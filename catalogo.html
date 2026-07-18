@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo — Kick Genius</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #fffdf9;
+    --navy-deep: #faf5ec;
+    --navy-soft: #efe4d2;
+    --white: #241f19;
+    --teal: #1b3f73;
+    --teal-dim: #122a4e;
+    --yellow: #bb8a44;
+    --line: rgba(36,31,25,0.12);
+    --radius: 18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--navy-deep);
+    color: var(--white);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton', sans-serif;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--teal);color:var(--navy-deep);}
+
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--navy-deep);}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--teal),var(--teal-dim));border-radius:10px;}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(27,63,115,0.07), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(187,138,68,0.06), transparent 40%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ===== NAV ===== */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:rgba(250,245,236,0.92);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;max-width:1200px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{height:38px;width:38px;border-radius:50%;object-fit:cover;}
+  .brand span{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:1px;}
+  .nav-links{display:flex;gap:32px;list-style:none;}
+  .nav-links a{
+    font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    position:relative;padding-bottom:4px;opacity:.85;transition:opacity .2s;
+  }
+  .nav-links a:hover, .nav-links a.active{opacity:1;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;height:2px;width:0;
+    background:var(--teal);transition:width .25s ease;
+  }
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .cart-btn{
+    position:relative;display:flex;align-items:center;gap:8px;
+    background:var(--teal);color:var(--navy-deep);border:none;
+    padding:10px 16px;border-radius:100px;font-weight:800;font-size:0.8rem;
+    letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .cart-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,63,115,0.28);}
+  .cart-count{
+    background:var(--navy-deep);color:var(--teal);
+    font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;
+  }
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:24px;height:2px;background:var(--white);}
+
+  .header-spacer{height:70px;}
+
+  /* ===== CATALOG TOOLBAR (integrado, sticky bajo el header) ===== */
+  .catalog-toolbar{
+    position:sticky;top:70px;z-index:900;
+    background:rgba(250,245,236,0.95);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+  }
+  .catalog-toolbar-inner{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+  }
+  .catalog-toolbar-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .catalog-toolbar-title h1{font-size:1.3rem;}
+  .catalog-toolbar-title span{font-size:0.8rem;color:rgba(36,31,25,0.5);font-weight:600;text-transform:none;letter-spacing:0;}
+
+  .filters-bar{
+    display:flex;gap:12px;flex-wrap:wrap;
+  }
+  .dropdown{position:relative;}
+  .dropdown-toggle{
+    display:flex;align-items:center;gap:10px;padding:11px 18px;border-radius:100px;
+    border:1px solid var(--line);background:var(--navy);color:var(--white);
+    font-weight:700;font-size:0.78rem;letter-spacing:0.3px;cursor:pointer;
+    transition:all .25s ease;
+  }
+  .dropdown-toggle .chevron{font-size:0.65rem;transition:transform .25s ease;opacity:0.6;}
+  .dropdown-toggle:hover, .dropdown.open .dropdown-toggle{
+    border-color:var(--teal);color:var(--teal);
+  }
+  .dropdown.open .chevron{transform:rotate(180deg);}
+  .dropdown-menu{
+    position:absolute;top:calc(100% + 10px);left:0;transform:translateY(-6px);
+    background:var(--navy);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 22px 45px rgba(36,31,25,0.16);padding:8px;min-width:230px;max-height:320px;
+    overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;
+    z-index:950;
+  }
+  .dropdown.open .dropdown-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
+  .dropdown-item{
+    display:block;width:100%;text-align:left;padding:10px 14px;border-radius:10px;border:none;
+    background:transparent;color:var(--white);font-size:0.85rem;font-weight:600;cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .dropdown-item:hover{background:rgba(36,31,25,0.06);}
+  .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
+
+  /* ===== reveal / stagger ===== */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .stagger > *{opacity:0;transform:translateY(30px);transition:opacity .6s ease, transform .6s ease;}
+  .stagger.visible > *{opacity:1;transform:translateY(0);}
+  .stagger.visible > *:nth-child(1){transition-delay:.05s;}
+  .stagger.visible > *:nth-child(2){transition-delay:.15s;}
+  .stagger.visible > *:nth-child(3){transition-delay:.25s;}
+  .stagger.visible > *:nth-child(4){transition-delay:.35s;}
+  .stagger.visible > *:nth-child(5){transition-delay:.45s;}
+  .stagger.visible > *:nth-child(6){transition-delay:.55s;}
+  .stagger.visible > *:nth-child(7){transition-delay:.65s;}
+  .stagger.visible > *:nth-child(8){transition-delay:.75s;}
+  .stagger.visible > *:nth-child(9){transition-delay:.85s;}
+  .stagger.visible > *:nth-child(10){transition-delay:.95s;}
+  .stagger.visible > *:nth-child(11){transition-delay:1.05s;}
+  .stagger.visible > *:nth-child(12){transition-delay:1.15s;}
+  .stagger.visible > *:nth-child(13){transition-delay:1.25s;}
+  .stagger.visible > *:nth-child(14){transition-delay:1.35s;}
+
+  /* ===== CATALOG GRID ===== */
+  .catalog-section{padding:44px 0 100px;}
+  .empty-state{
+    display:none;text-align:center;color:rgba(36,31,25,0.5);font-size:0.95rem;
+    padding:40px 0;
+  }
+  .empty-state.visible{display:block;}
+  .product-grid{
+    display:grid;grid-template-columns:repeat(auto-fit, minmax(270px,1fr));gap:28px;
+  }
+  .product-card{
+    background:var(--navy-soft);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;position:relative;transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    display:flex;flex-direction:column;
+  }
+  .product-card:hover{
+    transform:translateY(-10px);box-shadow:0 22px 45px rgba(36,31,25,0.14);border-color:rgba(27,63,115,0.45);
+  }
+  .product-card[data-id]{cursor:pointer;}
+  .product-media{
+    aspect-ratio:1/1;background:var(--navy-deep);position:relative;overflow:hidden;cursor:pointer;
+  }
+  .product-media img{
+    width:100%;height:100%;object-fit:cover;transition:transform .6s ease, opacity .4s ease;
+  }
+  .product-card:hover .product-media img{transform:scale(1.08);}
+  .product-media img.img-b{position:absolute;inset:0;opacity:0;}
+  .product-card:hover .product-media img.img-a{opacity:0;}
+  .product-card:hover .product-media img.img-b{opacity:1;}
+  .badge{
+    position:absolute;top:14px;left:14px;background:var(--yellow);color:var(--white);
+    font-size:0.68rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;
+    text-transform:uppercase;z-index:2;
+  }
+  .badge.soon{background:rgba(36,31,25,0.06);color:var(--white);backdrop-filter:blur(6px);}
+  .badge-offer{
+    position:absolute;top:14px;right:14px;background:var(--teal);color:var(--navy-deep);
+    font-size:0.68rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;
+    text-transform:uppercase;z-index:2;
+    animation:pulseOffer 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseOffer{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(27,63,115,0.35);}
+    50%{transform:scale(1.06);box-shadow:0 0 0 6px rgba(27,63,115,0);}
+  }
+  .product-info{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1;}
+  .product-cat{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;}
+  .product-name{font-size:1.05rem;font-weight:800;line-height:1.3;}
+  .product-price{font-size:1.4rem;font-weight:800;color:var(--white);margin-top:auto;}
+  .product-price .placeholder-text{font-size:0.85rem;color:rgba(36,31,25,0.42);font-weight:600;}
+  .price-row{display:flex;align-items:baseline;gap:10px;margin-top:auto;flex-wrap:wrap;}
+  .price-original{font-size:0.95rem;font-weight:600;color:rgba(36,31,25,0.4);text-decoration:line-through;}
+  .price-final{font-size:1.4rem;font-weight:800;color:var(--teal);}
+  .price-save{width:100%;font-size:0.72rem;font-weight:700;color:var(--white);opacity:0.55;letter-spacing:0.3px;}
+  .size-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px;}
+  .size-chip{
+    width:34px;height:30px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);border-radius:8px;font-size:0.75rem;cursor:pointer;
+    transition:all .2s ease;background:transparent;color:var(--white);
+  }
+  .size-chip.selected, .size-chip:hover{border-color:var(--teal);color:var(--teal);}
+  .add-cart-btn{
+    margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;
+    background:var(--teal);color:var(--navy-deep);font-weight:800;font-size:0.8rem;
+    letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:filter .2s ease;
+  }
+  .add-cart-btn:hover{filter:brightness(1.1);}
+  .add-cart-btn:disabled{background:rgba(36,31,25,0.06);color:rgba(36,31,25,0.35);cursor:not-allowed;}
+  .placeholder-card .product-media{
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg, var(--navy-soft), var(--navy-deep));
+  }
+  .placeholder-card .product-media span{font-size:3rem;opacity:0.25;}
+
+  /* ===== PRODUCT MODAL (ficha de producto) ===== */
+  .product-modal-overlay{
+    position:fixed;inset:0;background:rgba(36,31,25,0.45);backdrop-filter:blur(10px);
+    z-index:3000;display:none;align-items:center;justify-content:center;padding:24px;
+    overflow-y:auto;
+  }
+  .product-modal-overlay.open{display:flex;}
+  .product-modal{
+    background:var(--navy);border:1px solid var(--line);border-radius:var(--radius);
+    max-width:960px;width:100%;position:relative;margin:auto;
+    animation:modalIn .35s ease;
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .modal-close{
+    position:absolute;top:18px;right:18px;background:rgba(36,31,25,0.06);border:1px solid var(--line);
+    color:var(--white);font-size:1.4rem;width:38px;height:38px;border-radius:50%;cursor:pointer;
+    z-index:5;line-height:1;display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{border-color:var(--teal);color:var(--teal);}
+  .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .modal-gallery{padding:32px;border-right:1px solid var(--line);}
+  .modal-main-img{
+    aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--navy-deep);
+    border:1px solid var(--line);
+  }
+  .modal-main-img img{width:100%;height:100%;object-fit:cover;}
+  .modal-thumbs{display:flex;gap:10px;margin-top:14px;overflow-x:auto;padding-bottom:4px;}
+  .modal-thumbs img{
+    width:64px;height:64px;object-fit:cover;border-radius:10px;cursor:pointer;flex-shrink:0;
+    border:2px solid transparent;opacity:0.55;transition:all .2s ease;
+  }
+  .modal-thumbs img.active, .modal-thumbs img:hover{border-color:var(--teal);opacity:1;}
+  .modal-details{padding:32px;display:flex;flex-direction:column;}
+  .modal-details .product-cat{margin-bottom:8px;}
+  .modal-details h3{font-size:1.5rem;font-family:'Manrope',sans-serif;text-transform:none;font-weight:800;line-height:1.3;margin-bottom:14px;}
+  .modal-price-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+  .modal-offer-tag{
+    background:var(--yellow);color:var(--white);font-size:0.68rem;font-weight:800;
+    padding:4px 11px;border-radius:100px;letter-spacing:0.5px;text-transform:uppercase;
+  }
+  .product-note{
+    display:none;align-items:center;gap:8px;font-size:0.82rem;font-weight:700;color:var(--teal);
+    background:rgba(27,63,115,0.07);border:1px solid rgba(27,63,115,0.18);border-radius:10px;
+    padding:10px 14px;margin-bottom:22px;
+  }
+  .product-note.visible{display:flex;}
+  .size-label{font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(36,31,25,0.55);font-weight:700;display:block;margin-bottom:10px;}
+  .modal-sizes{margin-bottom:26px;}
+  .modal-sizes .size-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .modal-sizes .size-chip{width:42px;height:38px;font-size:0.8rem;}
+  .modal-note{font-size:0.85rem;color:rgba(36,31,25,0.5);margin-top:auto;padding-top:18px;line-height:1.5;}
+  .modal-customize{margin-bottom:22px;}
+  .customize-fields{display:flex;gap:10px;margin-top:8px;}
+  .customize-fields input, .patch-select{
+    flex:1;padding:11px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.85rem;
+  }
+  .customize-fields input:focus, .patch-select:focus{outline:none;border-color:var(--teal);}
+  .patch-select{width:100%;margin-top:8px;cursor:pointer;}
+  .customize-note{font-size:0.8rem;color:var(--teal);font-weight:700;margin-top:10px;}
+
+  @media (max-width: 720px){
+    .modal-grid{grid-template-columns:1fr;}
+    .modal-gallery{border-right:none;border-bottom:1px solid var(--line);}
+  }
+
+  footer{
+    border-top:1px solid var(--line);padding:44px 0;position:relative;z-index:1;
+  }
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .footer-brand{display:flex;align-items:center;gap:10px;}
+  .footer-brand img{height:32px;width:32px;border-radius:50%;}
+  .footer-socials{display:flex;gap:14px;}
+  .footer-socials a{
+    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;transition:all .25s ease;
+  }
+  .footer-socials a:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);}
+  .footer-copy{font-size:0.8rem;color:rgba(36,31,25,0.4);text-align:center;margin-top:24px;}
+
+  /* ===== CART DRAWER ===== */
+  .overlay{
+    position:fixed;inset:0;background:rgba(36,31,25,0.4);backdrop-filter:blur(4px);
+    z-index:1500;opacity:0;pointer-events:none;transition:opacity .35s ease;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .cart-drawer{
+    position:fixed;top:0;right:-420px;width:min(420px,100vw);height:100vh;
+    background:var(--navy);border-left:1px solid var(--line);z-index:1600;
+    display:flex;flex-direction:column;transition:right .4s cubic-bezier(.4,0,.2,1);
+  }
+  .cart-drawer.open{right:0;}
+  .cart-head{
+    display:flex;justify-content:space-between;align-items:center;padding:24px;border-bottom:1px solid var(--line);
+  }
+  .cart-head h3{font-size:1.3rem;}
+  .cart-close{background:none;border:none;color:var(--white);font-size:1.6rem;cursor:pointer;}
+  .cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+  .cart-item{
+    display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center;
+  }
+  .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:var(--navy-deep);}
+  .cart-item-info{flex:1;}
+  .cart-item-info .name{font-weight:700;font-size:0.9rem;}
+  .cart-item-info .meta{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-top:2px;}
+  .qty-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .qty-row button{
+    width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--white);cursor:pointer;
+  }
+  .remove-btn{background:none;border:none;color:rgba(36,31,25,0.4);cursor:pointer;font-size:0.75rem;text-decoration:underline;margin-top:6px;}
+  .cart-empty{text-align:center;padding:60px 20px;color:rgba(36,31,25,0.5);}
+  .cart-footer{padding:24px;border-top:1px solid var(--line);}
+  .shipping-form{margin-bottom:20px;}
+  .shipping-title{
+    font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;
+    color:rgba(36,31,25,0.55);font-weight:800;margin-bottom:10px;
+  }
+  .shipping-input{
+    width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.82rem;
+    margin-bottom:8px;transition:border-color .2s ease;
+  }
+  .shipping-input:focus{outline:none;border-color:var(--teal);}
+  .shipping-input.invalid{border-color:#c0392b;}
+  .shipping-row{display:flex;gap:8px;}
+  .shipping-row .shipping-input{flex:1;min-width:0;}
+  .shipping-error{
+    font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:2px;margin-bottom:0;display:none;
+  }
+  .shipping-error.visible{display:block;}
+  .cart-total-row{display:flex;justify-content:space-between;margin-bottom:18px;font-size:1.1rem;font-weight:800;}
+  .checkout-btn{
+    width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
+    color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
+    cursor:pointer;font-size:0.85rem;transition:filter .2s ease;
+  }
+  .checkout-btn:hover{filter:brightness(1.1);}
+
+  @media (max-width: 860px){
+    .nav-links{display:none;}
+    .burger{display:flex;}
+    .catalog-toolbar-inner{flex-direction:column;align-items:stretch;}
+    .filters-bar{justify-content:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <nav>
+    <a class="brand" href="index.html">
+      <img src="assets/logo/kick-genius-logo.jpeg" alt="Kick Genius">
+      <span>Kick Genius</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="nosotros.html">Nosotros</a></li>
+      <li><a href="catalogo.html" class="active">Catálogo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartToggle" aria-label="Abrir carrito">
+        🛒 Carrito <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="burger" id="burgerBtn" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="header-spacer"></div>
+
+<div class="catalog-toolbar">
+  <div class="wrap catalog-toolbar-inner">
+    <div class="catalog-toolbar-title">
+      <h1>Catálogo</h1>
+      <span>Sneakers · Fútbol · NBA · F1 · NFL</span>
+    </div>
+
+    <div class="filters-bar">
+      <div class="dropdown" id="categoryDropdown">
+        <button class="dropdown-toggle" type="button">
+          <span id="categoryLabel">Categoría: Todos</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-filter="all">Todos</button>
+          <button class="dropdown-item" data-filter="sneakers">Sneakers</button>
+          <button class="dropdown-item" data-filter="futbol">Fútbol</button>
+          <button class="dropdown-item" data-filter="nba">NBA</button>
+          <button class="dropdown-item" data-filter="f1">F1</button>
+          <button class="dropdown-item" data-filter="nfl">NFL</button>
+        </div>
+      </div>
+
+      <div class="dropdown" id="brandDropdown" style="display:none;">
+        <button class="dropdown-toggle" type="button">
+          <span id="brandLabel">Marca: Todas</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-brand="all">Todas las marcas</button>
+          <button class="dropdown-item" data-brand="nike">Nike</button>
+          <button class="dropdown-item" data-brand="adidas">Adidas</button>
+          <button class="dropdown-item" data-brand="jordan">Jordan</button>
+          <button class="dropdown-item" data-brand="ugg">UGG</button>
+          <button class="dropdown-item" data-brand="salomon">Salomon</button>
+          <button class="dropdown-item" data-brand="veja">Veja</button>
+          <button class="dropdown-item" data-brand="new-balance">New Balance</button>
+          <button class="dropdown-item" data-brand="asics">Asics</button>
+          <button class="dropdown-item" data-brand="crocs">Crocs</button>
+          <button class="dropdown-item" data-brand="vans">Vans</button>
+          <button class="dropdown-item" data-brand="converse">Converse</button>
+          <button class="dropdown-item" data-brand="golden-goose">Golden Goose</button>
+          <button class="dropdown-item" data-brand="bape-sta">Bape Sta</button>
+        </div>
+      </div>
+
+      <div class="dropdown" id="modelDropdown" style="display:none;">
+        <button class="dropdown-toggle" type="button">
+          <span id="modelLabel">Modelo: Todos</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-model="all">Todos los modelos</button>
+          <button class="dropdown-item" data-model="nike-mind-001" data-for-brand="nike">Nike Mind 001</button>
+        </div>
+      </div>
+
+      <div class="dropdown" id="leagueDropdown" style="display:none;">
+        <button class="dropdown-toggle" type="button">
+          <span id="leagueLabel">Liga: Todas</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-league="all">Todas las ligas</button>
+          <button class="dropdown-item" data-league="liga-espanola">Liga Española</button>
+          <button class="dropdown-item" data-league="premier-league">Premier League</button>
+        </div>
+      </div>
+
+      <div class="dropdown" id="teamDropdown" style="display:none;">
+        <button class="dropdown-toggle" type="button">
+          <span id="teamLabel">Equipo: Todos</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item active" data-team="all">Todos los equipos</button>
+          <button class="dropdown-item" data-team="real-madrid" data-for-league="liga-espanola">Real Madrid</button>
+          <button class="dropdown-item" data-team="manchester-city" data-for-league="premier-league">Manchester City</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="catalog-section">
+  <div class="wrap">
+    <div class="product-grid stagger" id="productGrid">
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001/vista-lateral-1.jpg" alt="Nike Mind 001 Slide vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001/vista-frontal.jpg" alt="Nike Mind 001 Slide vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Geode Teal Light Menta</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001-pearl-pink">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001-pearl-pink/vista-lateral-2.jpg" alt="Nike Mind 001 Slide Pearl Pink vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001-pearl-pink/vista-frontal.jpg" alt="Nike Mind 001 Slide Pearl Pink vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Pearl Pink</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001-black-chrome">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001-black-chrome/vista-lateral-1.jpg" alt="Nike Mind 001 Slide Black Chrome vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001-black-chrome/vista-frontal.jpg" alt="Nike Mind 001 Slide Black Chrome vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Black Chrome</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001-light-smoke-grey">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001-light-smoke-grey/vista-lateral-1.jpg" alt="Nike Mind 001 Slide Light Smoke Grey vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001-light-smoke-grey/vista-frontal.jpg" alt="Nike Mind 001 Slide Light Smoke Grey vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Light Smoke Grey</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001-solar-red">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001-solar-red/vista-lateral-1.jpg" alt="Nike Mind 001 Slide Solar Red vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001-solar-red/vista-frontal.jpg" alt="Nike Mind 001 Slide Solar Red vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Solar Red</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001-fragment-black">
+        <div class="product-media">
+          <span class="badge-offer">-24%</span>
+          <img class="img-a" src="assets/productos/nike-mind-001-fragment-black/vista-lateral-1.jpg" alt="Nike Mind 001 Slide Fragment Black vista lateral">
+          <img class="img-b" src="assets/productos/nike-mind-001-fragment-black/vista-frontal.jpg" alt="Nike Mind 001 Slide Fragment Black vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Nike · Nike Mind 001</span>
+          <span class="product-name">Nike Mind 001 Slide — Fragment Black</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">65€</span>
+            <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/real-madrid-local-2627/frontal.jpg" alt="Camiseta Real Madrid 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-local-2627/trasera-personalizada-mbappe.jpg" alt="Camiseta Real Madrid 26/27 personalizada">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Camiseta Local Real Madrid 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-id="manchester-city-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/manchester-city-local-2627/frontal.jpg" alt="Camiseta Manchester City 26/27 frontal">
+          <img class="img-b" src="assets/productos/manchester-city-local-2627/trasera.jpg" alt="Camiseta Manchester City 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Manchester City</span>
+          <span class="product-name">Camiseta Local Manchester City 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="crop-real-madrid-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/crop-real-madrid-local-2627/frontal.jpg" alt="Crop Real Madrid 26/27 frontal">
+          <img class="img-b" src="assets/productos/crop-real-madrid-local-2627/trasera.jpg" alt="Crop Real Madrid 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Crop Local Real Madrid 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/real-madrid-player-2627/frontal.jpg" alt="Camiseta Real Madrid Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-player-2627/trasera.jpg" alt="Camiseta Real Madrid Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Camiseta Local Real Madrid 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/real-madrid-kids-2627/frontal.jpg" alt="Equipación Niño Real Madrid 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-kids-2627/trasera.jpg" alt="Equipación Niño Real Madrid 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Equipación Niño Local Real Madrid 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PLACEHOLDERS: el resto de categorías aún no tienen producto/precio real -->
+      <article class="product-card placeholder-card" data-cat="nba">
+        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏀</span></div>
+        <div class="product-info">
+          <span class="product-cat">NBA</span>
+          <span class="product-name">[NOMBRE DE LA CAMISETA/PRODUCTO]</span>
+          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
+        </div>
+      </article>
+
+      <article class="product-card placeholder-card" data-cat="f1">
+        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏎️</span></div>
+        <div class="product-info">
+          <span class="product-cat">F1</span>
+          <span class="product-name">[NOMBRE DEL PRODUCTO]</span>
+          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
+        </div>
+      </article>
+
+      <article class="product-card placeholder-card" data-cat="nfl">
+        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏈</span></div>
+        <div class="product-info">
+          <span class="product-cat">NFL</span>
+          <span class="product-name">[NOMBRE DEL PRODUCTO]</span>
+          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
+        </div>
+      </article>
+
+    </div>
+
+    <p class="empty-state" id="emptyState">Todavía no hay productos en esta marca. ¡Vuelve pronto!</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo/kick-genius-logo.jpeg" alt="Kick Genius">
+        <span style="font-family:'Anton',sans-serif;letter-spacing:1px;">Kick Genius</span>
+      </div>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/kick_genius/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <defs><linearGradient id="igGradFooter" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
+              <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
+              <stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradFooter)"/>
+            <rect x="6.7" y="6.7" width="10.6" height="10.6" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
+          </svg>
+        </a>
+        <a href="https://www.tiktok.com/@kickgeniusj" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="#25F4EE" transform="translate(-0.9,0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#FE2C55" transform="translate(0.9,-0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#0a0a0a" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+          </svg>
+        </a>
+        <a href="https://wa.me/34644039760" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2zm0 18.15h-.01c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.25-8.24 8.25zm4.52-6.18c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.74 2.66 4.23 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+        </a>
+      </div>
+    </div>
+    <p class="footer-copy">© <span id="year"></span> Kick Genius. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- FICHA DE PRODUCTO -->
+<div class="product-modal-overlay" id="productModalOverlay">
+  <div class="product-modal">
+    <button class="modal-close" id="modalClose" aria-label="Cerrar">&times;</button>
+    <div class="modal-grid">
+      <div class="modal-gallery">
+        <div class="modal-main-img"><img id="modalMainImg" src="" alt="Foto de producto"></div>
+        <div class="modal-thumbs" id="modalThumbs"></div>
+      </div>
+      <div class="modal-details">
+        <span class="product-cat" id="modalCat"></span>
+        <h3 id="modalName"></h3>
+        <div class="modal-price-row">
+          <span class="price-original" id="modalPriceOriginal"></span>
+          <span class="price-final" id="modalPriceFinal" style="font-size:2rem;"></span>
+          <span class="modal-offer-tag" id="modalOfferTag"></span>
+        </div>
+        <p class="price-save" id="modalPriceSave" style="margin-bottom:22px;display:block;"></p>
+        <p class="product-note" id="productNote"></p>
+        <div class="modal-sizes">
+          <span class="size-label">Selecciona tu talla</span>
+          <div class="size-row" id="modalSizeRow"></div>
+        </div>
+
+        <div class="modal-customize" id="modalCustomize">
+          <span class="size-label">Personaliza tu camiseta (opcional)</span>
+          <div class="customize-fields">
+            <input type="text" id="customName" placeholder="Nombre" maxlength="20">
+            <input type="text" id="customNumber" placeholder="Número" maxlength="2" inputmode="numeric">
+          </div>
+          <span class="size-label" style="margin-top:14px;">Parche</span>
+          <select id="customPatch" class="patch-select">
+            <option value="none">Sin parche</option>
+            <option value="liga" id="customPatchLeagueOption">Liga (+1€)</option>
+            <option value="champions">Champions League (+1€)</option>
+          </select>
+          <div id="socksBlock">
+            <span class="size-label" style="margin-top:14px;">Medias a juego</span>
+            <select id="customSocks" class="patch-select">
+              <option value="no">No incluir medias</option>
+              <option value="yes">Sí, añadir medias (+5€)</option>
+            </select>
+          </div>
+          <p class="customize-note" id="customizeNote"></p>
+        </div>
+
+        <button class="add-cart-btn" id="modalAddBtn" disabled>Elige una talla</button>
+        <p class="modal-note" id="modalNote">Al añadir al carrito podrás finalizar tu pedido por WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Tu carrito</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="shipping-form">
+      <h4 class="shipping-title">Datos de envío</h4>
+      <input type="text" id="shipName" class="shipping-input" placeholder="Nombre y apellidos">
+      <input type="text" id="shipAddress" class="shipping-input" placeholder="Dirección completa">
+      <div class="shipping-row">
+        <input type="text" id="shipCity" class="shipping-input" placeholder="Población">
+        <input type="text" id="shipZip" class="shipping-input" placeholder="Código postal">
+      </div>
+      <input type="text" id="shipCountry" class="shipping-input" placeholder="País">
+      <div class="shipping-row">
+        <input type="tel" id="shipPhone" class="shipping-input" placeholder="Teléfono">
+        <input type="email" id="shipEmail" class="shipping-input" placeholder="Email">
+      </div>
+      <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
+    </div>
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">0€</span></div>
+    <button class="checkout-btn" id="checkoutBtn">Finalizar por WhatsApp</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+
+  // ===== Reveal on scroll =====
+  const revealEls = document.querySelectorAll('.reveal, .stagger');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ===== Filtros desplegables (categoría + subcategorías: marca / modelo / liga / equipo) =====
+  const categoryDropdown = document.getElementById('categoryDropdown');
+  const brandDropdown = document.getElementById('brandDropdown');
+  const modelDropdown = document.getElementById('modelDropdown');
+  const leagueDropdown = document.getElementById('leagueDropdown');
+  const teamDropdown = document.getElementById('teamDropdown');
+  const categoryLabel = document.getElementById('categoryLabel');
+  const brandLabel = document.getElementById('brandLabel');
+  const modelLabel = document.getElementById('modelLabel');
+  const leagueLabel = document.getElementById('leagueLabel');
+  const teamLabel = document.getElementById('teamLabel');
+  const allDropdowns = [categoryDropdown, brandDropdown, modelDropdown, leagueDropdown, teamDropdown];
+  const emptyState = document.getElementById('emptyState');
+  const cards = document.querySelectorAll('.product-card');
+  let activeCategory = 'all';
+  let activeBrand = 'all';
+  let activeModel = 'all';
+  let activeLeague = 'all';
+  let activeTeam = 'all';
+
+  allDropdowns.forEach(dd => {
+    const toggle = dd.querySelector('.dropdown-toggle');
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = dd.classList.contains('open');
+      allDropdowns.forEach(d => d.classList.remove('open'));
+      if (!wasOpen) dd.classList.add('open');
+    });
+  });
+  document.addEventListener('click', () => allDropdowns.forEach(d => d.classList.remove('open')));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') allDropdowns.forEach(d => d.classList.remove('open')); });
+
+  function resetDropdown(dropdown, labelEl, prefix) {
+    const allItem = dropdown.querySelector('.dropdown-item[data-brand="all"], .dropdown-item[data-model="all"], .dropdown-item[data-league="all"], .dropdown-item[data-team="all"]');
+    dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+    allItem.classList.add('active');
+    labelEl.textContent = `${prefix}: ${allItem.textContent}`;
+    return 'all';
+  }
+
+  function updateModelOptions() {
+    modelDropdown.querySelectorAll('.dropdown-item[data-for-brand]').forEach(item => {
+      item.style.display = item.dataset.forBrand === activeBrand ? '' : 'none';
+    });
+  }
+
+  function updateTeamOptions() {
+    teamDropdown.querySelectorAll('.dropdown-item[data-for-league]').forEach(item => {
+      item.style.display = item.dataset.forLeague === activeLeague ? '' : 'none';
+    });
+  }
+
+  function applyFilters() {
+    brandDropdown.style.display = activeCategory === 'sneakers' ? '' : 'none';
+    modelDropdown.style.display = (activeCategory === 'sneakers' && activeBrand !== 'all') ? '' : 'none';
+    leagueDropdown.style.display = activeCategory === 'futbol' ? '' : 'none';
+    teamDropdown.style.display = (activeCategory === 'futbol' && activeLeague !== 'all') ? '' : 'none';
+
+    if (activeCategory !== 'sneakers') {
+      activeBrand = resetDropdown(brandDropdown, brandLabel, 'Marca');
+      activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
+    }
+    if (activeBrand === 'all') activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
+    if (activeCategory !== 'futbol') {
+      activeLeague = resetDropdown(leagueDropdown, leagueLabel, 'Liga');
+      activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
+    }
+    if (activeLeague === 'all') activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
+    updateModelOptions();
+    updateTeamOptions();
+
+    let visibleCount = 0;
+    cards.forEach(card => {
+      const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
+      const matchesBrand = activeBrand === 'all' || card.dataset.cat !== 'sneakers' || card.dataset.brand === activeBrand;
+      const matchesModel = activeModel === 'all' || card.dataset.cat !== 'sneakers' || card.dataset.model === activeModel;
+      const matchesLeague = activeLeague === 'all' || card.dataset.cat !== 'futbol' || card.dataset.league === activeLeague;
+      const matchesTeam = activeTeam === 'all' || card.dataset.cat !== 'futbol' || card.dataset.team === activeTeam;
+      const show = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+    emptyState.classList.toggle('visible', visibleCount === 0);
+  }
+
+  categoryDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      categoryDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      categoryLabel.textContent = `Categoría: ${item.textContent}`;
+      categoryDropdown.classList.remove('open');
+      activeCategory = item.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  brandDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      brandDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      brandLabel.textContent = `Marca: ${item.textContent}`;
+      brandDropdown.classList.remove('open');
+      activeBrand = item.dataset.brand;
+      activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
+      applyFilters();
+    });
+  });
+
+  modelDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      modelDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      modelLabel.textContent = `Modelo: ${item.textContent}`;
+      modelDropdown.classList.remove('open');
+      activeModel = item.dataset.model;
+      applyFilters();
+    });
+  });
+
+  leagueDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      leagueDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      leagueLabel.textContent = `Liga: ${item.textContent}`;
+      leagueDropdown.classList.remove('open');
+      activeLeague = item.dataset.league;
+      activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
+      applyFilters();
+    });
+  });
+
+  teamDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      teamDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      teamLabel.textContent = `Equipo: ${item.textContent}`;
+      teamDropdown.classList.remove('open');
+      activeTeam = item.dataset.team;
+      applyFilters();
+    });
+  });
+
+  // ===== Product catalog data (ficha completa) =====
+  const PRODUCTS = {
+    'nike-mind-001': {
+      name: 'Nike Mind 001 Slide — Geode Teal Light Menta',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001/vista-frontal.jpg',
+        'assets/productos/nike-mind-001/vista-superior.jpg'
+      ]
+    },
+    'nike-mind-001-pearl-pink': {
+      name: 'Nike Mind 001 Slide — Pearl Pink',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001-pearl-pink/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001-pearl-pink/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001-pearl-pink/vista-frontal.jpg',
+        'assets/productos/nike-mind-001-pearl-pink/vista-superior.jpg'
+      ]
+    },
+    'nike-mind-001-black-chrome': {
+      name: 'Nike Mind 001 Slide — Black Chrome',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001-black-chrome/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001-black-chrome/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001-black-chrome/vista-frontal.jpg',
+        'assets/productos/nike-mind-001-black-chrome/vista-superior.jpg'
+      ]
+    },
+    'nike-mind-001-light-smoke-grey': {
+      name: 'Nike Mind 001 Slide — Light Smoke Grey',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001-light-smoke-grey/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001-light-smoke-grey/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001-light-smoke-grey/vista-frontal.jpg',
+        'assets/productos/nike-mind-001-light-smoke-grey/vista-superior.jpg'
+      ]
+    },
+    'nike-mind-001-solar-red': {
+      name: 'Nike Mind 001 Slide — Solar Red',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001-solar-red/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001-solar-red/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001-solar-red/vista-frontal.jpg',
+        'assets/productos/nike-mind-001-solar-red/vista-superior.jpg'
+      ]
+    },
+    'nike-mind-001-fragment-black': {
+      name: 'Nike Mind 001 Slide — Fragment Black',
+      cat: 'Sneakers · Nike · Nike Mind 001',
+      price: 65,
+      originalPrice: 85,
+      sizes: [36,37,38,39,40,41,42,43,44,45],
+      images: [
+        'assets/productos/nike-mind-001-fragment-black/vista-lateral-1.jpg',
+        'assets/productos/nike-mind-001-fragment-black/vista-lateral-2.jpg',
+        'assets/productos/nike-mind-001-fragment-black/vista-frontal.jpg',
+        'assets/productos/nike-mind-001-fragment-black/vista-superior.jpg'
+      ]
+    },
+    'real-madrid-local-2627': {
+      name: 'Camiseta Local Real Madrid 26/27',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/real-madrid-local-2627/frontal.jpg',
+        'assets/productos/real-madrid-local-2627/trasera.jpg',
+        'assets/productos/real-madrid-local-2627/trasera-personalizada-mbappe.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'manchester-city-local-2627': {
+      name: 'Camiseta Local Manchester City 26/27',
+      cat: 'Fútbol · Premier League · Manchester City',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/manchester-city-local-2627/frontal.jpg',
+        'assets/productos/manchester-city-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'crop-real-madrid-local-2627': {
+      name: 'Crop Local Real Madrid 26/27',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/crop-real-madrid-local-2627/frontal.jpg',
+        'assets/productos/crop-real-madrid-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'real-madrid-player-2627': {
+      name: 'Camiseta Local Real Madrid 26/27 (Player Version)',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/real-madrid-player-2627/frontal.jpg',
+        'assets/productos/real-madrid-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'real-madrid-kids-2627': {
+      name: 'Equipación Niño Local Real Madrid 26/27',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/real-madrid-kids-2627/frontal.jpg',
+        'assets/productos/real-madrid-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Liga',
+        socksFee: 5
+      }
+    }
+  };
+
+  // ===== Ficha de producto (modal) =====
+  const modalOverlay = document.getElementById('productModalOverlay');
+  const modalClose = document.getElementById('modalClose');
+  const modalMainImg = document.getElementById('modalMainImg');
+  const modalThumbs = document.getElementById('modalThumbs');
+  const modalCat = document.getElementById('modalCat');
+  const modalName = document.getElementById('modalName');
+  const modalPriceOriginal = document.getElementById('modalPriceOriginal');
+  const modalPriceFinal = document.getElementById('modalPriceFinal');
+  const modalOfferTag = document.getElementById('modalOfferTag');
+  const modalPriceSave = document.getElementById('modalPriceSave');
+  const modalSizeRow = document.getElementById('modalSizeRow');
+  const modalAddBtn = document.getElementById('modalAddBtn');
+  const modalCustomize = document.getElementById('modalCustomize');
+  const customName = document.getElementById('customName');
+  const customNumber = document.getElementById('customNumber');
+  const customPatch = document.getElementById('customPatch');
+  const customPatchLeagueOption = document.getElementById('customPatchLeagueOption');
+  const socksBlock = document.getElementById('socksBlock');
+  const customSocks = document.getElementById('customSocks');
+  const customizeNote = document.getElementById('customizeNote');
+  const productNote = document.getElementById('productNote');
+  let currentProductId = null;
+  let currentSize = null;
+
+  function updateCustomizeNote() {
+    const product = PRODUCTS[currentProductId];
+    if (!product || !product.customization) return;
+    let extra = 0;
+    const parts = [];
+    if (customName.value.trim() || customNumber.value.trim()) {
+      extra += product.customization.nameNumberFee;
+      parts.push(`nombre/número +${product.customization.nameNumberFee}€`);
+    }
+    if (customPatch.value !== 'none') {
+      extra += product.customization.patchFee;
+      parts.push(`parche +${product.customization.patchFee}€`);
+    }
+    if (product.customization.socksFee && customSocks.value === 'yes') {
+      extra += product.customization.socksFee;
+      parts.push(`medias +${product.customization.socksFee}€`);
+    }
+    if (extra > 0) {
+      customizeNote.textContent = `Total con personalización: ${product.price + extra}€ (${parts.join(', ')})`;
+    } else {
+      customizeNote.textContent = '';
+    }
+  }
+  customName.addEventListener('input', updateCustomizeNote);
+  customNumber.addEventListener('input', updateCustomizeNote);
+  customPatch.addEventListener('change', updateCustomizeNote);
+  customSocks.addEventListener('change', updateCustomizeNote);
+
+  function openProductModal(id) {
+    const product = PRODUCTS[id];
+    if (!product) return;
+    currentProductId = id;
+    currentSize = null;
+
+    modalCat.textContent = product.cat;
+    modalName.textContent = product.name;
+    modalPriceFinal.textContent = product.price + '€';
+    if (product.originalPrice) {
+      const discount = Math.round((1 - product.price / product.originalPrice) * 100);
+      modalPriceOriginal.textContent = product.originalPrice + '€';
+      modalPriceOriginal.style.display = '';
+      modalOfferTag.textContent = '-' + discount + '%';
+      modalOfferTag.style.display = '';
+      modalPriceSave.textContent = `Ahorras ${product.originalPrice - product.price}€ · oferta por tiempo limitado`;
+      modalPriceSave.style.display = '';
+    } else {
+      modalPriceOriginal.style.display = 'none';
+      modalOfferTag.style.display = 'none';
+      modalPriceSave.style.display = 'none';
+    }
+    if (product.note) {
+      productNote.textContent = product.note;
+      productNote.classList.add('visible');
+    } else {
+      productNote.classList.remove('visible');
+    }
+
+    modalMainImg.src = product.images[0];
+
+    modalThumbs.innerHTML = '';
+    product.images.forEach((src, i) => {
+      const t = document.createElement('img');
+      t.src = src;
+      if (i === 0) t.classList.add('active');
+      t.addEventListener('click', () => {
+        modalMainImg.src = src;
+        modalThumbs.querySelectorAll('img').forEach(im => im.classList.remove('active'));
+        t.classList.add('active');
+      });
+      modalThumbs.appendChild(t);
+    });
+
+    modalSizeRow.innerHTML = '';
+    product.sizes.forEach(s => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'size-chip';
+      chip.textContent = s;
+      chip.addEventListener('click', () => {
+        modalSizeRow.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        currentSize = s;
+        modalAddBtn.disabled = false;
+        modalAddBtn.textContent = 'Añadir al carrito';
+      });
+      modalSizeRow.appendChild(chip);
+    });
+    modalAddBtn.disabled = true;
+    modalAddBtn.textContent = 'Elige una talla';
+
+    if (product.customization) {
+      modalCustomize.style.display = '';
+      customName.value = '';
+      customNumber.value = '';
+      customPatch.value = 'none';
+      customPatchLeagueOption.textContent = `${product.customization.leaguePatchLabel} (+${product.customization.patchFee}€)`;
+      if (product.customization.socksFee) {
+        socksBlock.style.display = '';
+        customSocks.value = 'no';
+      } else {
+        socksBlock.style.display = 'none';
+      }
+      updateCustomizeNote();
+    } else {
+      modalCustomize.style.display = 'none';
+    }
+
+    modalOverlay.classList.add('open');
+  }
+  function closeProductModal(){ modalOverlay.classList.remove('open'); }
+
+  document.querySelectorAll('.product-card[data-id]').forEach(card => {
+    card.addEventListener('click', () => openProductModal(card.dataset.id));
+  });
+  modalClose.addEventListener('click', closeProductModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeProductModal(); });
+
+  modalAddBtn.addEventListener('click', () => {
+    if (!currentProductId || !currentSize) return;
+    const product = PRODUCTS[currentProductId];
+    const cart = getCart();
+
+    let unitPrice = product.price;
+    let customization = null;
+    if (product.customization) {
+      const name = customName.value.trim();
+      const number = customNumber.value.trim();
+      const patch = customPatch.value;
+      const socks = product.customization.socksFee ? customSocks.value : 'no';
+      if (name || number) unitPrice += product.customization.nameNumberFee;
+      if (patch !== 'none') unitPrice += product.customization.patchFee;
+      if (socks === 'yes') unitPrice += product.customization.socksFee;
+      customization = {
+        name, number,
+        patch: patch === 'none' ? '' : customPatch.options[customPatch.selectedIndex].text,
+        socks: socks === 'yes' ? 'Sí (+' + product.customization.socksFee + '€)' : ''
+      };
+    }
+
+    const id = currentProductId + '-' + currentSize + '-' + (customization ? `${customization.name}-${customization.number}-${customization.patch}-${customization.socks}` : '');
+    const existing = cart.find(i => i.id === id);
+    if (existing) { existing.qty++; }
+    else {
+      cart.push({
+        id,
+        name: product.name,
+        price: unitPrice,
+        img: product.images[0],
+        size: currentSize,
+        customization,
+        qty: 1
+      });
+    }
+    saveCart(cart);
+    closeProductModal();
+    openCart();
+  });
+
+  // ===== Cart (localStorage) =====
+  const CART_KEY = 'kickGeniusCart';
+  function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e){ return []; } }
+  function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); renderCart(); }
+
+  const cartItemsEl = document.getElementById('cartItems');
+  const cartCountEl = document.getElementById('cartCount');
+  const cartTotalEl = document.getElementById('cartTotal');
+
+  function renderCart(){
+    const cart = getCart();
+    cartCountEl.textContent = cart.reduce((n,i) => n + i.qty, 0);
+    if (cart.length === 0) {
+      cartItemsEl.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+      cartTotalEl.textContent = '0€';
+      return;
+    }
+    let total = 0;
+    cartItemsEl.innerHTML = cart.map((item, idx) => {
+      total += item.price * item.qty;
+      const customBits = [];
+      if (item.customization) {
+        if (item.customization.name) customBits.push(`Nombre: ${item.customization.name}`);
+        if (item.customization.number) customBits.push(`Nº: ${item.customization.number}`);
+        if (item.customization.patch) customBits.push(`Parche: ${item.customization.patch}`);
+        if (item.customization.socks) customBits.push(`Medias: ${item.customization.socks}`);
+      }
+      const customLine = customBits.length ? `<div class="meta">${customBits.join(' · ')}</div>` : '';
+      return `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="name">${item.name}</div>
+            <div class="meta">Talla ${item.size} · ${item.price}€</div>
+            ${customLine}
+            <div class="qty-row">
+              <button data-action="dec" data-idx="${idx}">−</button>
+              <span>${item.qty}</span>
+              <button data-action="inc" data-idx="${idx}">+</button>
+            </div>
+            <button class="remove-btn" data-action="remove" data-idx="${idx}">Eliminar</button>
+          </div>
+        </div>`;
+    }).join('');
+    cartTotalEl.textContent = total + '€';
+
+    cartItemsEl.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        const cart = getCart();
+        if (btn.dataset.action === 'inc') cart[idx].qty++;
+        if (btn.dataset.action === 'dec') { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx,1); }
+        if (btn.dataset.action === 'remove') cart.splice(idx,1);
+        saveCart(cart);
+      });
+    });
+  }
+
+  // ===== Cart drawer open/close =====
+  const cartDrawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('overlay');
+  function openCart(){ cartDrawer.classList.add('open'); overlay.classList.add('open'); }
+  function closeCart(){ cartDrawer.classList.remove('open'); overlay.classList.remove('open'); }
+  document.getElementById('cartToggle').addEventListener('click', openCart);
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  overlay.addEventListener('click', closeCart);
+
+  // ===== Datos de envío (persistidos entre visitas) =====
+  const SHIP_KEY = 'kickGeniusShipping';
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipCountry','shipZip','shipPhone','shipEmail'];
+  const shipLabels = {
+    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población',
+    shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
+  };
+
+  (function loadShipping(){
+    try {
+      const saved = JSON.parse(localStorage.getItem(SHIP_KEY)) || {};
+      shipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
+    } catch(e){}
+  })();
+
+  function saveShipping(){
+    const data = {};
+    shipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
+    localStorage.setItem(SHIP_KEY, JSON.stringify(data));
+    return data;
+  }
+
+  // ===== Checkout via WhatsApp =====
+  document.getElementById('checkoutBtn').addEventListener('click', () => {
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    const shipping = saveShipping();
+    const shippingError = document.getElementById('shippingError');
+    const missing = shipFieldIds.filter(id => !shipping[id]);
+    document.querySelectorAll('.shipping-input').forEach(el => el.classList.remove('invalid'));
+
+    if (missing.length) {
+      missing.forEach(id => document.getElementById(id).classList.add('invalid'));
+      shippingError.classList.add('visible');
+      document.getElementById(missing[0]).focus();
+      return;
+    }
+    shippingError.classList.remove('visible');
+
+    let total = 0;
+    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n\n*Productos:*\n`;
+    cart.forEach((item, idx) => {
+      total += item.price * item.qty;
+      msg += `${idx + 1}. ${item.name}\n   Talla: ${item.size} · Cantidad: ${item.qty} · Precio: ${item.price * item.qty}€\n`;
+      if (item.customization) {
+        const bits = [];
+        if (item.customization.name) bits.push(`Nombre: ${item.customization.name}`);
+        if (item.customization.number) bits.push(`Nº: ${item.customization.number}`);
+        if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
+        if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
+        if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
+      }
+    });
+    msg += `\n*Total del pedido: ${total}€*\n\n`;
+    msg += `📦 *Datos de envío*\n`;
+    shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
+    msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
+
+    window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
+  });
+
+  renderCart();
+
+  // ===== Mobile menu =====
+  const burger = document.getElementById('burgerBtn');
+  const navLinks = document.querySelector('.nav-links');
+  burger.addEventListener('click', () => {
+    const isOpen = navLinks.style.display === 'flex';
+    navLinks.style.display = isOpen ? 'none' : 'flex';
+    navLinks.style.cssText += isOpen ? '' : 'position:fixed;top:70px;left:0;right:0;flex-direction:column;background:rgba(250,245,236,0.98);padding:24px;gap:20px;text-align:center;';
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+})();
+</script>
+
+</body>
+</html>

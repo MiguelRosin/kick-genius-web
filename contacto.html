@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto — Kick Genius</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #fffdf9;
+    --navy-deep: #faf5ec;
+    --navy-soft: #efe4d2;
+    --white: #241f19;
+    --teal: #1b3f73;
+    --teal-dim: #122a4e;
+    --yellow: #bb8a44;
+    --line: rgba(36,31,25,0.12);
+    --radius: 18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--navy-deep);
+    color: var(--white);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton', sans-serif;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--teal);color:var(--navy-deep);}
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--navy-deep);}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--teal),var(--teal-dim));border-radius:10px;}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(27,63,115,0.07), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(187,138,68,0.06), transparent 40%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ===== NAV ===== */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:rgba(250,245,236,0.92);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;max-width:1200px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{height:38px;width:38px;border-radius:50%;object-fit:cover;}
+  .brand span{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:1px;}
+  .nav-links{display:flex;gap:32px;list-style:none;}
+  .nav-links a{
+    font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    position:relative;padding-bottom:4px;opacity:.85;transition:opacity .2s;
+  }
+  .nav-links a:hover, .nav-links a.active{opacity:1;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;height:2px;width:0;
+    background:var(--teal);transition:width .25s ease;
+  }
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .nav-right{display:flex;align-items:center;gap:18px;}
+  .cart-btn{
+    position:relative;display:flex;align-items:center;gap:8px;
+    background:var(--teal);color:var(--navy-deep);border:none;
+    padding:10px 16px;border-radius:100px;font-weight:800;font-size:0.8rem;
+    letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .cart-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,63,115,0.28);}
+  .cart-count{
+    background:var(--navy-deep);color:var(--teal);
+    font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;
+  }
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .burger span{width:24px;height:2px;background:var(--white);}
+  .header-spacer{height:70px;}
+
+  /* ===== PAGE HEAD ===== */
+  .page-head{padding:64px 0 20px;text-align:center;}
+  .kicker{
+    display:inline-block;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;
+    color:var(--teal);font-weight:800;margin-bottom:14px;
+  }
+  .page-head-sub{
+    max-width:520px;margin:18px auto 0;color:rgba(36,31,25,0.6);font-size:1rem;line-height:1.6;
+  }
+
+  section{position:relative;z-index:1;padding:60px 0 120px;}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* ===== CONTACT ===== */
+  .contact-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;max-width:1000px;margin:0 auto;
+  }
+  .contact-card{
+    display:flex;align-items:center;gap:18px;padding:22px;
+    background:var(--navy-soft);border:1px solid var(--line);border-radius:16px;
+    margin-bottom:16px;transition:transform .3s ease, border-color .3s ease;
+  }
+  .contact-card:hover{transform:translateX(8px);border-color:var(--teal);}
+  .contact-icon{
+    width:46px;height:46px;border-radius:50%;background:rgba(27,63,115,0.10);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal);font-size:1.2rem;
+  }
+  .contact-card h4{font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;color:rgba(36,31,25,0.5);font-weight:700;}
+  .contact-card p{font-size:1.05rem;font-weight:700;margin-top:4px;}
+  .newsletter-box{
+    background:linear-gradient(145deg, var(--navy-soft), var(--navy-deep));
+    border:1px solid var(--line);border-radius:var(--radius);padding:40px;
+  }
+  .newsletter-box h3{font-size:1.6rem;margin-bottom:14px;}
+  .newsletter-box p{color:rgba(36,31,25,0.62);margin-bottom:24px;line-height:1.6;}
+  .form-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .form-row input{
+    flex:1;min-width:180px;padding:14px 18px;border-radius:100px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.9rem;
+  }
+  .form-row input:focus{outline:none;border-color:var(--teal);}
+  .btn{
+    padding:16px 34px;border-radius:100px;font-weight:800;font-size:0.85rem;
+    letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;
+    transition:transform .25s ease, box-shadow .25s ease;display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  }
+  .btn-primary{background:var(--teal);color:var(--navy-deep);}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(27,63,115,0.28);}
+
+  footer{border-top:1px solid var(--line);padding:44px 0;position:relative;z-index:1;}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .footer-brand{display:flex;align-items:center;gap:10px;}
+  .footer-brand img{height:32px;width:32px;border-radius:50%;}
+  .footer-socials{display:flex;gap:14px;}
+  .footer-socials a{
+    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;transition:all .25s ease;
+  }
+  .footer-socials a:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);}
+  .footer-copy{font-size:0.8rem;color:rgba(36,31,25,0.4);text-align:center;margin-top:24px;}
+
+  /* ===== CART DRAWER ===== */
+  .overlay{
+    position:fixed;inset:0;background:rgba(36,31,25,0.4);backdrop-filter:blur(4px);
+    z-index:1500;opacity:0;pointer-events:none;transition:opacity .35s ease;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .cart-drawer{
+    position:fixed;top:0;right:-420px;width:min(420px,100vw);height:100vh;
+    background:var(--navy);border-left:1px solid var(--line);z-index:1600;
+    display:flex;flex-direction:column;transition:right .4s cubic-bezier(.4,0,.2,1);
+  }
+  .cart-drawer.open{right:0;}
+  .cart-head{display:flex;justify-content:space-between;align-items:center;padding:24px;border-bottom:1px solid var(--line);}
+  .cart-head h3{font-size:1.3rem;}
+  .cart-close{background:none;border:none;color:var(--white);font-size:1.6rem;cursor:pointer;}
+  .cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+  .cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center;}
+  .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:var(--navy-deep);}
+  .cart-item-info{flex:1;}
+  .cart-item-info .name{font-weight:700;font-size:0.9rem;}
+  .cart-item-info .meta{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-top:2px;}
+  .qty-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .qty-row button{
+    width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--white);cursor:pointer;
+  }
+  .remove-btn{background:none;border:none;color:rgba(36,31,25,0.4);cursor:pointer;font-size:0.75rem;text-decoration:underline;margin-top:6px;}
+  .cart-empty{text-align:center;padding:60px 20px;color:rgba(36,31,25,0.5);}
+  .cart-footer{padding:24px;border-top:1px solid var(--line);}
+  .shipping-form{margin-bottom:20px;}
+  .shipping-title{font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;color:rgba(36,31,25,0.55);font-weight:800;margin-bottom:10px;}
+  .shipping-input{
+    width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.82rem;
+    margin-bottom:8px;transition:border-color .2s ease;
+  }
+  .shipping-input:focus{outline:none;border-color:var(--teal);}
+  .shipping-input.invalid{border-color:#c0392b;}
+  .shipping-row{display:flex;gap:8px;}
+  .shipping-row .shipping-input{flex:1;min-width:0;}
+  .shipping-error{font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:2px;margin-bottom:0;display:none;}
+  .shipping-error.visible{display:block;}
+  .cart-total-row{display:flex;justify-content:space-between;margin-bottom:18px;font-size:1.1rem;font-weight:800;}
+  .checkout-btn{
+    width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
+    color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
+    cursor:pointer;font-size:0.85rem;transition:filter .2s ease;
+  }
+  .checkout-btn:hover{filter:brightness(1.1);}
+
+  @media (max-width: 860px){
+    .nav-links{display:none;}
+    .burger{display:flex;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <nav>
+    <a class="brand" href="index.html">
+      <img src="assets/logo/kick-genius-logo.jpeg" alt="Kick Genius">
+      <span>Kick Genius</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="nosotros.html">Nosotros</a></li>
+      <li><a href="catalogo.html">Catálogo</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contacto.html" class="active">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartToggle" aria-label="Abrir carrito">
+        🛒 Carrito <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="burger" id="burgerBtn" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="header-spacer"></div>
+
+<div class="page-head">
+  <span class="kicker">Contacto</span>
+  <h1>Hablemos</h1>
+  <p class="page-head-sub">Resolvemos tus dudas y gestionamos tu pedido directamente por WhatsApp o Instagram.</p>
+</div>
+
+<section>
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <a href="https://wa.me/34644039760" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2zm0 18.15h-.01c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.25-8.24 8.25zm4.52-6.18c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.74 2.66 4.23 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+        </div>
+        <div><h4>WhatsApp</h4><p>+34 644 03 97 60</p></div>
+      </a>
+
+      <a href="https://www.instagram.com/kick_genius/" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <defs><linearGradient id="igGradContact" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
+              <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
+              <stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradContact)"/>
+            <rect x="6.7" y="6.7" width="10.6" height="10.6" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
+          </svg>
+        </div>
+        <div><h4>Instagram</h4><p>@kick_genius</p></div>
+      </a>
+
+      <a href="https://www.tiktok.com/@kickgeniusj" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path fill="#25F4EE" transform="translate(-0.9,0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#FE2C55" transform="translate(0.9,-0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#0a0a0a" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+          </svg>
+        </div>
+        <div><h4>TikTok</h4><p>@kickgeniusj</p></div>
+      </a>
+    </div>
+
+    <div class="newsletter-box reveal">
+      <h3>¿Dudas sobre una talla o producto?</h3>
+      <p>Escríbenos directamente y te respondemos por WhatsApp o Instagram lo antes posible.</p>
+      <div class="form-row">
+        <input type="text" id="contactName" placeholder="Tu nombre">
+      </div>
+      <div class="form-row" style="margin-top:12px;">
+        <input type="text" id="contactMsg" placeholder="¿En qué te ayudamos?">
+      </div>
+      <button class="btn btn-primary" style="margin-top:18px;width:100%;" onclick="sendContactWhatsapp()">Enviar por WhatsApp</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo/kick-genius-logo.jpeg" alt="Kick Genius">
+        <span style="font-family:'Anton',sans-serif;letter-spacing:1px;">Kick Genius</span>
+      </div>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/kick_genius/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <defs><linearGradient id="igGradFooter" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
+              <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
+              <stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradFooter)"/>
+            <rect x="6.7" y="6.7" width="10.6" height="10.6" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3" fill="none" stroke="#fff" stroke-width="1.6"/>
+            <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
+          </svg>
+        </a>
+        <a href="https://www.tiktok.com/@kickgeniusj" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="#25F4EE" transform="translate(-0.9,0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#FE2C55" transform="translate(0.9,-0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            <path fill="#0a0a0a" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+          </svg>
+        </a>
+        <a href="https://wa.me/34644039760" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2zm0 18.15h-.01c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.25-8.24 8.25zm4.52-6.18c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.74 2.66 4.23 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+        </a>
+      </div>
+    </div>
+    <p class="footer-copy">© <span id="year"></span> Kick Genius. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Tu carrito</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="shipping-form">
+      <h4 class="shipping-title">Datos de envío</h4>
+      <input type="text" id="shipName" class="shipping-input" placeholder="Nombre y apellidos">
+      <input type="text" id="shipAddress" class="shipping-input" placeholder="Dirección completa">
+      <div class="shipping-row">
+        <input type="text" id="shipCity" class="shipping-input" placeholder="Población">
+        <input type="text" id="shipZip" class="shipping-input" placeholder="Código postal">
+      </div>
+      <input type="text" id="shipCountry" class="shipping-input" placeholder="País">
+      <div class="shipping-row">
+        <input type="tel" id="shipPhone" class="shipping-input" placeholder="Teléfono">
+        <input type="email" id="shipEmail" class="shipping-input" placeholder="Email">
+      </div>
+      <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
+    </div>
+    <div class="cart-total-row"><span>Total</span><span id="cartTotal">0€</span></div>
+    <button class="checkout-btn" id="checkoutBtn">Finalizar por WhatsApp</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+
+  // ===== NAV scroll state =====
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  // ===== Reveal on scroll =====
+  const revealEls = document.querySelectorAll('.reveal, .stagger');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ===== Cart (localStorage) =====
+  const CART_KEY = 'kickGeniusCart';
+  function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e){ return []; } }
+  function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); renderCart(); }
+
+  const cartItemsEl = document.getElementById('cartItems');
+  const cartCountEl = document.getElementById('cartCount');
+  const cartTotalEl = document.getElementById('cartTotal');
+
+  function renderCart(){
+    const cart = getCart();
+    cartCountEl.textContent = cart.reduce((n,i) => n + i.qty, 0);
+    if (cart.length === 0) {
+      cartItemsEl.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+      cartTotalEl.textContent = '0€';
+      return;
+    }
+    let total = 0;
+    cartItemsEl.innerHTML = cart.map((item, idx) => {
+      total += item.price * item.qty;
+      const customBits = [];
+      if (item.customization) {
+        if (item.customization.name) customBits.push(`Nombre: ${item.customization.name}`);
+        if (item.customization.number) customBits.push(`Nº: ${item.customization.number}`);
+        if (item.customization.patch) customBits.push(`Parche: ${item.customization.patch}`);
+        if (item.customization.socks) customBits.push(`Medias: ${item.customization.socks}`);
+      }
+      const customLine = customBits.length ? `<div class="meta">${customBits.join(' · ')}</div>` : '';
+      return `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="name">${item.name}</div>
+            <div class="meta">Talla ${item.size} · ${item.price}€</div>
+            ${customLine}
+            <div class="qty-row">
+              <button data-action="dec" data-idx="${idx}">−</button>
+              <span>${item.qty}</span>
+              <button data-action="inc" data-idx="${idx}">+</button>
+            </div>
+            <button class="remove-btn" data-action="remove" data-idx="${idx}">Eliminar</button>
+          </div>
+        </div>`;
+    }).join('');
+    cartTotalEl.textContent = total + '€';
+
+    cartItemsEl.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        const cart = getCart();
+        if (btn.dataset.action === 'inc') cart[idx].qty++;
+        if (btn.dataset.action === 'dec') { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx,1); }
+        if (btn.dataset.action === 'remove') cart.splice(idx,1);
+        saveCart(cart);
+      });
+    });
+  }
+
+  // ===== Cart drawer open/close =====
+  const cartDrawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('overlay');
+  function openCart(){ cartDrawer.classList.add('open'); overlay.classList.add('open'); }
+  function closeCart(){ cartDrawer.classList.remove('open'); overlay.classList.remove('open'); }
+  document.getElementById('cartToggle').addEventListener('click', openCart);
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  overlay.addEventListener('click', closeCart);
+
+  // ===== Datos de envío (persistidos entre visitas) =====
+  const SHIP_KEY = 'kickGeniusShipping';
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipCountry','shipZip','shipPhone','shipEmail'];
+  const shipLabels = {
+    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población',
+    shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
+  };
+
+  (function loadShipping(){
+    try {
+      const saved = JSON.parse(localStorage.getItem(SHIP_KEY)) || {};
+      shipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
+    } catch(e){}
+  })();
+
+  function saveShipping(){
+    const data = {};
+    shipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
+    localStorage.setItem(SHIP_KEY, JSON.stringify(data));
+    return data;
+  }
+
+  // ===== Checkout via WhatsApp =====
+  document.getElementById('checkoutBtn').addEventListener('click', () => {
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    const shipping = saveShipping();
+    const shippingError = document.getElementById('shippingError');
+    const missing = shipFieldIds.filter(id => !shipping[id]);
+    document.querySelectorAll('.shipping-input').forEach(el => el.classList.remove('invalid'));
+
+    if (missing.length) {
+      missing.forEach(id => document.getElementById(id).classList.add('invalid'));
+      shippingError.classList.add('visible');
+      document.getElementById(missing[0]).focus();
+      return;
+    }
+    shippingError.classList.remove('visible');
+
+    let total = 0;
+    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n\n*Productos:*\n`;
+    cart.forEach((item, idx) => {
+      total += item.price * item.qty;
+      msg += `${idx + 1}. ${item.name}\n   Talla: ${item.size} · Cantidad: ${item.qty} · Precio: ${item.price * item.qty}€\n`;
+      if (item.customization) {
+        const bits = [];
+        if (item.customization.name) bits.push(`Nombre: ${item.customization.name}`);
+        if (item.customization.number) bits.push(`Nº: ${item.customization.number}`);
+        if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
+        if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
+        if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
+      }
+    });
+    msg += `\n*Total del pedido: ${total}€*\n\n`;
+    msg += `📦 *Datos de envío*\n`;
+    shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
+    msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
+
+    window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
+  });
+
+  window.sendContactWhatsapp = function(){
+    const name = document.getElementById('contactName').value.trim();
+    const message = document.getElementById('contactMsg').value.trim();
+    let text = 'Hola Kick Genius,';
+    if (name) text += ` soy ${name}.`;
+    if (message) text += ` ${message}`;
+    window.open(`https://wa.me/34644039760?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  renderCart();
+
+  // ===== Mobile menu =====
+  const burger = document.getElementById('burgerBtn');
+  const navLinks = document.querySelector('.nav-links');
+  burger.addEventListener('click', () => {
+    const isOpen = navLinks.style.display === 'flex';
+    navLinks.style.display = isOpen ? 'none' : 'flex';
+    navLinks.style.cssText += isOpen ? '' : 'position:fixed;top:70px;left:0;right:0;flex-direction:column;background:rgba(250,245,236,0.98);padding:24px;gap:20px;text-align:center;';
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+})();
+</script>
+
+</body>
+</html>
