@@ -161,52 +161,91 @@
 
   /* ===== CART DRAWER ===== */
   .overlay{
-    position:fixed;inset:0;background:rgba(36,31,25,0.4);backdrop-filter:blur(4px);
+    position:fixed;inset:0;background:rgba(36,31,25,0.45);backdrop-filter:blur(4px);
     z-index:1500;opacity:0;pointer-events:none;transition:opacity .35s ease;
   }
   .overlay.open{opacity:1;pointer-events:auto;}
   .cart-drawer{
-    position:fixed;top:0;right:-420px;width:min(420px,100vw);height:100vh;
+    position:fixed;top:0;right:-440px;width:min(440px,100vw);height:100vh;
     background:var(--navy);border-left:1px solid var(--line);z-index:1600;
     display:flex;flex-direction:column;transition:right .4s cubic-bezier(.4,0,.2,1);
+    box-shadow:-24px 0 60px rgba(36,31,25,0.18);
   }
   .cart-drawer.open{right:0;}
-  .cart-head{display:flex;justify-content:space-between;align-items:center;padding:24px;border-bottom:1px solid var(--line);}
-  .cart-head h3{font-size:1.3rem;}
-  .cart-close{background:none;border:none;color:var(--white);font-size:1.6rem;cursor:pointer;}
-  .cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
-  .cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center;}
-  .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:var(--navy-deep);}
-  .cart-item-info{flex:1;}
-  .cart-item-info .name{font-weight:700;font-size:0.9rem;}
-  .cart-item-info .meta{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-top:2px;}
-  .qty-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
-  .qty-row button{
-    width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--white);cursor:pointer;
+  .cart-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line);}
+  .cart-head-title{display:flex;align-items:baseline;gap:10px;}
+  .cart-head h3{font-size:1.15rem;font-family:'Anton',sans-serif;letter-spacing:0.5px;}
+  .cart-head-count{font-size:0.78rem;color:rgba(36,31,25,0.5);font-weight:700;}
+  .cart-close{
+    background:rgba(36,31,25,0.06);border:none;color:var(--white);font-size:1.3rem;cursor:pointer;
+    width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    line-height:1;transition:background .2s ease;
   }
-  .remove-btn{background:none;border:none;color:rgba(36,31,25,0.4);cursor:pointer;font-size:0.75rem;text-decoration:underline;margin-top:6px;}
-  .cart-empty{text-align:center;padding:60px 20px;color:rgba(36,31,25,0.5);}
-  .cart-footer{padding:24px;border-top:1px solid var(--line);}
-  .shipping-form{margin-bottom:20px;}
-  .shipping-title{font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;color:rgba(36,31,25,0.55);font-weight:800;margin-bottom:10px;}
+  .cart-close:hover{background:rgba(36,31,25,0.12);}
+  .cart-items{flex:1;overflow-y:auto;padding:6px 24px;}
+  .cart-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+  .cart-item img{
+    width:72px;height:72px;object-fit:contain;border-radius:12px;background:var(--navy-deep);
+    border:1px solid var(--line);padding:6px;flex-shrink:0;
+  }
+  .cart-item-info{flex:1;min-width:0;}
+  .cart-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .cart-item-info .name{font-weight:800;font-size:0.9rem;line-height:1.35;}
+  .cart-item-info .meta{font-size:0.78rem;color:rgba(36,31,25,0.55);margin-top:4px;font-weight:600;}
+  .cart-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .cart-tag{
+    font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:100px;
+    background:rgba(27,63,115,0.08);color:var(--teal);white-space:nowrap;
+  }
+  .cart-item-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+  .qty-pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:100px;overflow:hidden;}
+  .qty-pill button{
+    width:26px;height:26px;background:none;border:none;color:var(--white);cursor:pointer;
+    font-size:0.95rem;transition:background .2s ease;display:flex;align-items:center;justify-content:center;
+  }
+  .qty-pill button:hover{background:rgba(36,31,25,0.06);}
+  .qty-pill span{min-width:22px;text-align:center;font-weight:800;font-size:0.82rem;}
+  .cart-item-subtotal{font-weight:800;font-size:0.92rem;color:var(--teal);}
+  .remove-icon-btn{
+    background:none;border:none;cursor:pointer;color:rgba(36,31,25,0.32);font-size:0.95rem;
+    padding:4px;border-radius:6px;line-height:1;transition:all .2s ease;flex-shrink:0;
+  }
+  .remove-icon-btn:hover{color:#c0392b;background:rgba(192,57,43,0.08);}
+  .cart-empty{
+    text-align:center;padding:70px 20px;color:rgba(36,31,25,0.5);
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+  }
+  .cart-empty-icon{font-size:2.4rem;opacity:0.4;}
+  .cart-empty a{color:var(--teal);font-weight:700;font-size:0.85rem;text-decoration:underline;}
+  .cart-footer{padding:20px 24px 24px;border-top:1px solid var(--line);}
+  .shipping-form{margin-bottom:16px;}
+  .shipping-title{font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;color:rgba(36,31,25,0.55);font-weight:800;margin-bottom:12px;}
+  .shipping-field{margin-bottom:10px;}
+  .shipping-field label{display:block;font-size:0.7rem;font-weight:700;color:rgba(36,31,25,0.5);margin-bottom:4px;}
   .shipping-input{
     width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
-    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.82rem;
-    margin-bottom:8px;transition:border-color .2s ease;
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.85rem;
+    transition:border-color .2s ease;
   }
   .shipping-input:focus{outline:none;border-color:var(--teal);}
   .shipping-input.invalid{border-color:#c0392b;}
-  .shipping-row{display:flex;gap:8px;}
-  .shipping-row .shipping-input{flex:1;min-width:0;}
-  .shipping-error{font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:2px;margin-bottom:0;display:none;}
+  .shipping-row{display:flex;gap:10px;}
+  .shipping-row .shipping-field{flex:1;min-width:0;}
+  .shipping-error{font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:4px;margin-bottom:0;display:none;}
   .shipping-error.visible{display:block;}
-  .cart-total-row{display:flex;justify-content:space-between;margin-bottom:18px;font-size:1.1rem;font-weight:800;}
+  .cart-total-row{
+    display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;
+    font-size:1.2rem;font-weight:800;padding-top:14px;border-top:1px solid var(--line);
+  }
+  .cart-total-note{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-bottom:16px;}
   .checkout-btn{
     width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
     color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
-    cursor:pointer;font-size:0.85rem;transition:filter .2s ease;
+    cursor:pointer;font-size:0.85rem;transition:filter .2s ease, transform .2s ease;
+    display:flex;align-items:center;justify-content:center;gap:8px;
   }
-  .checkout-btn:hover{filter:brightness(1.1);}
+  .checkout-btn:hover{filter:brightness(1.1);transform:translateY(-2px);}
+  .checkout-note{text-align:center;font-size:0.72rem;color:rgba(36,31,25,0.45);margin-top:10px;}
 
   @media (max-width: 860px){
     .nav-links{display:none;}
@@ -347,28 +386,54 @@
 <div class="overlay" id="overlay"></div>
 <aside class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
-    <h3>Tu carrito</h3>
-    <button class="cart-close" id="cartClose">&times;</button>
+    <div class="cart-head-title">
+      <h3>Tu carrito</h3>
+      <span class="cart-head-count" id="cartHeadCount"></span>
+    </div>
+    <button class="cart-close" id="cartClose" aria-label="Cerrar carrito">&times;</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="shipping-form">
       <h4 class="shipping-title">Datos de envío</h4>
-      <input type="text" id="shipName" class="shipping-input" placeholder="Nombre y apellidos">
-      <input type="text" id="shipAddress" class="shipping-input" placeholder="Dirección completa">
-      <div class="shipping-row">
-        <input type="text" id="shipCity" class="shipping-input" placeholder="Población">
-        <input type="text" id="shipZip" class="shipping-input" placeholder="Código postal">
+      <div class="shipping-field">
+        <label for="shipName">Nombre y apellidos</label>
+        <input type="text" id="shipName" class="shipping-input" placeholder="Ej. Juan Pérez">
       </div>
-      <input type="text" id="shipCountry" class="shipping-input" placeholder="País">
+      <div class="shipping-field">
+        <label for="shipAddress">Dirección completa</label>
+        <input type="text" id="shipAddress" class="shipping-input" placeholder="Calle, número, piso">
+      </div>
       <div class="shipping-row">
-        <input type="tel" id="shipPhone" class="shipping-input" placeholder="Teléfono">
-        <input type="email" id="shipEmail" class="shipping-input" placeholder="Email">
+        <div class="shipping-field">
+          <label for="shipCity">Población</label>
+          <input type="text" id="shipCity" class="shipping-input">
+        </div>
+        <div class="shipping-field">
+          <label for="shipZip">Código postal</label>
+          <input type="text" id="shipZip" class="shipping-input">
+        </div>
+      </div>
+      <div class="shipping-field">
+        <label for="shipCountry">País</label>
+        <input type="text" id="shipCountry" class="shipping-input">
+      </div>
+      <div class="shipping-row">
+        <div class="shipping-field">
+          <label for="shipPhone">Teléfono</label>
+          <input type="tel" id="shipPhone" class="shipping-input">
+        </div>
+        <div class="shipping-field">
+          <label for="shipEmail">Email</label>
+          <input type="email" id="shipEmail" class="shipping-input">
+        </div>
       </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
     <div class="cart-total-row"><span>Total</span><span id="cartTotal">0€</span></div>
+    <p class="cart-total-note">Envío a coordinar por WhatsApp tras confirmar el pedido</p>
     <button class="checkout-btn" id="checkoutBtn">Finalizar por WhatsApp</button>
+    <p class="checkout-note">Pago por PayPal o transferencia bancaria</p>
   </div>
 </aside>
 
@@ -410,40 +475,54 @@
 
   const cartItemsEl = document.getElementById('cartItems');
   const cartCountEl = document.getElementById('cartCount');
+  const cartHeadCountEl = document.getElementById('cartHeadCount');
   const cartTotalEl = document.getElementById('cartTotal');
 
   function renderCart(){
     const cart = getCart();
-    cartCountEl.textContent = cart.reduce((n,i) => n + i.qty, 0);
+    const count = cart.reduce((n,i) => n + i.qty, 0);
+    cartCountEl.textContent = count;
+    cartHeadCountEl.textContent = count > 0 ? `${count} ${count === 1 ? 'artículo' : 'artículos'}` : '';
     if (cart.length === 0) {
-      cartItemsEl.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+      cartItemsEl.innerHTML = `
+        <div class="cart-empty">
+          <span class="cart-empty-icon">🛒</span>
+          <p>Tu carrito está vacío</p>
+          <a href="catalogo.html">Ver catálogo</a>
+        </div>`;
       cartTotalEl.textContent = '0€';
       return;
     }
     let total = 0;
     cartItemsEl.innerHTML = cart.map((item, idx) => {
-      total += item.price * item.qty;
-      const customBits = [];
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      const tags = [];
       if (item.customization) {
-        if (item.customization.name) customBits.push(`Nombre: ${item.customization.name}`);
-        if (item.customization.number) customBits.push(`Nº: ${item.customization.number}`);
-        if (item.customization.patch) customBits.push(`Parche: ${item.customization.patch}`);
-        if (item.customization.socks) customBits.push(`Medias: ${item.customization.socks}`);
+        if (item.customization.name) tags.push(`Nombre: ${item.customization.name}`);
+        if (item.customization.number) tags.push(`Nº ${item.customization.number}`);
+        if (item.customization.patch) tags.push(item.customization.patch);
+        if (item.customization.socks) tags.push('Medias');
       }
-      const customLine = customBits.length ? `<div class="meta">${customBits.join(' · ')}</div>` : '';
+      const tagsHtml = tags.length ? `<div class="cart-tags">${tags.map(t => `<span class="cart-tag">${t}</span>`).join('')}</div>` : '';
       return `
         <div class="cart-item">
           <img src="${item.img}" alt="${item.name}">
           <div class="cart-item-info">
-            <div class="name">${item.name}</div>
-            <div class="meta">Talla ${item.size} · ${item.price}€</div>
-            ${customLine}
-            <div class="qty-row">
-              <button data-action="dec" data-idx="${idx}">−</button>
-              <span>${item.qty}</span>
-              <button data-action="inc" data-idx="${idx}">+</button>
+            <div class="cart-item-top">
+              <span class="name">${item.name}</span>
+              <button class="remove-icon-btn" data-action="remove" data-idx="${idx}" aria-label="Eliminar" title="Eliminar">✕</button>
             </div>
-            <button class="remove-btn" data-action="remove" data-idx="${idx}">Eliminar</button>
+            <div class="meta">Talla ${item.size} · ${item.price}€ / ud.</div>
+            ${tagsHtml}
+            <div class="cart-item-bottom">
+              <div class="qty-pill">
+                <button data-action="dec" data-idx="${idx}" aria-label="Restar unidad">−</button>
+                <span>${item.qty}</span>
+                <button data-action="inc" data-idx="${idx}" aria-label="Sumar unidad">+</button>
+              </div>
+              <span class="cart-item-subtotal">${subtotal}€</span>
+            </div>
           </div>
         </div>`;
     }).join('');
