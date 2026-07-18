@@ -178,12 +178,6 @@
   .product-media img.img-b{position:absolute;inset:0;opacity:0;}
   .product-card:hover .product-media img.img-a{opacity:0;}
   .product-card:hover .product-media img.img-b{opacity:1;}
-  .badge{
-    position:absolute;top:14px;left:14px;background:var(--yellow);color:var(--white);
-    font-size:0.68rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;
-    text-transform:uppercase;z-index:2;
-  }
-  .badge.soon{background:rgba(36,31,25,0.06);color:var(--white);backdrop-filter:blur(6px);}
   .badge-offer{
     position:absolute;top:14px;right:14px;background:var(--teal);color:var(--navy-deep);
     font-size:0.68rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;
@@ -197,8 +191,6 @@
   .product-info{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1;}
   .product-cat{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;}
   .product-name{font-size:1.05rem;font-weight:800;line-height:1.3;}
-  .product-price{font-size:1.4rem;font-weight:800;color:var(--white);margin-top:auto;}
-  .product-price .placeholder-text{font-size:0.85rem;color:rgba(36,31,25,0.42);font-weight:600;}
   .price-row{display:flex;align-items:baseline;gap:10px;margin-top:auto;flex-wrap:wrap;}
   .price-original{font-size:0.95rem;font-weight:600;color:rgba(36,31,25,0.4);text-decoration:line-through;}
   .price-final{font-size:1.4rem;font-weight:800;color:var(--teal);}
@@ -217,11 +209,6 @@
   }
   .add-cart-btn:hover{filter:brightness(1.1);}
   .add-cart-btn:disabled{background:rgba(36,31,25,0.06);color:rgba(36,31,25,0.35);cursor:not-allowed;}
-  .placeholder-card .product-media{
-    display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg, var(--navy-soft), var(--navy-deep));
-  }
-  .placeholder-card .product-media span{font-size:3rem;opacity:0.25;}
 
   /* ===== PRODUCT MODAL (ficha de producto) ===== */
   .product-modal-overlay{
@@ -430,7 +417,7 @@
   <div class="wrap catalog-toolbar-inner">
     <div class="catalog-toolbar-title">
       <h1>Catálogo</h1>
-      <span>Sneakers · Fútbol · NBA · F1 · NFL</span>
+      <span>Sneakers · Fútbol</span>
     </div>
 
     <div class="filters-bar">
@@ -442,9 +429,6 @@
           <button class="dropdown-item active" data-filter="all">Todos</button>
           <button class="dropdown-item" data-filter="sneakers">Sneakers</button>
           <button class="dropdown-item" data-filter="futbol">Fútbol</button>
-          <button class="dropdown-item" data-filter="nba">NBA</button>
-          <button class="dropdown-item" data-filter="f1">F1</button>
-          <button class="dropdown-item" data-filter="nfl">NFL</button>
         </div>
       </div>
 
@@ -742,34 +726,6 @@
             <span class="price-final">23€</span>
             <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
           </div>
-        </div>
-      </article>
-
-      <!-- PLACEHOLDERS: el resto de categorías aún no tienen producto/precio real -->
-      <article class="product-card placeholder-card" data-cat="nba">
-        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏀</span></div>
-        <div class="product-info">
-          <span class="product-cat">NBA</span>
-          <span class="product-name">[NOMBRE DE LA CAMISETA/PRODUCTO]</span>
-          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
-        </div>
-      </article>
-
-      <article class="product-card placeholder-card" data-cat="f1">
-        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏎️</span></div>
-        <div class="product-info">
-          <span class="product-cat">F1</span>
-          <span class="product-name">[NOMBRE DEL PRODUCTO]</span>
-          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
-        </div>
-      </article>
-
-      <article class="product-card placeholder-card" data-cat="nfl">
-        <div class="product-media"><span class="badge soon">Próximamente</span><span>🏈</span></div>
-        <div class="product-info">
-          <span class="product-cat">NFL</span>
-          <span class="product-name">[NOMBRE DEL PRODUCTO]</span>
-          <span class="product-price"><span class="placeholder-text">[AÑADE PRECIO Y FOTO]</span></span>
         </div>
       </article>
 

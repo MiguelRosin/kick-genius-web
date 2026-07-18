@@ -192,7 +192,8 @@
 
   /* ===== CATEGORIES ===== */
   .cat-grid{
-    display:grid;grid-template-columns:repeat(5, 1fr);gap:20px;
+    display:grid;grid-template-columns:repeat(2, minmax(180px, 240px));gap:20px;
+    justify-content:center;max-width:520px;margin:0 auto;
   }
   .cat-card{
     background:var(--navy-soft);border:1px solid var(--line);border-radius:var(--radius);
@@ -359,7 +360,7 @@
   <div class="hero-bg-shape parallax-el" data-speed="0.15"></div>
   <div class="hero-bg-shape two parallax-el" data-speed="0.25"></div>
   <div class="hero-inner">
-    <span class="hero-tag">Sneakers · Fútbol · NBA · F1 · NFL</span>
+    <span class="hero-tag">Sneakers · Fútbol</span>
     <h1>KICK <span class="accent">DIFFERENT.</span></h1>
     <p>La tienda online de Kick Genius: sneakers y camisetas deportivas para quienes viven el deporte con estilo propio.</p>
     <div class="btn-row">
@@ -390,18 +391,6 @@
       <a href="catalogo.html" class="cat-card">
         <span class="cat-icon">⚽</span>
         <h4>Fútbol</h4>
-      </a>
-      <a href="catalogo.html" class="cat-card">
-        <span class="cat-icon">🏀</span>
-        <h4>NBA</h4>
-      </a>
-      <a href="catalogo.html" class="cat-card">
-        <span class="cat-icon">🏎️</span>
-        <h4>F1</h4>
-      </a>
-      <a href="catalogo.html" class="cat-card">
-        <span class="cat-icon">🏈</span>
-        <h4>NFL</h4>
       </a>
     </div>
   </div>
