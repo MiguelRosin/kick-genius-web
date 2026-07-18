@@ -164,6 +164,7 @@
   .stagger.visible > *:nth-child(12){transition-delay:1.15s;}
   .stagger.visible > *:nth-child(13){transition-delay:1.25s;}
   .stagger.visible > *:nth-child(14){transition-delay:1.35s;}
+  .stagger.visible > *:nth-child(15){transition-delay:1.45s;}
 
   /* ===== CATALOG GRID ===== */
   .catalog-section{padding:44px 0 100px;}
@@ -495,6 +496,7 @@
           <button class="dropdown-item active" data-league="all">Todas las ligas</button>
           <button class="dropdown-item" data-league="liga-espanola">Liga Española</button>
           <button class="dropdown-item" data-league="premier-league">Premier League</button>
+          <button class="dropdown-item" data-league="bundesliga">Bundesliga</button>
         </div>
       </div>
 
@@ -506,6 +508,7 @@
           <button class="dropdown-item active" data-team="all">Todos los equipos</button>
           <button class="dropdown-item" data-team="real-madrid" data-for-league="liga-espanola">Real Madrid</button>
           <button class="dropdown-item" data-team="manchester-city" data-for-league="premier-league">Manchester City</button>
+          <button class="dropdown-item" data-team="bayern-munich" data-for-league="bundesliga">Bayern Munich</button>
         </div>
       </div>
     </div>
@@ -652,6 +655,24 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Premier League · Manchester City</span>
           <span class="product-name">Camiseta Local Manchester City 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-id="bayern-munich-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/bayern-munich-local-2627/frontal.jpg" alt="Camiseta Bayern Munich 26/27 frontal">
+          <img class="img-b" src="assets/productos/bayern-munich-local-2627/trasera.jpg" alt="Camiseta Bayern Munich 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Bundesliga · Bayern Munich</span>
+          <span class="product-name">Camiseta Local Bayern Munich 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -1134,6 +1155,22 @@
         nameNumberFee: 2,
         patchFee: 1,
         leaguePatchLabel: 'Premier League'
+      }
+    },
+    'bayern-munich-local-2627': {
+      name: 'Camiseta Local Bayern Munich 26/27',
+      cat: 'Fútbol · Bundesliga · Bayern Munich',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/bayern-munich-local-2627/frontal.jpg',
+        'assets/productos/bayern-munich-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Bundesliga'
       }
     },
     'crop-real-madrid-local-2627': {
