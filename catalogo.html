@@ -148,6 +148,40 @@
   .dropdown-item:hover{background:rgba(36,31,25,0.06);}
   .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
 
+  /* ===== Árbol de categorías (filtro único y claro) ===== */
+  .tree-menu{min-width:270px;max-height:420px;padding:10px;}
+  .tree-item{
+    display:block;width:100%;text-align:left;border:none;background:transparent;
+    cursor:pointer;transition:background .2s ease, color .2s ease;border-radius:10px;
+  }
+  .tree-item:hover{background:rgba(36,31,25,0.06);}
+  .tree-item.active{background:var(--teal);color:var(--navy-deep);}
+  .tree-all{
+    padding:11px 12px;font-size:0.88rem;font-weight:800;margin-bottom:6px;
+    border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;
+  }
+  .tree-group{margin-top:4px;padding-top:4px;}
+  .tree-group + .tree-group{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;}
+  .tree-cat{
+    padding:9px 12px;font-size:0.72rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--teal);
+  }
+  .tree-cat:hover{background:rgba(27,63,115,0.08);}
+  .tree-cat.active{background:var(--teal);color:var(--navy-deep);}
+  .tree-sub{
+    padding:9px 12px 9px 26px;font-size:0.85rem;font-weight:700;
+    position:relative;
+  }
+  .tree-sub::before{
+    content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:5px;height:5px;border-radius:50%;background:var(--line);
+  }
+  .tree-sub.active::before{background:var(--navy-deep);}
+  .tree-subsub{
+    padding:8px 12px 8px 40px;font-size:0.8rem;font-weight:600;color:rgba(36,31,25,0.75);
+  }
+  .tree-subsub.active{color:var(--navy-deep);}
+
 
   /* ===== CATALOG GRID ===== */
   .catalog-section{padding:44px 0 100px;}
@@ -172,9 +206,9 @@
     aspect-ratio:1/1;background:var(--navy-deep);position:relative;overflow:hidden;cursor:pointer;
   }
   .product-media img{
-    width:100%;height:100%;object-fit:cover;transition:transform .6s ease, opacity .4s ease;
+    width:100%;height:100%;object-fit:contain;padding:10px;transition:transform .6s ease, opacity .4s ease;
   }
-  .product-card:hover .product-media img{transform:scale(1.08);}
+  .product-card:hover .product-media img{transform:scale(1.05);}
   .product-media img.img-b{position:absolute;inset:0;opacity:0;}
   .product-card:hover .product-media img.img-a{opacity:0;}
   .product-card:hover .product-media img.img-b{opacity:1;}
@@ -235,7 +269,7 @@
     aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--navy-deep);
     border:1px solid var(--line);
   }
-  .modal-main-img img{width:100%;height:100%;object-fit:cover;}
+  .modal-main-img img{width:100%;height:100%;object-fit:contain;padding:14px;}
   .modal-thumbs{display:flex;gap:10px;margin-top:14px;overflow-x:auto;padding-bottom:4px;}
   .modal-thumbs img{
     width:64px;height:64px;object-fit:cover;border-radius:10px;cursor:pointer;flex-shrink:0;
@@ -421,70 +455,50 @@
     </div>
 
     <div class="filters-bar">
-      <div class="dropdown" id="categoryDropdown">
+      <div class="dropdown tree-dropdown" id="filterDropdown">
         <button class="dropdown-toggle" type="button">
-          <span id="categoryLabel">Categoría: Todos</span><span class="chevron">▾</span>
+          <span id="filterLabel">Categoría: Todos</span><span class="chevron">▾</span>
         </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item active" data-filter="all">Todos</button>
-          <button class="dropdown-item" data-filter="sneakers">Sneakers</button>
-          <button class="dropdown-item" data-filter="futbol">Fútbol</button>
-        </div>
-      </div>
+        <div class="dropdown-menu tree-menu">
+          <button class="tree-item tree-all active" data-label="Categoría: Todos">
+            Todos los productos
+          </button>
 
-      <div class="dropdown" id="brandDropdown" style="display:none;">
-        <button class="dropdown-toggle" type="button">
-          <span id="brandLabel">Marca: Todas</span><span class="chevron">▾</span>
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item active" data-brand="all">Todas las marcas</button>
-          <button class="dropdown-item" data-brand="nike">Nike</button>
-          <button class="dropdown-item" data-brand="adidas">Adidas</button>
-          <button class="dropdown-item" data-brand="jordan">Jordan</button>
-          <button class="dropdown-item" data-brand="ugg">UGG</button>
-          <button class="dropdown-item" data-brand="salomon">Salomon</button>
-          <button class="dropdown-item" data-brand="veja">Veja</button>
-          <button class="dropdown-item" data-brand="new-balance">New Balance</button>
-          <button class="dropdown-item" data-brand="asics">Asics</button>
-          <button class="dropdown-item" data-brand="crocs">Crocs</button>
-          <button class="dropdown-item" data-brand="vans">Vans</button>
-          <button class="dropdown-item" data-brand="converse">Converse</button>
-          <button class="dropdown-item" data-brand="golden-goose">Golden Goose</button>
-          <button class="dropdown-item" data-brand="bape-sta">Bape Sta</button>
-        </div>
-      </div>
+          <div class="tree-group">
+            <button class="tree-item tree-cat" data-cat="sneakers" data-label="Categoría: Sneakers">
+              👟 Sneakers
+            </button>
+            <button class="tree-item tree-sub" data-cat="sneakers" data-brand="nike" data-label="Categoría: Sneakers · Nike">
+              Nike
+            </button>
+            <button class="tree-item tree-subsub" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-label="Categoría: Sneakers · Nike · Nike Mind 001">
+              Nike Mind 001
+            </button>
+          </div>
 
-      <div class="dropdown" id="modelDropdown" style="display:none;">
-        <button class="dropdown-toggle" type="button">
-          <span id="modelLabel">Modelo: Todos</span><span class="chevron">▾</span>
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item active" data-model="all">Todos los modelos</button>
-          <button class="dropdown-item" data-model="nike-mind-001" data-for-brand="nike">Nike Mind 001</button>
-        </div>
-      </div>
-
-      <div class="dropdown" id="leagueDropdown" style="display:none;">
-        <button class="dropdown-toggle" type="button">
-          <span id="leagueLabel">Liga: Todas</span><span class="chevron">▾</span>
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item active" data-league="all">Todas las ligas</button>
-          <button class="dropdown-item" data-league="liga-espanola">Liga Española</button>
-          <button class="dropdown-item" data-league="premier-league">Premier League</button>
-          <button class="dropdown-item" data-league="bundesliga">Bundesliga</button>
-        </div>
-      </div>
-
-      <div class="dropdown" id="teamDropdown" style="display:none;">
-        <button class="dropdown-toggle" type="button">
-          <span id="teamLabel">Equipo: Todos</span><span class="chevron">▾</span>
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item active" data-team="all">Todos los equipos</button>
-          <button class="dropdown-item" data-team="real-madrid" data-for-league="liga-espanola">Real Madrid</button>
-          <button class="dropdown-item" data-team="manchester-city" data-for-league="premier-league">Manchester City</button>
-          <button class="dropdown-item" data-team="bayern-munich" data-for-league="bundesliga">Bayern Munich</button>
+          <div class="tree-group">
+            <button class="tree-item tree-cat" data-cat="futbol" data-label="Categoría: Fútbol">
+              ⚽ Fútbol
+            </button>
+            <button class="tree-item tree-sub" data-cat="futbol" data-league="liga-espanola" data-label="Categoría: Fútbol · Liga Española">
+              Liga Española
+            </button>
+            <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-label="Categoría: Fútbol · Liga Española · Real Madrid">
+              Real Madrid
+            </button>
+            <button class="tree-item tree-sub" data-cat="futbol" data-league="premier-league" data-label="Categoría: Fútbol · Premier League">
+              Premier League
+            </button>
+            <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-label="Categoría: Fútbol · Premier League · Manchester City">
+              Manchester City
+            </button>
+            <button class="tree-item tree-sub" data-cat="futbol" data-league="bundesliga" data-label="Categoría: Fútbol · Bundesliga">
+              Bundesliga
+            </button>
+            <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-label="Categoría: Fútbol · Bundesliga · Bayern Munich">
+              Bayern Munich
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -729,9 +743,27 @@
         </div>
       </article>
 
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-id="bayern-munich-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/bayern-munich-kids-2627/frontal.jpg" alt="Equipación Niño Bayern Munich 26/27 frontal">
+          <img class="img-b" src="assets/productos/bayern-munich-kids-2627/trasera.jpg" alt="Equipación Niño Bayern Munich 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Bundesliga · Bayern Munich</span>
+          <span class="product-name">Equipación Niño Bayern Munich Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
     </div>
 
-    <p class="empty-state" id="emptyState">Todavía no hay productos en esta marca. ¡Vuelve pronto!</p>
+    <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
   </div>
 </section>
 
@@ -856,84 +888,29 @@
 <script>
 (function(){
 
-  // ===== Filtros desplegables (categoría + subcategorías: marca / modelo / liga / equipo) =====
-  const categoryDropdown = document.getElementById('categoryDropdown');
-  const brandDropdown = document.getElementById('brandDropdown');
-  const modelDropdown = document.getElementById('modelDropdown');
-  const leagueDropdown = document.getElementById('leagueDropdown');
-  const teamDropdown = document.getElementById('teamDropdown');
-  const categoryLabel = document.getElementById('categoryLabel');
-  const brandLabel = document.getElementById('brandLabel');
-  const modelLabel = document.getElementById('modelLabel');
-  const leagueLabel = document.getElementById('leagueLabel');
-  const teamLabel = document.getElementById('teamLabel');
-  const allDropdowns = [categoryDropdown, brandDropdown, modelDropdown, leagueDropdown, teamDropdown];
+  // ===== Filtro único: árbol de categorías/subcategorías =====
+  const filterDropdown = document.getElementById('filterDropdown');
+  const filterLabel = document.getElementById('filterLabel');
   const emptyState = document.getElementById('emptyState');
   const cards = document.querySelectorAll('.product-card');
-  let activeCategory = 'all';
-  let activeBrand = 'all';
-  let activeModel = 'all';
-  let activeLeague = 'all';
-  let activeTeam = 'all';
+  const treeItems = document.querySelectorAll('.tree-item');
 
-  allDropdowns.forEach(dd => {
-    const toggle = dd.querySelector('.dropdown-toggle');
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const wasOpen = dd.classList.contains('open');
-      allDropdowns.forEach(d => d.classList.remove('open'));
-      if (!wasOpen) dd.classList.add('open');
-    });
+  const toggle = filterDropdown.querySelector('.dropdown-toggle');
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    filterDropdown.classList.toggle('open');
   });
-  document.addEventListener('click', () => allDropdowns.forEach(d => d.classList.remove('open')));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') allDropdowns.forEach(d => d.classList.remove('open')); });
+  document.addEventListener('click', () => filterDropdown.classList.remove('open'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') filterDropdown.classList.remove('open'); });
 
-  function resetDropdown(dropdown, labelEl, prefix) {
-    const allItem = dropdown.querySelector('.dropdown-item[data-brand="all"], .dropdown-item[data-model="all"], .dropdown-item[data-league="all"], .dropdown-item[data-team="all"]');
-    dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-    allItem.classList.add('active');
-    labelEl.textContent = `${prefix}: ${allItem.textContent}`;
-    return 'all';
-  }
-
-  function updateModelOptions() {
-    modelDropdown.querySelectorAll('.dropdown-item[data-for-brand]').forEach(item => {
-      item.style.display = item.dataset.forBrand === activeBrand ? '' : 'none';
-    });
-  }
-
-  function updateTeamOptions() {
-    teamDropdown.querySelectorAll('.dropdown-item[data-for-league]').forEach(item => {
-      item.style.display = item.dataset.forLeague === activeLeague ? '' : 'none';
-    });
-  }
-
-  function applyFilters() {
-    brandDropdown.style.display = activeCategory === 'sneakers' ? '' : 'none';
-    modelDropdown.style.display = (activeCategory === 'sneakers' && activeBrand !== 'all') ? '' : 'none';
-    leagueDropdown.style.display = activeCategory === 'futbol' ? '' : 'none';
-    teamDropdown.style.display = (activeCategory === 'futbol' && activeLeague !== 'all') ? '' : 'none';
-
-    if (activeCategory !== 'sneakers') {
-      activeBrand = resetDropdown(brandDropdown, brandLabel, 'Marca');
-      activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
-    }
-    if (activeBrand === 'all') activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
-    if (activeCategory !== 'futbol') {
-      activeLeague = resetDropdown(leagueDropdown, leagueLabel, 'Liga');
-      activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
-    }
-    if (activeLeague === 'all') activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
-    updateModelOptions();
-    updateTeamOptions();
-
+  function applyFilters(activeCategory, activeBrand, activeModel, activeLeague, activeTeam) {
     let visibleCount = 0;
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
-      const matchesBrand = activeBrand === 'all' || card.dataset.cat !== 'sneakers' || card.dataset.brand === activeBrand;
-      const matchesModel = activeModel === 'all' || card.dataset.cat !== 'sneakers' || card.dataset.model === activeModel;
-      const matchesLeague = activeLeague === 'all' || card.dataset.cat !== 'futbol' || card.dataset.league === activeLeague;
-      const matchesTeam = activeTeam === 'all' || card.dataset.cat !== 'futbol' || card.dataset.team === activeTeam;
+      const matchesBrand = activeBrand === 'all' || card.dataset.brand === activeBrand;
+      const matchesModel = activeModel === 'all' || card.dataset.model === activeModel;
+      const matchesLeague = activeLeague === 'all' || card.dataset.league === activeLeague;
+      const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const show = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam;
       card.style.display = show ? '' : 'none';
       if (show) visibleCount++;
@@ -941,60 +918,19 @@
     emptyState.classList.toggle('visible', visibleCount === 0);
   }
 
-  categoryDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+  treeItems.forEach(item => {
     item.addEventListener('click', () => {
-      categoryDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      treeItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
-      categoryLabel.textContent = `Categoría: ${item.textContent}`;
-      categoryDropdown.classList.remove('open');
-      activeCategory = item.dataset.filter;
-      applyFilters();
-    });
-  });
-
-  brandDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', () => {
-      brandDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      brandLabel.textContent = `Marca: ${item.textContent}`;
-      brandDropdown.classList.remove('open');
-      activeBrand = item.dataset.brand;
-      activeModel = resetDropdown(modelDropdown, modelLabel, 'Modelo');
-      applyFilters();
-    });
-  });
-
-  modelDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', () => {
-      modelDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      modelLabel.textContent = `Modelo: ${item.textContent}`;
-      modelDropdown.classList.remove('open');
-      activeModel = item.dataset.model;
-      applyFilters();
-    });
-  });
-
-  leagueDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', () => {
-      leagueDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      leagueLabel.textContent = `Liga: ${item.textContent}`;
-      leagueDropdown.classList.remove('open');
-      activeLeague = item.dataset.league;
-      activeTeam = resetDropdown(teamDropdown, teamLabel, 'Equipo');
-      applyFilters();
-    });
-  });
-
-  teamDropdown.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', () => {
-      teamDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      teamLabel.textContent = `Equipo: ${item.textContent}`;
-      teamDropdown.classList.remove('open');
-      activeTeam = item.dataset.team;
-      applyFilters();
+      filterLabel.textContent = item.dataset.label;
+      filterDropdown.classList.remove('open');
+      applyFilters(
+        item.dataset.cat || 'all',
+        item.dataset.brand || 'all',
+        item.dataset.model || 'all',
+        item.dataset.league || 'all',
+        item.dataset.team || 'all'
+      );
     });
   });
 
@@ -1190,6 +1126,24 @@
         nameNumberFee: 2,
         patchFee: 1,
         leaguePatchLabel: 'Liga',
+        socksFee: 5
+      }
+    },
+    'bayern-munich-kids-2627': {
+      name: 'Equipación Niño Bayern Munich Local 26/27',
+      cat: 'Fútbol · Bundesliga · Bayern Munich',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/bayern-munich-kids-2627/frontal.jpg',
+        'assets/productos/bayern-munich-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Bundesliga',
         socksFee: 5
       }
     }
