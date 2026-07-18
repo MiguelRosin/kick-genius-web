@@ -20,13 +20,16 @@
     --radius: 18px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
+  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100%;}
   body{
     background: var(--navy-deep);
     color: var(--white);
     font-family:'Manrope', sans-serif;
     overflow-x:hidden;
     width:100%;
+    max-width:100%;
+    overscroll-behavior-x:none;
+    touch-action:pan-y pinch-zoom;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3,.display{
@@ -145,26 +148,6 @@
   .dropdown-item:hover{background:rgba(36,31,25,0.06);}
   .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
 
-  /* ===== reveal / stagger ===== */
-  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease, transform .8s ease;}
-  .reveal.visible{opacity:1;transform:translateY(0);}
-  .stagger > *{opacity:0;transform:translateY(30px);transition:opacity .6s ease, transform .6s ease;}
-  .stagger.visible > *{opacity:1;transform:translateY(0);}
-  .stagger.visible > *:nth-child(1){transition-delay:.05s;}
-  .stagger.visible > *:nth-child(2){transition-delay:.15s;}
-  .stagger.visible > *:nth-child(3){transition-delay:.25s;}
-  .stagger.visible > *:nth-child(4){transition-delay:.35s;}
-  .stagger.visible > *:nth-child(5){transition-delay:.45s;}
-  .stagger.visible > *:nth-child(6){transition-delay:.55s;}
-  .stagger.visible > *:nth-child(7){transition-delay:.65s;}
-  .stagger.visible > *:nth-child(8){transition-delay:.75s;}
-  .stagger.visible > *:nth-child(9){transition-delay:.85s;}
-  .stagger.visible > *:nth-child(10){transition-delay:.95s;}
-  .stagger.visible > *:nth-child(11){transition-delay:1.05s;}
-  .stagger.visible > *:nth-child(12){transition-delay:1.15s;}
-  .stagger.visible > *:nth-child(13){transition-delay:1.25s;}
-  .stagger.visible > *:nth-child(14){transition-delay:1.35s;}
-  .stagger.visible > *:nth-child(15){transition-delay:1.45s;}
 
   /* ===== CATALOG GRID ===== */
   .catalog-section{padding:44px 0 100px;}
@@ -302,16 +285,17 @@
   .customize-note{font-size:0.8rem;color:var(--teal);font-weight:700;margin-top:10px;}
 
   @media (max-width: 720px){
-    .product-modal-overlay{padding:0;align-items:flex-end;}
+    .product-modal-overlay{padding:0;align-items:flex-end;overscroll-behavior:none;}
     .product-modal{
-      max-width:100%;width:100%;margin:0;max-height:92vh;overflow-y:auto;
-      border-radius:22px 22px 0 0;
+      max-width:100vw;width:100%;margin:0;max-height:92vh;overflow-y:auto;overflow-x:hidden;
+      border-radius:22px 22px 0 0;overscroll-behavior:contain;touch-action:pan-y pinch-zoom;
     }
-    .modal-grid{grid-template-columns:1fr;}
-    .modal-gallery{border-right:none;border-bottom:1px solid var(--line);padding:20px 20px 16px;}
-    .modal-details{padding:16px 20px 24px;}
+    .modal-grid{grid-template-columns:1fr;max-width:100%;}
+    .modal-gallery{border-right:none;border-bottom:1px solid var(--line);padding:18px 16px 14px;}
+    .modal-details{padding:14px 16px 20px;}
     .modal-main-img{aspect-ratio:4/3;}
     .modal-close{top:12px;right:12px;}
+    .customize-fields{flex-wrap:wrap;}
   }
 
   footer{
@@ -403,6 +387,14 @@
     .nav-right{gap:10px;}
     .cart-btn{padding:9px 12px;font-size:0.75rem;gap:6px;}
     .cart-label{display:none;}
+    .wrap{padding:0 16px;}
+    .catalog-toolbar{padding:14px 0;}
+    .catalog-toolbar-title h1{font-size:1.1rem;}
+    .catalog-toolbar-title span{display:block;width:100%;font-size:0.72rem;}
+    .catalog-section{padding:28px 0 60px;}
+    .product-grid{gap:18px;}
+    .product-info{padding:16px;}
+    .dropdown-toggle{padding:9px 14px;font-size:0.72rem;}
   }
 </style>
 </head>
@@ -517,7 +509,7 @@
 
 <section class="catalog-section">
   <div class="wrap">
-    <div class="product-grid stagger" id="productGrid">
+    <div class="product-grid" id="productGrid">
 
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-id="nike-mind-001">
@@ -889,18 +881,6 @@
 
 <script>
 (function(){
-
-  // ===== Reveal on scroll =====
-  const revealEls = document.querySelectorAll('.reveal, .stagger');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => io.observe(el));
 
   // ===== Filtros desplegables (categoría + subcategorías: marca / modelo / liga / equipo) =====
   const categoryDropdown = document.getElementById('categoryDropdown');

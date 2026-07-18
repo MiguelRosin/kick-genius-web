@@ -20,13 +20,16 @@
     --radius: 18px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
+  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100%;}
   body{
     background: var(--navy-deep);
     color: var(--white);
     font-family:'Manrope', sans-serif;
     overflow-x:hidden;
     width:100%;
+    max-width:100%;
+    overscroll-behavior-x:none;
+    touch-action:pan-y pinch-zoom;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3,.display{
@@ -405,6 +408,7 @@
     });
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
+  setTimeout(() => revealEls.forEach(el => el.classList.add('visible')), 1800);
 
   // ===== Cart (localStorage) =====
   const CART_KEY = 'kickGeniusCart';
