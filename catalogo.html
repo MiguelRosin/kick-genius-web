@@ -300,8 +300,16 @@
   .customize-note{font-size:0.8rem;color:var(--teal);font-weight:700;margin-top:10px;}
 
   @media (max-width: 720px){
+    .product-modal-overlay{padding:0;align-items:flex-end;}
+    .product-modal{
+      max-width:100%;width:100%;margin:0;max-height:92vh;overflow-y:auto;
+      border-radius:22px 22px 0 0;
+    }
     .modal-grid{grid-template-columns:1fr;}
-    .modal-gallery{border-right:none;border-bottom:1px solid var(--line);}
+    .modal-gallery{border-right:none;border-bottom:1px solid var(--line);padding:20px 20px 16px;}
+    .modal-details{padding:16px 20px 24px;}
+    .modal-main-img{aspect-ratio:4/3;}
+    .modal-close{top:12px;right:12px;}
   }
 
   footer{
