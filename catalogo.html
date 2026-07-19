@@ -118,8 +118,25 @@
   .catalog-toolbar-title span{font-size:0.8rem;color:rgba(36,31,25,0.5);font-weight:600;text-transform:none;letter-spacing:0;}
 
   .filters-bar{
-    display:flex;gap:12px;flex-wrap:wrap;
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;
   }
+  .search-box{
+    display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:100px;
+    border:1px solid var(--line);background:var(--navy);transition:border-color .25s ease;
+  }
+  .search-box:focus-within{border-color:var(--teal);}
+  .search-box .search-icon{font-size:0.85rem;opacity:0.6;flex-shrink:0;}
+  .search-box input{
+    border:none;background:none;outline:none;color:var(--white);font-family:inherit;
+    font-size:0.82rem;font-weight:600;width:190px;max-width:100%;
+  }
+  .search-box input::placeholder{color:rgba(36,31,25,0.4);font-weight:600;}
+  .search-clear{
+    background:none;border:none;color:rgba(36,31,25,0.4);cursor:pointer;font-size:0.9rem;
+    padding:0;line-height:1;display:none;flex-shrink:0;
+  }
+  .search-clear.visible{display:block;}
+  .search-clear:hover{color:var(--teal);}
   .dropdown{position:relative;}
   .dropdown-toggle{
     display:flex;align-items:center;gap:10px;padding:11px 18px;border-radius:100px;
@@ -437,6 +454,8 @@
     .burger{display:flex;}
     .catalog-toolbar-inner{flex-direction:column;align-items:stretch;}
     .filters-bar{justify-content:flex-start;}
+    .search-box{flex:1;}
+    .search-box input{width:100%;}
   }
 
   @media (max-width: 640px){
@@ -496,6 +515,11 @@
     </div>
 
     <div class="filters-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Buscar por producto, equipo, marca..." aria-label="Buscar productos">
+        <button class="search-clear" id="searchClear" aria-label="Borrar búsqueda">✕</button>
+      </div>
       <div class="dropdown tree-dropdown" id="filterDropdown">
         <button class="dropdown-toggle" type="button">
           <span id="filterLabel">Categoría: Todos</span><span class="chevron">▾</span>
@@ -823,6 +847,24 @@
         </div>
       </article>
 
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-id="fc-barcelona-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/fc-barcelona-kids-2627/frontal.jpg" alt="Equipación Niño FC Barcelona 26/27 frontal">
+          <img class="img-b" src="assets/productos/fc-barcelona-kids-2627/trasera.jpg" alt="Equipación Niño FC Barcelona 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · FC Barcelona</span>
+          <span class="product-name">Equipación Niño FC Barcelona Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
@@ -982,6 +1024,8 @@
   const emptyState = document.getElementById('emptyState');
   const cards = document.querySelectorAll('.product-card');
   const treeItems = document.querySelectorAll('.tree-item');
+  const searchInput = document.getElementById('searchInput');
+  const searchClear = document.getElementById('searchClear');
 
   const toggle = filterDropdown.querySelector('.dropdown-toggle');
   toggle.addEventListener('click', (e) => {
@@ -991,7 +1035,23 @@
   document.addEventListener('click', () => filterDropdown.classList.remove('open'));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') filterDropdown.classList.remove('open'); });
 
-  function applyFilters(activeCategory, activeBrand, activeModel, activeLeague, activeTeam) {
+  let currentCategoryFilter = { cat: 'all', brand: 'all', model: 'all', league: 'all', team: 'all' };
+
+  function cardMatchesSearch(card, query) {
+    if (!query) return true;
+    const name = card.querySelector('.product-name')?.textContent.toLowerCase() || '';
+    const catText = card.querySelector('.product-cat')?.textContent.toLowerCase() || '';
+    const attrs = ['cat','brand','model','league','team']
+      .map(a => (card.dataset[a] || '').replace(/-/g, ' '))
+      .join(' ');
+    const haystack = `${name} ${catText} ${attrs}`.toLowerCase();
+    return haystack.includes(query);
+  }
+
+  function applyFilters() {
+    const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
+    const query = searchInput.value.trim().toLowerCase();
+    searchClear.classList.toggle('visible', query.length > 0);
     let visibleCount = 0;
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
@@ -999,7 +1059,8 @@
       const matchesModel = activeModel === 'all' || card.dataset.model === activeModel;
       const matchesLeague = activeLeague === 'all' || card.dataset.league === activeLeague;
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
-      const show = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam;
+      const matchesSearch = cardMatchesSearch(card, query);
+      const show = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
       card.style.display = show ? '' : 'none';
       if (show) visibleCount++;
     });
@@ -1012,14 +1073,22 @@
       item.classList.add('active');
       filterLabel.textContent = item.dataset.label;
       filterDropdown.classList.remove('open');
-      applyFilters(
-        item.dataset.cat || 'all',
-        item.dataset.brand || 'all',
-        item.dataset.model || 'all',
-        item.dataset.league || 'all',
-        item.dataset.team || 'all'
-      );
+      currentCategoryFilter = {
+        cat: item.dataset.cat || 'all',
+        brand: item.dataset.brand || 'all',
+        model: item.dataset.model || 'all',
+        league: item.dataset.league || 'all',
+        team: item.dataset.team || 'all'
+      };
+      applyFilters();
     });
+  });
+
+  searchInput.addEventListener('input', applyFilters);
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    applyFilters();
+    searchInput.focus();
   });
 
   // ===== Product catalog data (ficha completa) =====
@@ -1248,6 +1317,24 @@
         nameNumberFee: 2,
         patchFee: 1,
         leaguePatchLabel: 'Bundesliga',
+        socksFee: 5
+      }
+    },
+    'fc-barcelona-kids-2627': {
+      name: 'Equipación Niño FC Barcelona Local 26/27',
+      cat: 'Fútbol · Liga Española · FC Barcelona',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/fc-barcelona-kids-2627/frontal.jpg',
+        'assets/productos/fc-barcelona-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Liga',
         socksFee: 5
       }
     }
