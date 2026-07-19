@@ -32,7 +32,7 @@
     touch-action:pan-y pinch-zoom;
     -webkit-font-smoothing:antialiased;
   }
-  body.cart-open{overflow:hidden;height:100vh;}
+  body.cart-open{overflow:hidden;position:fixed;width:100%;}
   h1,h2,h3,.display{
     font-family:'Anton', sans-serif;
     letter-spacing:0.5px;
@@ -172,7 +172,7 @@
   }
   .overlay.open{opacity:1;pointer-events:auto;}
   .cart-drawer{
-    position:fixed;top:0;right:-440px;width:min(440px,100vw);height:100vh;
+    position:fixed;top:0;bottom:0;right:-440px;width:min(440px,100vw);
     background:var(--navy);border-left:1px solid var(--line);z-index:1600;
     display:flex;flex-direction:column;transition:right .4s cubic-bezier(.4,0,.2,1);
     box-shadow:-24px 0 60px rgba(36,31,25,0.18);
@@ -547,8 +547,17 @@
   // ===== Cart drawer open/close =====
   const cartDrawer = document.getElementById('cartDrawer');
   const overlay = document.getElementById('overlay');
-  function openCart(){ cartDrawer.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('cart-open'); }
-  function closeCart(){ cartDrawer.classList.remove('open'); overlay.classList.remove('open'); document.body.classList.remove('cart-open'); }
+  let cartScrollY = 0;
+  function openCart(){
+    cartScrollY = window.scrollY;
+    document.body.style.top = `-${cartScrollY}px`;
+    cartDrawer.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('cart-open');
+  }
+  function closeCart(){
+    cartDrawer.classList.remove('open'); overlay.classList.remove('open'); document.body.classList.remove('cart-open');
+    document.body.style.top = '';
+    window.scrollTo(0, cartScrollY);
+  }
   document.getElementById('cartToggle').addEventListener('click', openCart);
   document.getElementById('cartClose').addEventListener('click', closeCart);
   overlay.addEventListener('click', closeCart);
