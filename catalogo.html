@@ -928,6 +928,24 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-id="arsenal-away-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/arsenal-away-kids-2627/frontal.jpg" alt="Equipación Niño Arsenal Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/arsenal-away-kids-2627/frontal.jpg" alt="Equipación Niño Arsenal Visitante 26/27 frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Arsenal</span>
+          <span class="product-name">Equipación Niño Arsenal Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-id="fc-barcelona-kids-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -1090,9 +1108,15 @@
           <input type="text" id="shipZip" class="shipping-input">
         </div>
       </div>
-      <div class="shipping-field">
-        <label for="shipCountry">País</label>
-        <input type="text" id="shipCountry" class="shipping-input">
+      <div class="shipping-row">
+        <div class="shipping-field">
+          <label for="shipProvince">Provincia</label>
+          <input type="text" id="shipProvince" class="shipping-input">
+        </div>
+        <div class="shipping-field">
+          <label for="shipCountry">País</label>
+          <input type="text" id="shipCountry" class="shipping-input">
+        </div>
       </div>
       <div class="shipping-row">
         <div class="shipping-field">
@@ -1484,6 +1508,23 @@
         socksFee: 5
       }
     },
+    'arsenal-away-kids-2627': {
+      name: 'Equipación Niño Arsenal Visitante 26/27',
+      cat: 'Fútbol · Premier League · Arsenal',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/arsenal-away-kids-2627/frontal.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1,
+        leaguePatchLabel: 'Premier League',
+        socksFee: 5
+      }
+    },
     'fc-barcelona-kids-2627': {
       name: 'Equipación Niño FC Barcelona Local 26/27',
       cat: 'Fútbol · Liga Española · FC Barcelona',
@@ -1797,9 +1838,9 @@
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
-  const shipFieldIds = ['shipName','shipAddress','shipCity','shipCountry','shipZip','shipPhone','shipEmail'];
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail'];
   const shipLabels = {
-    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población',
+    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población', shipProvince: 'Provincia',
     shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
   };
 

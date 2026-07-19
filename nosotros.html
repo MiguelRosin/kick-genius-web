@@ -434,9 +434,15 @@
           <input type="text" id="shipZip" class="shipping-input">
         </div>
       </div>
-      <div class="shipping-field">
-        <label for="shipCountry">País</label>
-        <input type="text" id="shipCountry" class="shipping-input">
+      <div class="shipping-row">
+        <div class="shipping-field">
+          <label for="shipProvince">Provincia</label>
+          <input type="text" id="shipProvince" class="shipping-input">
+        </div>
+        <div class="shipping-field">
+          <label for="shipCountry">País</label>
+          <input type="text" id="shipCountry" class="shipping-input">
+        </div>
       </div>
       <div class="shipping-row">
         <div class="shipping-field">
@@ -571,9 +577,9 @@
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
-  const shipFieldIds = ['shipName','shipAddress','shipCity','shipCountry','shipZip','shipPhone','shipEmail'];
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail'];
   const shipLabels = {
-    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población',
+    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población', shipProvince: 'Provincia',
     shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
   };
 
