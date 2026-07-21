@@ -356,7 +356,7 @@
       </div>
     </div>
     <div class="about-visual reveal scale">
-      <img src="assets/productos/nike-mind-001/vista-frontal.jpg" alt="Kick Genius sneaker">
+      <img src="assets/productos/nike-mind-001/vista-frontal.jpg" alt="Kick Genius sneaker" loading="lazy">
     </div>
   </div>
 </section>
@@ -597,7 +597,7 @@
       const tagsHtml = tags.length ? `<div class="cart-tags">${tags.map(t => `<span class="cart-tag">${t}</span>`).join('')}</div>` : '';
       return `
         <div class="cart-item">
-          <img src="${item.img}" alt="${item.name}">
+          <img src="${item.img}" alt="${item.name}" loading="lazy">
           <div class="cart-item-info">
             <div class="cart-item-top">
               <span class="name">${item.name}</span>
