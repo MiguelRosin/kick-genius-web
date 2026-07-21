@@ -249,6 +249,34 @@
     font-size:1.2rem;font-weight:800;padding-top:14px;border-top:1px solid var(--line);
   }
   .cart-total-note{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-bottom:16px;}
+  .coupon-row{display:flex;gap:8px;margin-bottom:6px;}
+  .coupon-input{
+    flex:1;min-width:0;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.85rem;
+    text-transform:uppercase;transition:border-color .2s ease;
+  }
+  .coupon-input:focus{outline:none;border-color:var(--teal);}
+  .coupon-input.invalid{border-color:#c0392b;}
+  .coupon-btn{
+    padding:0 18px;border-radius:10px;border:1px solid var(--teal);background:transparent;color:var(--teal);
+    font-weight:800;font-size:0.75rem;letter-spacing:0.3px;text-transform:uppercase;cursor:pointer;
+    white-space:nowrap;transition:background .2s ease, color .2s ease;
+  }
+  .coupon-btn:hover{background:var(--teal);color:var(--navy-deep);}
+  .coupon-msg{font-size:0.75rem;font-weight:700;margin:0 0 14px;display:none;align-items:center;justify-content:space-between;gap:8px;}
+  .coupon-msg.success{display:flex;color:#2e8b57;}
+  .coupon-msg.error{display:block;color:#c0392b;}
+  .coupon-remove{background:none;border:none;color:inherit;text-decoration:underline;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;flex-shrink:0;}
+  .cart-subtotal-row{display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;color:rgba(36,31,25,0.6);margin-bottom:4px;}
+  .cart-discount-row{display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;color:#2e8b57;margin-bottom:4px;}
+  .whatsapp-float{
+    position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;
+    background:#25D366;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(37,211,102,0.45);z-index:1400;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .whatsapp-float:hover{transform:scale(1.08);box-shadow:0 10px 28px rgba(37,211,102,0.55);}
+  .whatsapp-float svg{width:30px;height:30px;}
+  @media(max-width:640px){.whatsapp-float{right:16px;bottom:16px;width:52px;height:52px;}.whatsapp-float svg{width:26px;height:26px;}}
   .checkout-btn{
     width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
     color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
@@ -449,6 +477,13 @@
       </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
+    <div class="coupon-row">
+      <input type="text" id="couponInput" class="coupon-input" placeholder="Código de descuento" maxlength="24">
+      <button type="button" class="coupon-btn" id="couponBtn">Aplicar</button>
+    </div>
+    <p class="coupon-msg" id="couponMsg"></p>
+    <div class="cart-subtotal-row" id="cartSubtotalRow" style="display:none;"><span>Subtotal</span><span id="cartSubtotal">0€</span></div>
+    <div class="cart-discount-row" id="cartDiscountRow" style="display:none;"><span>Descuento</span><span id="cartDiscount">-0€</span></div>
     <div class="cart-total-row"><span>Total</span><span id="cartTotal">0€</span></div>
     <p class="cart-total-note">Envío a coordinar por WhatsApp tras confirmar el pedido</p>
     <button class="checkout-btn" id="checkoutBtn">Finalizar por WhatsApp</button>
@@ -488,6 +523,42 @@
   const cartHeadCountEl = document.getElementById('cartHeadCount');
   const cartTotalEl = document.getElementById('cartTotal');
 
+  // ===== Cupón de descuento =====
+  const COUPONS = {
+    'BIENVENIDO10': { type: 'percent', value: 10, label: '10% de descuento' },
+    'KICKGENIUS5': { type: 'fixed', value: 5, label: '5€ de descuento' }
+  };
+  const COUPON_KEY = 'kickGeniusCoupon';
+  function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
+  function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
+  function calcDiscount(subtotal, code){
+    const coupon = code ? COUPONS[code] : null;
+    if (!coupon || subtotal <= 0) return 0;
+    const raw = coupon.type === 'percent' ? subtotal * coupon.value / 100 : coupon.value;
+    return Math.min(Math.round(raw * 100) / 100, subtotal);
+  }
+  const couponInput = document.getElementById('couponInput');
+  const couponBtn = document.getElementById('couponBtn');
+  const couponMsg = document.getElementById('couponMsg');
+  function applyCouponCode(rawCode){
+    const code = rawCode.trim().toUpperCase();
+    if (!code) return;
+    if (COUPONS[code]) {
+      saveCouponCode(code);
+      couponInput.value = '';
+      couponInput.classList.remove('invalid');
+    } else {
+      saveCouponCode(null);
+      couponInput.classList.add('invalid');
+      couponMsg.className = 'coupon-msg error';
+      couponMsg.textContent = 'Código no válido.';
+    }
+    renderCart();
+  }
+  couponBtn.addEventListener('click', () => applyCouponCode(couponInput.value));
+  couponInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCouponCode(couponInput.value); } });
+  couponInput.addEventListener('input', () => couponInput.classList.remove('invalid'));
+
   function renderCart(){
     const cart = getCart();
     const count = cart.reduce((n,i) => n + i.qty, 0);
@@ -501,6 +572,8 @@
           <a href="catalogo.html">Ver catálogo</a>
         </div>`;
       cartTotalEl.textContent = '0€';
+      document.getElementById('cartSubtotalRow').style.display = 'none';
+      document.getElementById('cartDiscountRow').style.display = 'none';
       return;
     }
     let total = 0;
@@ -536,7 +609,31 @@
           </div>
         </div>`;
     }).join('');
-    cartTotalEl.textContent = total + '€';
+
+    const appliedCoupon = getCoupon();
+    const discount = calcDiscount(total, appliedCoupon);
+    const finalTotal = Math.round((total - discount) * 100) / 100;
+    const subtotalRow = document.getElementById('cartSubtotalRow');
+    const discountRow = document.getElementById('cartDiscountRow');
+    if (discount > 0) {
+      subtotalRow.style.display = 'flex';
+      discountRow.style.display = 'flex';
+      document.getElementById('cartSubtotal').textContent = total + '€';
+      document.getElementById('cartDiscount').textContent = '-' + discount + '€';
+    } else {
+      subtotalRow.style.display = 'none';
+      discountRow.style.display = 'none';
+    }
+    cartTotalEl.textContent = finalTotal + '€';
+
+    if (appliedCoupon && COUPONS[appliedCoupon]) {
+      couponMsg.className = 'coupon-msg success';
+      couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> aplicado (${COUPONS[appliedCoupon].label}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
+      document.getElementById('couponRemoveBtn').addEventListener('click', () => { saveCouponCode(null); renderCart(); });
+    } else if (!appliedCoupon) {
+      couponMsg.className = 'coupon-msg';
+      couponMsg.textContent = '';
+    }
 
     cartItemsEl.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -622,7 +719,14 @@
         if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
       }
     });
-    msg += `\n*Total del pedido: ${total}€*\n\n`;
+    const appliedCouponCode = getCoupon();
+    const orderDiscount = calcDiscount(total, appliedCouponCode);
+    const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
+    if (orderDiscount > 0) {
+      msg += `\nSubtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+    } else {
+      msg += `\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+    }
     msg += `📦 *Datos de envío*\n`;
     shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
     msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
@@ -654,6 +758,10 @@
 
 })();
 </script>
+
+<a href="https://wa.me/34644039760?text=Hola%20Kick%20Genius%2C%20tengo%20una%20duda" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Escríbenos por WhatsApp" title="¿Dudas? Escríbenos por WhatsApp">
+  <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.646 4.47 1.77 6.31L4 29l7.86-1.74A11.93 11.93 0 0 0 16.004 27C22.63 27 28 21.63 28 15S22.63 3 16.004 3zm0 21.9c-1.98 0-3.85-.53-5.46-1.46l-.39-.23-4.66 1.03 1.05-4.55-.25-.4A9.86 9.86 0 0 1 6.1 15c0-5.46 4.45-9.9 9.9-9.9 5.46 0 9.9 4.44 9.9 9.9 0 5.46-4.44 9.9-9.9 9.9zm5.44-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.47 0 1.45 1.06 2.86 1.2 3.06.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+</a>
 
 </body>
 </html>

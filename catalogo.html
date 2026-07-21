@@ -182,19 +182,28 @@
   .tree-group + .tree-group{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;}
   .tree-cat{
     padding:9px 12px;font-size:0.72rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
-    color:var(--teal);
+    color:var(--teal);display:flex;align-items:center;justify-content:space-between;gap:8px;
   }
   .tree-cat:hover{background:rgba(27,63,115,0.08);}
   .tree-cat.active{background:var(--teal);color:var(--navy-deep);}
   .tree-sub{
     padding:9px 12px 9px 26px;font-size:0.85rem;font-weight:700;
-    position:relative;
+    position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;
   }
   .tree-sub::before{
     content:"";position:absolute;left:14px;top:50%;transform:translateY(-50%);
     width:5px;height:5px;border-radius:50%;background:var(--line);
   }
   .tree-sub.active::before{background:var(--navy-deep);}
+  .tree-toggle{
+    flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+    border-radius:50%;font-size:0.85rem;font-weight:800;color:rgba(36,31,25,0.4);
+    transition:background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .tree-toggle:hover{background:rgba(27,63,115,0.12);color:var(--teal);}
+  .tree-toggle.open{transform:rotate(45deg);color:var(--teal);}
+  .tree-children{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .tree-children.open{max-height:2000px;}
   .tree-subsub{
     padding:8px 12px 8px 40px;font-size:0.8rem;font-weight:600;color:rgba(36,31,25,0.75);
   }
@@ -445,6 +454,34 @@
     font-size:1.2rem;font-weight:800;padding-top:14px;border-top:1px solid var(--line);
   }
   .cart-total-note{font-size:0.75rem;color:rgba(36,31,25,0.5);margin-bottom:16px;}
+  .coupon-row{display:flex;gap:8px;margin-bottom:6px;}
+  .coupon-input{
+    flex:1;min-width:0;padding:10px 14px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-deep);color:var(--white);font-family:inherit;font-size:0.85rem;
+    text-transform:uppercase;transition:border-color .2s ease;
+  }
+  .coupon-input:focus{outline:none;border-color:var(--teal);}
+  .coupon-input.invalid{border-color:#c0392b;}
+  .coupon-btn{
+    padding:0 18px;border-radius:10px;border:1px solid var(--teal);background:transparent;color:var(--teal);
+    font-weight:800;font-size:0.75rem;letter-spacing:0.3px;text-transform:uppercase;cursor:pointer;
+    white-space:nowrap;transition:background .2s ease, color .2s ease;
+  }
+  .coupon-btn:hover{background:var(--teal);color:var(--navy-deep);}
+  .coupon-msg{font-size:0.75rem;font-weight:700;margin:0 0 14px;display:none;align-items:center;justify-content:space-between;gap:8px;}
+  .coupon-msg.success{display:flex;color:#2e8b57;}
+  .coupon-msg.error{display:block;color:#c0392b;}
+  .coupon-remove{background:none;border:none;color:inherit;text-decoration:underline;font-size:0.72rem;font-weight:700;cursor:pointer;padding:0;flex-shrink:0;}
+  .cart-subtotal-row{display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;color:rgba(36,31,25,0.6);margin-bottom:4px;}
+  .cart-discount-row{display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;color:#2e8b57;margin-bottom:4px;}
+  .whatsapp-float{
+    position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;
+    background:#25D366;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(37,211,102,0.45);z-index:1400;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .whatsapp-float:hover{transform:scale(1.08);box-shadow:0 10px 28px rgba(37,211,102,0.55);}
+  .whatsapp-float svg{width:30px;height:30px;}
+  @media(max-width:640px){.whatsapp-float{right:16px;bottom:16px;width:52px;height:52px;}.whatsapp-float svg{width:26px;height:26px;}}
   .checkout-btn{
     width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
     color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
@@ -536,44 +573,210 @@
 
           <div class="tree-group">
             <button class="tree-item tree-cat" data-cat="sneakers" data-label="Categoría: Sneakers">
-              👟 Sneakers
+              <span>👟 Sneakers</span><span class="tree-toggle">+</span>
             </button>
-            <button class="tree-item tree-sub" data-cat="sneakers" data-brand="nike" data-label="Categoría: Sneakers · Nike">
-              Nike
-            </button>
-            <button class="tree-item tree-subsub" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-label="Categoría: Sneakers · Nike · Nike Mind 001">
-              Nike Mind 001
-            </button>
+            <div class="tree-children">
+              <button class="tree-item tree-sub" data-cat="sneakers" data-brand="nike" data-label="Categoría: Sneakers · Nike">
+                <span>Nike</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-label="Categoría: Sneakers · Nike · Nike Mind 001">
+                  Nike Mind 001
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="tree-group">
             <button class="tree-item tree-cat" data-cat="futbol" data-label="Categoría: Fútbol">
-              ⚽ Fútbol
+              <span>⚽ Fútbol</span><span class="tree-toggle">+</span>
             </button>
-            <button class="tree-item tree-sub" data-cat="futbol" data-league="liga-espanola" data-label="Categoría: Fútbol · Liga Española">
-              Liga Española
-            </button>
-            <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-label="Categoría: Fútbol · Liga Española · Real Madrid">
-              Real Madrid
-            </button>
-            <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-label="Categoría: Fútbol · Liga Española · FC Barcelona">
-              FC Barcelona
-            </button>
-            <button class="tree-item tree-sub" data-cat="futbol" data-league="premier-league" data-label="Categoría: Fútbol · Premier League">
-              Premier League
-            </button>
-            <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-label="Categoría: Fútbol · Premier League · Manchester City">
-              Manchester City
-            </button>
-            <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-label="Categoría: Fútbol · Premier League · Arsenal">
-              Arsenal
-            </button>
-            <button class="tree-item tree-sub" data-cat="futbol" data-league="bundesliga" data-label="Categoría: Fútbol · Bundesliga">
-              Bundesliga
-            </button>
-            <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-label="Categoría: Fútbol · Bundesliga · Bayern Munich">
-              Bayern Munich
-            </button>
+            <div class="tree-children">
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="liga-espanola" data-label="Categoría: Fútbol · Liga Española">
+                <span>Liga Española</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-label="Categoría: Fútbol · Liga Española · Real Madrid">
+                  Real Madrid
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-label="Categoría: Fútbol · Liga Española · FC Barcelona">
+                  FC Barcelona
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="athletic-bilbao" data-label="Categoría: Fútbol · Liga Española · Athletic Bilbao">
+                  Athletic Bilbao
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="eibar" data-label="Categoría: Fútbol · Liga Española · Eibar">
+                  Eibar
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="malaga" data-label="Categoría: Fútbol · Liga Española · Málaga">
+                  Málaga
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="celta-vigo" data-label="Categoría: Fútbol · Liga Española · Celta de Vigo">
+                  Celta de Vigo
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="valencia" data-label="Categoría: Fútbol · Liga Española · Valencia">
+                  Valencia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="deportivo" data-label="Categoría: Fútbol · Liga Española · Deportivo de la Coruña">
+                  Deportivo de la Coruña
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="betis" data-label="Categoría: Fútbol · Liga Española · Real Betis">
+                  Real Betis
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-label="Categoría: Fútbol · Liga Española · Atlético de Madrid">
+                  Atlético de Madrid
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="premier-league" data-label="Categoría: Fútbol · Premier League">
+                <span>Premier League</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-label="Categoría: Fútbol · Premier League · Manchester City">
+                  Manchester City
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-label="Categoría: Fútbol · Premier League · Arsenal">
+                  Arsenal
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="aston-villa" data-label="Categoría: Fútbol · Premier League · Aston Villa">
+                  Aston Villa
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="liverpool" data-label="Categoría: Fútbol · Premier League · Liverpool">
+                  Liverpool
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="everton" data-label="Categoría: Fútbol · Premier League · Everton">
+                  Everton
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="manchester-united" data-label="Categoría: Fútbol · Premier League · Manchester United">
+                  Manchester United
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="chelsea" data-label="Categoría: Fútbol · Premier League · Chelsea">
+                  Chelsea
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="leeds-united" data-label="Categoría: Fútbol · Premier League · Leeds United">
+                  Leeds United
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="millwall" data-label="Categoría: Fútbol · Premier League · Millwall">
+                  Millwall
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="bundesliga" data-label="Categoría: Fútbol · Bundesliga">
+                <span>Bundesliga</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-label="Categoría: Fútbol · Bundesliga · Bayern Munich">
+                  Bayern Munich
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="borussia-dortmund" data-label="Categoría: Fútbol · Bundesliga · Borussia Dortmund">
+                  Borussia Dortmund
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="fortuna-dusseldorf" data-label="Categoría: Fútbol · Bundesliga · Fortuna Düsseldorf">
+                  Fortuna Düsseldorf
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="bundesliga" data-team="borussia-monchengladbach" data-label="Categoría: Fútbol · Bundesliga · Borussia Mönchengladbach">
+                  Borussia Mönchengladbach
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="liga-portugal" data-label="Categoría: Fútbol · Liga Portugal">
+                <span>Liga Portugal</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-portugal" data-team="benfica" data-label="Categoría: Fútbol · Liga Portugal · Benfica">
+                  Benfica
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-portugal" data-team="oporto" data-label="Categoría: Fútbol · Liga Portugal · Oporto">
+                  Oporto
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="ligue-1" data-label="Categoría: Fútbol · Ligue 1">
+                <span>Ligue 1</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="ligue-1" data-team="lyon" data-label="Categoría: Fútbol · Ligue 1 · O. Lyon">
+                  O. Lyon
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="ligue-1" data-team="psg" data-label="Categoría: Fútbol · Ligue 1 · PSG">
+                  PSG
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="serie-a" data-label="Categoría: Fútbol · Serie A">
+                <span>Serie A</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="serie-a" data-team="ac-milan" data-label="Categoría: Fútbol · Serie A · AC Milan">
+                  AC Milan
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="serie-a" data-team="inter-milan" data-label="Categoría: Fútbol · Serie A · Inter Milan">
+                  Inter Milan
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="europa" data-label="Categoría: Fútbol · Europa">
+                <span>Europa</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="europa" data-team="fenerbahce" data-label="Categoría: Fútbol · Europa · Fenerbahçe">
+                  Fenerbahçe
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="europa" data-team="celtic" data-label="Categoría: Fútbol · Europa · Celtic">
+                  Celtic
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="europa" data-team="hearts" data-label="Categoría: Fútbol · Europa · Hearts">
+                  Hearts
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="futbol" data-league="selecciones" data-label="Categoría: Fútbol · Selecciones">
+                <span>Selecciones</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="tunez" data-label="Categoría: Fútbol · Selecciones · Túnez">
+                  Túnez
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="corea-del-sur" data-label="Categoría: Fútbol · Selecciones · Corea del Sur">
+                  Corea del Sur
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="francia" data-label="Categoría: Fútbol · Selecciones · Francia">
+                  Francia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="australia" data-label="Categoría: Fútbol · Selecciones · Australia">
+                  Australia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="paraguay" data-label="Categoría: Fútbol · Selecciones · Paraguay">
+                  Paraguay
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="sudafrica" data-label="Categoría: Fútbol · Selecciones · Sudáfrica">
+                  Sudáfrica
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="noruega" data-label="Categoría: Fútbol · Selecciones · Noruega">
+                  Noruega
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="turquia" data-label="Categoría: Fútbol · Selecciones · Turquía">
+                  Turquía
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="republica-del-congo" data-label="Categoría: Fútbol · Selecciones · República del Congo">
+                  República del Congo
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="ecuador" data-label="Categoría: Fútbol · Selecciones · Ecuador">
+                  Ecuador
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="inglaterra" data-label="Categoría: Fútbol · Selecciones · Inglaterra">
+                  Inglaterra
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="croacia" data-label="Categoría: Fútbol · Selecciones · Croacia">
+                  Croacia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="suecia" data-label="Categoría: Fútbol · Selecciones · Suecia">
+                  Suecia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="curazao" data-label="Categoría: Fútbol · Selecciones · Curazao">
+                  Curazao
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="bosnia" data-label="Categoría: Fútbol · Selecciones · Bosnia">
+                  Bosnia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Selecciones · España">
+                  España
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -712,6 +915,42 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-alt-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/real-madrid-alt-2627/frontal.jpg" alt="Camiseta Real Madrid Alternativa 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-alt-2627/trasera.jpg" alt="Camiseta Real Madrid Alternativa 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Camiseta Real Madrid Alternativa 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-local-ml-2627">
+        <div class="product-media">
+          <span class="badge-offer">-21%</span>
+          <img class="img-a" src="assets/productos/real-madrid-local-ml-2627/frontal.jpg" alt="Camiseta Real Madrid Local Manga Larga 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-local-ml-2627/trasera.jpg" alt="Camiseta Real Madrid Local Manga Larga 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Camiseta Real Madrid Local 26/27 Manga Larga</span>
+          <div class="price-row">
+            <span class="price-original">38€</span>
+            <span class="price-final">30€</span>
+            <span class="price-save">Ahorras 8€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-id="fc-barcelona-local-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -730,6 +969,438 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="athletic-bilbao" data-id="athletic-bilbao-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/athletic-bilbao-local-2627/frontal.jpg" alt="Camiseta Athletic Bilbao 26/27 frontal">
+          <img class="img-b" src="assets/productos/athletic-bilbao-local-2627/trasera.jpg" alt="Camiseta Athletic Bilbao 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Athletic Bilbao</span>
+          <span class="product-name">Camiseta Athletic Bilbao Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="athletic-bilbao" data-id="athletic-bilbao-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/athletic-bilbao-away-2627/frontal.jpg" alt="Camiseta Athletic Bilbao Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/athletic-bilbao-away-2627/trasera.jpg" alt="Camiseta Athletic Bilbao Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Athletic Bilbao</span>
+          <span class="product-name">Camiseta Athletic Bilbao Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="athletic-bilbao" data-id="athletic-bilbao-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/athletic-bilbao-player-2627/frontal.jpg" alt="Camiseta Athletic Bilbao Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/athletic-bilbao-player-2627/trasera.jpg" alt="Camiseta Athletic Bilbao Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Athletic Bilbao</span>
+          <span class="product-name">Camiseta Athletic Bilbao Local 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="eibar" data-id="eibar-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/eibar-local-2627/frontal.jpg" alt="Camiseta Eibar 26/27 frontal">
+          <img class="img-b" src="assets/productos/eibar-local-2627/trasera.jpg" alt="Camiseta Eibar 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Eibar</span>
+          <span class="product-name">Camiseta Eibar Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="malaga" data-id="malaga-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/malaga-local-2627/frontal.jpg" alt="Camiseta Málaga 26/27 frontal">
+          <img class="img-b" src="assets/productos/malaga-local-2627/trasera.jpg" alt="Camiseta Málaga 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Málaga</span>
+          <span class="product-name">Camiseta Málaga Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="malaga" data-id="malaga-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/malaga-kids-2627/frontal.jpg" alt="Equipación Niño Málaga 26/27 frontal">
+          <img class="img-b" src="assets/productos/malaga-kids-2627/trasera.jpg" alt="Equipación Niño Málaga 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Málaga</span>
+          <span class="product-name">Equipación Niño Málaga Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="everton" data-id="everton-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/everton-local-2627/frontal.jpg" alt="Camiseta Everton 26/27 frontal">
+          <img class="img-b" src="assets/productos/everton-local-2627/trasera.jpg" alt="Camiseta Everton 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Everton</span>
+          <span class="product-name">Camiseta Everton Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="celta-vigo" data-id="celta-vigo-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/celta-vigo-away-2627/frontal.jpg" alt="Camiseta Celta de Vigo Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/celta-vigo-away-2627/trasera.jpg" alt="Camiseta Celta de Vigo Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Celta de Vigo</span>
+          <span class="product-name">Camiseta Celta de Vigo Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="betis" data-id="betis-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/betis-local-2627/frontal.jpg" alt="Camiseta Real Betis 26/27 frontal">
+          <img class="img-b" src="assets/productos/betis-local-2627/trasera.jpg" alt="Camiseta Real Betis 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Betis</span>
+          <span class="product-name">Camiseta Real Betis Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="betis" data-id="betis-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/betis-kids-2627/frontal.jpg" alt="Equipación Niño Real Betis 26/27 frontal">
+          <img class="img-b" src="assets/productos/betis-kids-2627/trasera.jpg" alt="Equipación Niño Real Betis 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Betis</span>
+          <span class="product-name">Equipación Niño Betis Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-id="atletico-madrid-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/atletico-madrid-away-2627/frontal.jpg" alt="Camiseta Atlético de Madrid Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/atletico-madrid-away-2627/trasera.jpg" alt="Camiseta Atlético de Madrid Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Atlético de Madrid</span>
+          <span class="product-name">Camiseta Atlético de Madrid Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-id="atletico-madrid-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/atletico-madrid-player-2627/frontal.jpg" alt="Camiseta Atlético de Madrid Local Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/atletico-madrid-player-2627/trasera.jpg" alt="Camiseta Atlético de Madrid Local Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Atlético de Madrid</span>
+          <span class="product-name">Camiseta Atlético de Madrid Local 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-id="atletico-madrid-away-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/atletico-madrid-away-player-2627/frontal.jpg" alt="Camiseta Atlético de Madrid Visitante Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/atletico-madrid-away-player-2627/trasera.jpg" alt="Camiseta Atlético de Madrid Visitante Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Atlético de Madrid</span>
+          <span class="product-name">Camiseta Atlético de Madrid Visitante 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-id="atletico-madrid-away-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/atletico-madrid-away-kids-2627/frontal.jpg" alt="Equipación Niño Atlético de Madrid Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/atletico-madrid-away-kids-2627/trasera.jpg" alt="Equipación Niño Atlético de Madrid Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Atlético de Madrid</span>
+          <span class="product-name">Equipación Niño Atlético Madrid Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="valencia" data-id="valencia-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/valencia-local-2627/frontal.jpg" alt="Camiseta Valencia 26/27 frontal">
+          <img class="img-b" src="assets/productos/valencia-local-2627/trasera.jpg" alt="Camiseta Valencia 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Valencia</span>
+          <span class="product-name">Camiseta Valencia Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="deportivo" data-id="deportivo-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/deportivo-local-2627/frontal.jpg" alt="Camiseta Deportivo de la Coruña 26/27 frontal">
+          <img class="img-b" src="assets/productos/deportivo-local-2627/trasera.jpg" alt="Camiseta Deportivo de la Coruña 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Deportivo de la Coruña</span>
+          <span class="product-name">Camiseta Deportivo de la Coruña Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="lyon" data-id="lyon-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/lyon-local-2627/frontal.jpg" alt="Camiseta O. Lyon 26/27 frontal">
+          <img class="img-b" src="assets/productos/lyon-local-2627/trasera.jpg" alt="Camiseta O. Lyon 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · O. Lyon</span>
+          <span class="product-name">Camiseta O. Lyon Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="psg" data-id="psg-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/psg-local-2627/frontal.jpg" alt="Camiseta PSG 26/27 frontal">
+          <img class="img-b" src="assets/productos/psg-local-2627/trasera.jpg" alt="Camiseta PSG 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · PSG</span>
+          <span class="product-name">Camiseta PSG Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="psg" data-id="psg-girl-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/psg-girl-2627/frontal.jpg" alt="Camiseta PSG Girl Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/psg-girl-2627/trasera.jpg" alt="Camiseta PSG Girl Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · PSG</span>
+          <span class="product-name">Camiseta PSG Local 26/27 (Girl Version)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="psg" data-id="psg-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/psg-kids-2627/frontal.jpg" alt="Equipación Niño PSG 26/27 frontal">
+          <img class="img-b" src="assets/productos/psg-kids-2627/trasera.jpg" alt="Equipación Niño PSG 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · PSG</span>
+          <span class="product-name">Equipación Niño PSG Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="psg" data-id="psg-away-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/psg-away-kids-2627/frontal.jpg" alt="Equipación Niño PSG Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/psg-away-kids-2627/trasera.jpg" alt="Equipación Niño PSG Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · PSG</span>
+          <span class="product-name">Equipación Niño PSG Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="ligue-1" data-team="lyon" data-id="lyon-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/lyon-away-2627/frontal.jpg" alt="Camiseta O. Lyon Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/lyon-away-2627/trasera.jpg" alt="Camiseta O. Lyon Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Ligue 1 · O. Lyon</span>
+          <span class="product-name">Camiseta O. Lyon Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="liverpool" data-id="liverpool-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/liverpool-local-2627/frontal.jpg" alt="Camiseta Liverpool 26/27 frontal">
+          <img class="img-b" src="assets/productos/liverpool-local-2627/trasera.jpg" alt="Camiseta Liverpool 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Liverpool</span>
+          <span class="product-name">Camiseta Liverpool Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="liverpool" data-id="liverpool-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/liverpool-kids-2627/frontal.jpg" alt="Equipación Niño Liverpool 26/27 frontal">
+          <img class="img-b" src="assets/productos/liverpool-kids-2627/trasera.jpg" alt="Equipación Niño Liverpool 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Liverpool</span>
+          <span class="product-name">Equipación Niño Liverpool Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-id="manchester-city-local-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -739,6 +1410,150 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Premier League · Manchester City</span>
           <span class="product-name">Camiseta Manchester City Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-id="manchester-city-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/manchester-city-kids-2627/frontal.jpg" alt="Equipación Niño Manchester City 26/27 frontal">
+          <img class="img-b" src="assets/productos/manchester-city-kids-2627/trasera.jpg" alt="Equipación Niño Manchester City 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Manchester City</span>
+          <span class="product-name">Equipación Niño Manchester City Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="manchester-united" data-id="manchester-united-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/manchester-united-local-2627/frontal.jpg" alt="Camiseta Manchester United 26/27 frontal">
+          <img class="img-b" src="assets/productos/manchester-united-local-2627/trasera.jpg" alt="Camiseta Manchester United 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Manchester United</span>
+          <span class="product-name">Camiseta Manchester United Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="manchester-united" data-id="manchester-united-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/manchester-united-kids-2627/frontal.jpg" alt="Equipación Niño Manchester United 26/27 frontal">
+          <img class="img-b" src="assets/productos/manchester-united-kids-2627/trasera.jpg" alt="Equipación Niño Manchester United 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Manchester United</span>
+          <span class="product-name">Equipación Niño Manchester United Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="chelsea" data-id="chelsea-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/chelsea-local-2627/frontal.jpg" alt="Camiseta Chelsea 26/27 frontal">
+          <img class="img-b" src="assets/productos/chelsea-local-2627/trasera.jpg" alt="Camiseta Chelsea 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Chelsea</span>
+          <span class="product-name">Camiseta Chelsea Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="chelsea" data-id="chelsea-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/chelsea-away-2627/frontal.jpg" alt="Camiseta Chelsea Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/chelsea-away-2627/trasera.jpg" alt="Camiseta Chelsea Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Chelsea</span>
+          <span class="product-name">Camiseta Chelsea Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="leeds-united" data-id="leeds-united-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/leeds-united-local-2627/frontal.jpg" alt="Camiseta Leeds United 26/27 frontal">
+          <img class="img-b" src="assets/productos/leeds-united-local-2627/trasera.jpg" alt="Camiseta Leeds United 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Leeds United</span>
+          <span class="product-name">Camiseta Leeds United Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="leeds-united" data-id="leeds-united-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/leeds-united-away-2627/frontal.jpg" alt="Camiseta Leeds United Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/leeds-united-away-2627/trasera.jpg" alt="Camiseta Leeds United Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Leeds United</span>
+          <span class="product-name">Camiseta Leeds United Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="millwall" data-id="millwall-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/millwall-local-2627/frontal.jpg" alt="Camiseta Millwall 26/27 frontal">
+          <img class="img-b" src="assets/productos/millwall-local-2627/trasera.jpg" alt="Camiseta Millwall 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Millwall</span>
+          <span class="product-name">Camiseta Millwall Local 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -784,6 +1599,726 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="serie-a" data-team="ac-milan" data-id="ac-milan-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/ac-milan-local-2627/frontal.jpg" alt="Camiseta AC Milan 26/27 frontal">
+          <img class="img-b" src="assets/productos/ac-milan-local-2627/trasera.jpg" alt="Camiseta AC Milan 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · AC Milan</span>
+          <span class="product-name">Camiseta AC Milan Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="serie-a" data-team="inter-milan" data-id="inter-milan-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/inter-milan-local-2627/frontal.jpg" alt="Camiseta Inter Milan 26/27 frontal">
+          <img class="img-b" src="assets/productos/inter-milan-local-2627/trasera.jpg" alt="Camiseta Inter Milan 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Inter Milan</span>
+          <span class="product-name">Camiseta Inter Milan Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="serie-a" data-team="inter-milan" data-id="inter-milan-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/inter-milan-kids-2627/frontal.jpg" alt="Equipación Niño Inter Milan 26/27 frontal">
+          <img class="img-b" src="assets/productos/inter-milan-kids-2627/trasera.jpg" alt="Equipación Niño Inter Milan 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Inter Milan</span>
+          <span class="product-name">Equipación Niño Inter Milan Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="europa" data-team="fenerbahce" data-id="fenerbahce-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/fenerbahce-local-2627/frontal.jpg" alt="Camiseta Fenerbahçe Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/fenerbahce-local-2627/trasera.jpg" alt="Camiseta Fenerbahçe Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Europa · Fenerbahçe</span>
+          <span class="product-name">Camiseta Fenerbahçe Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="europa" data-team="fenerbahce" data-id="fenerbahce-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/fenerbahce-away-2627/frontal.jpg" alt="Camiseta Fenerbahçe Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/fenerbahce-away-2627/trasera.jpg" alt="Camiseta Fenerbahçe Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Europa · Fenerbahçe</span>
+          <span class="product-name">Camiseta Fenerbahçe Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="europa" data-team="celtic" data-id="celtic-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/celtic-local-2627/frontal.jpg" alt="Camiseta Celtic Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/celtic-local-2627/trasera.jpg" alt="Camiseta Celtic Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Europa · Celtic</span>
+          <span class="product-name">Camiseta Celtic Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="europa" data-team="hearts" data-id="hearts-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/hearts-local-2627/frontal.jpg" alt="Camiseta Hearts Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/hearts-local-2627/trasera.jpg" alt="Camiseta Hearts Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Europa · Hearts</span>
+          <span class="product-name">Camiseta Hearts Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="europa" data-team="hearts" data-id="hearts-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/hearts-away-2627/frontal.jpg" alt="Camiseta Hearts Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/hearts-away-2627/trasera.jpg" alt="Camiseta Hearts Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Europa · Hearts</span>
+          <span class="product-name">Camiseta Hearts Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="tunez" data-id="tunez-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/tunez-away-2026/frontal.jpg" alt="Camiseta Túnez Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/tunez-away-2026/trasera.jpg" alt="Camiseta Túnez Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Túnez</span>
+          <span class="product-name">Camiseta Túnez Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="corea-del-sur" data-id="corea-del-sur-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/corea-del-sur-local-2026/frontal.jpg" alt="Camiseta Corea del Sur Local 2026 frontal">
+          <img class="img-b" src="assets/productos/corea-del-sur-local-2026/trasera.jpg" alt="Camiseta Corea del Sur Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Corea del Sur</span>
+          <span class="product-name">Camiseta Corea del Sur Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="corea-del-sur" data-id="corea-del-sur-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/corea-del-sur-away-2026/frontal.jpg" alt="Camiseta Corea del Sur Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/corea-del-sur-away-2026/trasera.jpg" alt="Camiseta Corea del Sur Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Corea del Sur</span>
+          <span class="product-name">Camiseta Corea del Sur Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="francia" data-id="francia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/francia-local-2026/frontal.jpg" alt="Camiseta Francia Local 2026 frontal">
+          <img class="img-b" src="assets/productos/francia-local-2026/trasera.jpg" alt="Camiseta Francia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Francia</span>
+          <span class="product-name">Camiseta Francia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="francia" data-id="francia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/francia-away-2026/frontal.jpg" alt="Camiseta Francia Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/francia-away-2026/trasera.jpg" alt="Camiseta Francia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Francia</span>
+          <span class="product-name">Camiseta Francia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="australia" data-id="australia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/australia-local-2026/frontal.jpg" alt="Camiseta Australia Local 2026 frontal">
+          <img class="img-b" src="assets/productos/australia-local-2026/trasera.jpg" alt="Camiseta Australia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Australia</span>
+          <span class="product-name">Camiseta Australia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="australia" data-id="australia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/australia-away-2026/frontal.jpg" alt="Camiseta Australia Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/australia-away-2026/trasera.jpg" alt="Camiseta Australia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Australia</span>
+          <span class="product-name">Camiseta Australia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="paraguay" data-id="paraguay-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/paraguay-local-2026/frontal.jpg" alt="Camiseta Paraguay Local 2026 frontal">
+          <img class="img-b" src="assets/productos/paraguay-local-2026/trasera.jpg" alt="Camiseta Paraguay Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Paraguay</span>
+          <span class="product-name">Camiseta Paraguay Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="paraguay" data-id="paraguay-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/paraguay-away-2026/frontal.jpg" alt="Camiseta Paraguay Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/paraguay-away-2026/trasera.jpg" alt="Camiseta Paraguay Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Paraguay</span>
+          <span class="product-name">Camiseta Paraguay Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="sudafrica" data-id="sudafrica-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/sudafrica-local-2026/frontal.jpg" alt="Camiseta Sudáfrica Local 2026 frontal">
+          <img class="img-b" src="assets/productos/sudafrica-local-2026/trasera.jpg" alt="Camiseta Sudáfrica Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Sudáfrica</span>
+          <span class="product-name">Camiseta Sudáfrica Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="noruega" data-id="noruega-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/noruega-local-2026/frontal.jpg" alt="Camiseta Noruega Local 2026 frontal">
+          <img class="img-b" src="assets/productos/noruega-local-2026/trasera.jpg" alt="Camiseta Noruega Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Noruega</span>
+          <span class="product-name">Camiseta Noruega Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="noruega" data-id="noruega-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/noruega-away-2026/frontal.jpg" alt="Camiseta Noruega Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/noruega-away-2026/trasera.jpg" alt="Camiseta Noruega Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Noruega</span>
+          <span class="product-name">Camiseta Noruega Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="noruega" data-id="noruega-alt-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/noruega-alt-2026/frontal.jpg" alt="Camiseta Noruega Alternativa 2026 frontal">
+          <img class="img-b" src="assets/productos/noruega-alt-2026/trasera.jpg" alt="Camiseta Noruega Alternativa 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Noruega</span>
+          <span class="product-name">Camiseta Noruega Alternativa 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="turquia" data-id="turquia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/turquia-local-2026/frontal.jpg" alt="Camiseta Turquía Local 2026 frontal">
+          <img class="img-b" src="assets/productos/turquia-local-2026/trasera.jpg" alt="Camiseta Turquía Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Turquía</span>
+          <span class="product-name">Camiseta Turquía Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="turquia" data-id="turquia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/turquia-away-2026/frontal.jpg" alt="Camiseta Turquía Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/turquia-away-2026/trasera.jpg" alt="Camiseta Turquía Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Turquía</span>
+          <span class="product-name">Camiseta Turquía Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="republica-del-congo" data-id="republica-del-congo-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/republica-del-congo-local-2026/frontal.jpg" alt="Camiseta República del Congo Local 2026 frontal">
+          <img class="img-b" src="assets/productos/republica-del-congo-local-2026/trasera.jpg" alt="Camiseta República del Congo Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · República del Congo</span>
+          <span class="product-name">Camiseta República del Congo Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="republica-del-congo" data-id="republica-del-congo-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/republica-del-congo-away-2026/frontal.jpg" alt="Camiseta República del Congo Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/republica-del-congo-away-2026/trasera.jpg" alt="Camiseta República del Congo Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · República del Congo</span>
+          <span class="product-name">Camiseta República del Congo Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="ecuador" data-id="ecuador-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/ecuador-local-2026/frontal.jpg" alt="Camiseta Ecuador Local 2026 frontal">
+          <img class="img-b" src="assets/productos/ecuador-local-2026/trasera.jpg" alt="Camiseta Ecuador Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Ecuador</span>
+          <span class="product-name">Camiseta Ecuador Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="ecuador" data-id="ecuador-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/ecuador-away-2026/frontal.jpg" alt="Camiseta Ecuador Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/ecuador-away-2026/trasera.jpg" alt="Camiseta Ecuador Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Ecuador</span>
+          <span class="product-name">Camiseta Ecuador Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="ecuador" data-id="ecuador-alt-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/ecuador-alt-2026/frontal.jpg" alt="Camiseta Ecuador Alternativa 2026 frontal">
+          <img class="img-b" src="assets/productos/ecuador-alt-2026/trasera.jpg" alt="Camiseta Ecuador Alternativa 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Ecuador</span>
+          <span class="product-name">Camiseta Ecuador Alternativa 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="inglaterra" data-id="inglaterra-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/inglaterra-local-2026/frontal.jpg" alt="Camiseta Inglaterra Local 2026 frontal">
+          <img class="img-b" src="assets/productos/inglaterra-local-2026/trasera.jpg" alt="Camiseta Inglaterra Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Inglaterra</span>
+          <span class="product-name">Camiseta Inglaterra Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="inglaterra" data-id="inglaterra-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/inglaterra-away-2026/frontal.jpg" alt="Camiseta Inglaterra Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/inglaterra-away-2026/trasera.jpg" alt="Camiseta Inglaterra Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Inglaterra</span>
+          <span class="product-name">Camiseta Inglaterra Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="croacia" data-id="croacia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/croacia-local-2026/frontal.jpg" alt="Camiseta Croacia Local 2026 frontal">
+          <img class="img-b" src="assets/productos/croacia-local-2026/trasera.jpg" alt="Camiseta Croacia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Croacia</span>
+          <span class="product-name">Camiseta Croacia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="croacia" data-id="croacia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/croacia-away-2026/frontal.jpg" alt="Camiseta Croacia Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/croacia-away-2026/trasera.jpg" alt="Camiseta Croacia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Croacia</span>
+          <span class="product-name">Camiseta Croacia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="suecia" data-id="suecia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/suecia-local-2026/frontal.jpg" alt="Camiseta Suecia Local 2026 frontal">
+          <img class="img-b" src="assets/productos/suecia-local-2026/trasera.jpg" alt="Camiseta Suecia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Suecia</span>
+          <span class="product-name">Camiseta Suecia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="suecia" data-id="suecia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/suecia-away-2026/frontal.jpg" alt="Camiseta Suecia Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/suecia-away-2026/trasera.jpg" alt="Camiseta Suecia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Suecia</span>
+          <span class="product-name">Camiseta Suecia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="curazao" data-id="curazao-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/curazao-local-2026/frontal.jpg" alt="Camiseta Curazao Local 2026 frontal">
+          <img class="img-b" src="assets/productos/curazao-local-2026/trasera.jpg" alt="Camiseta Curazao Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Curazao</span>
+          <span class="product-name">Camiseta Curazao Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="curazao" data-id="curazao-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/curazao-away-2026/frontal.jpg" alt="Camiseta Curazao Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/curazao-away-2026/trasera.jpg" alt="Camiseta Curazao Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Curazao</span>
+          <span class="product-name">Camiseta Curazao Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="bosnia" data-id="bosnia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/bosnia-local-2026/frontal.jpg" alt="Camiseta Bosnia Local 2026 frontal">
+          <img class="img-b" src="assets/productos/bosnia-local-2026/trasera.jpg" alt="Camiseta Bosnia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Bosnia</span>
+          <span class="product-name">Camiseta Bosnia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="bosnia" data-id="bosnia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/bosnia-away-2026/frontal.jpg" alt="Camiseta Bosnia Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/bosnia-away-2026/trasera.jpg" alt="Camiseta Bosnia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Bosnia</span>
+          <span class="product-name">Camiseta Bosnia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/espana-local-2026/frontal.jpg" alt="Camiseta España Local 2026 frontal">
+          <img class="img-b" src="assets/productos/espana-local-2026/trasera.jpg" alt="Camiseta España Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Camiseta España Local 2026 (2 Estrellas)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/espana-away-2026/frontal.jpg" alt="Camiseta España Visitante 2026 frontal">
+          <img class="img-b" src="assets/productos/espana-away-2026/trasera.jpg" alt="Camiseta España Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Camiseta España Visitante 2026 (2 Estrellas)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="bayern-munich" data-id="bayern-munich-local-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -793,6 +2328,60 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Bundesliga · Bayern Munich</span>
           <span class="product-name">Camiseta Bayern Munich Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="borussia-dortmund" data-id="borussia-dortmund-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/borussia-dortmund-local-2627/frontal.jpg" alt="Camiseta Borussia Dortmund 26/27 frontal">
+          <img class="img-b" src="assets/productos/borussia-dortmund-local-2627/trasera.jpg" alt="Camiseta Borussia Dortmund 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Bundesliga · Borussia Dortmund</span>
+          <span class="product-name">Camiseta Local B. Dortmund 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="fortuna-dusseldorf" data-id="fortuna-dusseldorf-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/fortuna-dusseldorf-local-2627/frontal.jpg" alt="Camiseta Düsseldorf Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/fortuna-dusseldorf-local-2627/trasera.jpg" alt="Camiseta Düsseldorf Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Bundesliga · Fortuna Düsseldorf</span>
+          <span class="product-name">Camiseta Düsseldorf Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="bundesliga" data-team="borussia-monchengladbach" data-id="borussia-monchengladbach-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/borussia-monchengladbach-local-2627/frontal.jpg" alt="Camiseta Borussia Mönchengladbach Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/borussia-monchengladbach-local-2627/trasera.jpg" alt="Camiseta Borussia Mönchengladbach Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Bundesliga · Borussia Mönchengladbach</span>
+          <span class="product-name">Camiseta Borussia Mönchengladbach Local 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -874,6 +2463,96 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-girl-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/real-madrid-girl-2627/frontal.jpg" alt="Camiseta Real Madrid Girl Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/real-madrid-girl-2627/trasera.jpg" alt="Camiseta Real Madrid Girl Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Real Madrid</span>
+          <span class="product-name">Camiseta Real Madrid Local 26/27 (Girl Version)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-id="arsenal-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/arsenal-player-2627/frontal.jpg" alt="Camiseta Arsenal Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/arsenal-player-2627/trasera.jpg" alt="Camiseta Arsenal Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Arsenal</span>
+          <span class="product-name">Camiseta Arsenal Local 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-id="arsenal-girl-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/arsenal-girl-2627/frontal.jpg" alt="Camiseta Arsenal Girl Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/arsenal-girl-2627/trasera.jpg" alt="Camiseta Arsenal Girl Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Arsenal</span>
+          <span class="product-name">Camiseta Arsenal Local 26/27 (Girl Version)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="aston-villa" data-id="aston-villa-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/aston-villa-local-2627/frontal.jpg" alt="Camiseta Aston Villa 26/27 frontal">
+          <img class="img-b" src="assets/productos/aston-villa-local-2627/trasera.jpg" alt="Camiseta Aston Villa 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Aston Villa</span>
+          <span class="product-name">Camiseta Aston Villa Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="aston-villa" data-id="aston-villa-player-2627">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" src="assets/productos/aston-villa-player-2627/frontal.jpg" alt="Camiseta Aston Villa Player Version 26/27 frontal">
+          <img class="img-b" src="assets/productos/aston-villa-player-2627/trasera.jpg" alt="Camiseta Aston Villa Player Version 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Aston Villa</span>
+          <span class="product-name">Camiseta Aston Villa Local 26/27 (Player Version)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-kids-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -928,6 +2607,96 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="aston-villa" data-id="aston-villa-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/aston-villa-kids-2627/frontal.jpg" alt="Equipación Niño Aston Villa 26/27 frontal">
+          <img class="img-b" src="assets/productos/aston-villa-kids-2627/trasera.jpg" alt="Equipación Niño Aston Villa 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Premier League · Aston Villa</span>
+          <span class="product-name">Equipación Niño Aston Villa Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-portugal" data-team="benfica" data-id="benfica-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/benfica-local-2627/frontal.jpg" alt="Camiseta Benfica Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/benfica-local-2627/trasera.jpg" alt="Camiseta Benfica Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Portugal · Benfica</span>
+          <span class="product-name">Camiseta Benfica Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-portugal" data-team="oporto" data-id="oporto-local-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/oporto-local-2627/frontal.jpg" alt="Camiseta Oporto Local 26/27 frontal">
+          <img class="img-b" src="assets/productos/oporto-local-2627/trasera.jpg" alt="Camiseta Oporto Local 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Portugal · Oporto</span>
+          <span class="product-name">Camiseta Oporto Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-portugal" data-team="benfica" data-id="benfica-away-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/benfica-away-2627/frontal.jpg" alt="Camiseta Benfica Visitante 26/27 frontal">
+          <img class="img-b" src="assets/productos/benfica-away-2627/trasera.jpg" alt="Camiseta Benfica Visitante 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Portugal · Benfica</span>
+          <span class="product-name">Camiseta Benfica Visitante 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-portugal" data-team="benfica" data-id="benfica-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/benfica-kids-2627/frontal.jpg" alt="Equipación Niño Benfica 26/27 frontal">
+          <img class="img-b" src="assets/productos/benfica-kids-2627/trasera.jpg" alt="Equipación Niño Benfica 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Portugal · Benfica</span>
+          <span class="product-name">Equipación Niño Benfica Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="arsenal" data-id="arsenal-away-kids-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -955,6 +2724,24 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Liga Española · FC Barcelona</span>
           <span class="product-name">Equipación Niño FC Barcelona Local 26/27</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-id="fc-barcelona-gk-kids-2627">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" src="assets/productos/fc-barcelona-gk-kids-2627/frontal.jpg" alt="Equipación Niño FC Barcelona Portero 26/27 frontal">
+          <img class="img-b" src="assets/productos/fc-barcelona-gk-kids-2627/trasera.jpg" alt="Equipación Niño FC Barcelona Portero 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · FC Barcelona</span>
+          <span class="product-name">Equipación Niño FC Barcelona Portero 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -1053,12 +2840,14 @@
             <input type="text" id="customName" placeholder="Nombre" maxlength="20">
             <input type="text" id="customNumber" placeholder="Número" maxlength="2" inputmode="numeric">
           </div>
-          <span class="size-label" style="margin-top:14px;">Parche</span>
-          <select id="customPatch" class="patch-select">
-            <option value="none">Sin parche</option>
-            <option value="liga" id="customPatchLeagueOption">Liga (+1€)</option>
-            <option value="champions">Champions League (+1€)</option>
-          </select>
+          <div id="patchBlock">
+            <span class="size-label" style="margin-top:14px;">Parche</span>
+            <select id="customPatch" class="patch-select">
+              <option value="none">Sin parche</option>
+              <option value="liga" id="customPatchLeagueOption">Liga (+1.5€)</option>
+              <option value="champions" id="customPatchChampionsOption">Champions League (+1.5€)</option>
+            </select>
+          </div>
           <div id="socksBlock">
             <span class="size-label" style="margin-top:14px;">Medias a juego</span>
             <select id="customSocks" class="patch-select">
@@ -1130,6 +2919,13 @@
       </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
+    <div class="coupon-row">
+      <input type="text" id="couponInput" class="coupon-input" placeholder="Código de descuento" maxlength="24">
+      <button type="button" class="coupon-btn" id="couponBtn">Aplicar</button>
+    </div>
+    <p class="coupon-msg" id="couponMsg"></p>
+    <div class="cart-subtotal-row" id="cartSubtotalRow" style="display:none;"><span>Subtotal</span><span id="cartSubtotal">0€</span></div>
+    <div class="cart-discount-row" id="cartDiscountRow" style="display:none;"><span>Descuento</span><span id="cartDiscount">-0€</span></div>
     <div class="cart-total-row"><span>Total</span><span id="cartTotal">0€</span></div>
     <p class="cart-total-note">Envío a coordinar por WhatsApp tras confirmar el pedido</p>
     <button class="checkout-btn" id="checkoutBtn">Finalizar por WhatsApp</button>
@@ -1156,6 +2952,15 @@
   });
   document.addEventListener('click', () => filterDropdown.classList.remove('open'));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') filterDropdown.classList.remove('open'); });
+
+  document.querySelectorAll('.tree-toggle').forEach(toggleIcon => {
+    toggleIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const children = toggleIcon.closest('.tree-cat, .tree-sub').nextElementSibling;
+      const isOpen = children.classList.toggle('open');
+      toggleIcon.classList.toggle('open', isOpen);
+    });
+  });
 
   let currentCategoryFilter = { cat: 'all', brand: 'all', model: 'all', league: 'all', team: 'all' };
 
@@ -1306,7 +3111,39 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'real-madrid-alt-2627': {
+      name: 'Camiseta Real Madrid Alternativa 26/27',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/real-madrid-alt-2627/frontal.jpg',
+        'assets/productos/real-madrid-alt-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'real-madrid-local-ml-2627': {
+      name: 'Camiseta Real Madrid Local 26/27 Manga Larga',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 30,
+      originalPrice: 38,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/real-madrid-local-ml-2627/frontal.jpg',
+        'assets/productos/real-madrid-local-ml-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga'
       }
     },
@@ -1322,8 +3159,414 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga'
+      }
+    },
+    'athletic-bilbao-local-2627': {
+      name: 'Camiseta Athletic Bilbao Local 26/27',
+      cat: 'Fútbol · Liga Española · Athletic Bilbao',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/athletic-bilbao-local-2627/frontal.jpg',
+        'assets/productos/athletic-bilbao-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'athletic-bilbao-away-2627': {
+      name: 'Camiseta Athletic Bilbao Visitante 26/27',
+      cat: 'Fútbol · Liga Española · Athletic Bilbao',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/athletic-bilbao-away-2627/frontal.jpg',
+        'assets/productos/athletic-bilbao-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'athletic-bilbao-player-2627': {
+      name: 'Camiseta Athletic Bilbao Local 26/27 (Player Version)',
+      cat: 'Fútbol · Liga Española · Athletic Bilbao',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/athletic-bilbao-player-2627/frontal.jpg',
+        'assets/productos/athletic-bilbao-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'eibar-local-2627': {
+      name: 'Camiseta Eibar Local 26/27',
+      cat: 'Fútbol · Liga Española · Eibar',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/eibar-local-2627/frontal.jpg',
+        'assets/productos/eibar-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'malaga-local-2627': {
+      name: 'Camiseta Málaga Local 26/27',
+      cat: 'Fútbol · Liga Española · Málaga',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/malaga-local-2627/frontal.jpg',
+        'assets/productos/malaga-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'malaga-kids-2627': {
+      name: 'Equipación Niño Málaga Local 26/27',
+      cat: 'Fútbol · Liga Española · Málaga',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/malaga-kids-2627/frontal.jpg',
+        'assets/productos/malaga-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true,
+        socksFee: 5
+      }
+    },
+    'everton-local-2627': {
+      name: 'Camiseta Everton Local 26/27',
+      cat: 'Fútbol · Premier League · Everton',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/everton-local-2627/frontal.jpg',
+        'assets/productos/everton-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        noChampions: true
+      }
+    },
+    'celta-vigo-away-2627': {
+      name: 'Camiseta Celta de Vigo Visitante 26/27',
+      cat: 'Fútbol · Liga Española · Celta de Vigo',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/celta-vigo-away-2627/frontal.jpg',
+        'assets/productos/celta-vigo-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'betis-local-2627': {
+      name: 'Camiseta Real Betis Local 26/27',
+      cat: 'Fútbol · Liga Española · Real Betis',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/betis-local-2627/frontal.jpg',
+        'assets/productos/betis-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'betis-kids-2627': {
+      name: 'Equipación Niño Betis Local 26/27',
+      cat: 'Fútbol · Liga Española · Real Betis',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/betis-kids-2627/frontal.jpg',
+        'assets/productos/betis-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        socksFee: 5
+      }
+    },
+    'atletico-madrid-away-2627': {
+      name: 'Camiseta Atlético de Madrid Visitante 26/27',
+      cat: 'Fútbol · Liga Española · Atlético de Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/atletico-madrid-away-2627/frontal.jpg',
+        'assets/productos/atletico-madrid-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'atletico-madrid-player-2627': {
+      name: 'Camiseta Atlético de Madrid Local 26/27 (Player Version)',
+      cat: 'Fútbol · Liga Española · Atlético de Madrid',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/atletico-madrid-player-2627/frontal.jpg',
+        'assets/productos/atletico-madrid-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'atletico-madrid-away-player-2627': {
+      name: 'Camiseta Atlético de Madrid Visitante 26/27 (Player Version)',
+      cat: 'Fútbol · Liga Española · Atlético de Madrid',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/atletico-madrid-away-player-2627/frontal.jpg',
+        'assets/productos/atletico-madrid-away-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'atletico-madrid-away-kids-2627': {
+      name: 'Equipación Niño Atlético Madrid Visitante 26/27',
+      cat: 'Fútbol · Liga Española · Atlético de Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/atletico-madrid-away-kids-2627/frontal.jpg',
+        'assets/productos/atletico-madrid-away-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        socksFee: 5
+      }
+    },
+    'valencia-local-2627': {
+      name: 'Camiseta Valencia Local 26/27',
+      cat: 'Fútbol · Liga Española · Valencia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/valencia-local-2627/frontal.jpg',
+        'assets/productos/valencia-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'deportivo-local-2627': {
+      name: 'Camiseta Deportivo de la Coruña Local 26/27',
+      cat: 'Fútbol · Liga Española · Deportivo de la Coruña',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/deportivo-local-2627/frontal.jpg',
+        'assets/productos/deportivo-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        noChampions: true
+      }
+    },
+    'lyon-local-2627': {
+      name: 'Camiseta O. Lyon Local 26/27',
+      cat: 'Fútbol · Ligue 1 · O. Lyon',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/lyon-local-2627/frontal.jpg',
+        'assets/productos/lyon-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1'
+      }
+    },
+    'psg-local-2627': {
+      name: 'Camiseta PSG Local 26/27',
+      cat: 'Fútbol · Ligue 1 · PSG',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/psg-local-2627/frontal.jpg',
+        'assets/productos/psg-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1'
+      }
+    },
+    'psg-girl-2627': {
+      name: 'Camiseta PSG Local 26/27 (Girl Version)',
+      cat: 'Fútbol · Ligue 1 · PSG',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/psg-girl-2627/frontal.jpg',
+        'assets/productos/psg-girl-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1'
+      }
+    },
+    'psg-kids-2627': {
+      name: 'Equipación Niño PSG Local 26/27',
+      cat: 'Fútbol · Ligue 1 · PSG',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/psg-kids-2627/frontal.jpg',
+        'assets/productos/psg-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1',
+        socksFee: 5
+      }
+    },
+    'psg-away-kids-2627': {
+      name: 'Equipación Niño PSG Visitante 26/27',
+      cat: 'Fútbol · Ligue 1 · PSG',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/psg-away-kids-2627/frontal.jpg',
+        'assets/productos/psg-away-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1',
+        socksFee: 5
+      }
+    },
+    'lyon-away-2627': {
+      name: 'Camiseta O. Lyon Visitante 26/27',
+      cat: 'Fútbol · Ligue 1 · O. Lyon',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/lyon-away-2627/frontal.jpg',
+        'assets/productos/lyon-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Ligue 1'
+      }
+    },
+    'liverpool-local-2627': {
+      name: 'Camiseta Liverpool Local 26/27',
+      cat: 'Fútbol · Premier League · Liverpool',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/liverpool-local-2627/frontal.jpg',
+        'assets/productos/liverpool-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'liverpool-kids-2627': {
+      name: 'Equipación Niño Liverpool Local 26/27',
+      cat: 'Fútbol · Premier League · Liverpool',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/liverpool-kids-2627/frontal.jpg',
+        'assets/productos/liverpool-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        socksFee: 5
       }
     },
     'manchester-city-local-2627': {
@@ -1338,7 +3581,139 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'manchester-city-kids-2627': {
+      name: 'Equipación Niño Manchester City Local 26/27',
+      cat: 'Fútbol · Premier League · Manchester City',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/manchester-city-kids-2627/frontal.jpg',
+        'assets/productos/manchester-city-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        socksFee: 5
+      }
+    },
+    'manchester-united-local-2627': {
+      name: 'Camiseta Manchester United Local 26/27',
+      cat: 'Fútbol · Premier League · Manchester United',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/manchester-united-local-2627/frontal.jpg',
+        'assets/productos/manchester-united-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'manchester-united-kids-2627': {
+      name: 'Equipación Niño Manchester United Local 26/27',
+      cat: 'Fútbol · Premier League · Manchester United',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/manchester-united-kids-2627/frontal.jpg',
+        'assets/productos/manchester-united-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        socksFee: 5
+      }
+    },
+    'chelsea-local-2627': {
+      name: 'Camiseta Chelsea Local 26/27',
+      cat: 'Fútbol · Premier League · Chelsea',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/chelsea-local-2627/frontal.jpg',
+        'assets/productos/chelsea-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'chelsea-away-2627': {
+      name: 'Camiseta Chelsea Visitante 26/27',
+      cat: 'Fútbol · Premier League · Chelsea',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/chelsea-away-2627/frontal.jpg',
+        'assets/productos/chelsea-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'leeds-united-local-2627': {
+      name: 'Camiseta Leeds United Local 26/27',
+      cat: 'Fútbol · Premier League · Leeds United',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/leeds-united-local-2627/frontal.jpg',
+        'assets/productos/leeds-united-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'leeds-united-away-2627': {
+      name: 'Camiseta Leeds United Visitante 26/27',
+      cat: 'Fútbol · Premier League · Leeds United',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/leeds-united-away-2627/frontal.jpg',
+        'assets/productos/leeds-united-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'millwall-local-2627': {
+      name: 'Camiseta Millwall Local 26/27',
+      cat: 'Fútbol · Premier League · Millwall',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/millwall-local-2627/frontal.jpg',
+        'assets/productos/millwall-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League'
       }
     },
@@ -1354,7 +3729,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League'
       }
     },
@@ -1370,8 +3745,677 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League'
+      }
+    },
+    'ac-milan-local-2627': {
+      name: 'Camiseta AC Milan Local 26/27',
+      cat: 'Fútbol · Serie A · AC Milan',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/ac-milan-local-2627/frontal.jpg',
+        'assets/productos/ac-milan-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Serie A'
+      }
+    },
+    'inter-milan-local-2627': {
+      name: 'Camiseta Inter Milan Local 26/27',
+      cat: 'Fútbol · Serie A · Inter Milan',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/inter-milan-local-2627/frontal.jpg',
+        'assets/productos/inter-milan-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Serie A'
+      }
+    },
+    'inter-milan-kids-2627': {
+      name: 'Equipación Niño Inter Milan Local 26/27',
+      cat: 'Fútbol · Serie A · Inter Milan',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/inter-milan-kids-2627/frontal.jpg',
+        'assets/productos/inter-milan-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Serie A',
+        socksFee: 5
+      }
+    },
+    'fenerbahce-local-2627': {
+      name: 'Camiseta Fenerbahçe Local 26/27',
+      cat: 'Fútbol · Europa · Fenerbahçe',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/fenerbahce-local-2627/frontal.jpg',
+        'assets/productos/fenerbahce-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'fenerbahce-away-2627': {
+      name: 'Camiseta Fenerbahçe Visitante 26/27',
+      cat: 'Fútbol · Europa · Fenerbahçe',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/fenerbahce-away-2627/frontal.jpg',
+        'assets/productos/fenerbahce-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'celtic-local-2627': {
+      name: 'Camiseta Celtic Local 26/27',
+      cat: 'Fútbol · Europa · Celtic',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/celtic-local-2627/frontal.jpg',
+        'assets/productos/celtic-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'hearts-local-2627': {
+      name: 'Camiseta Hearts Local 26/27',
+      cat: 'Fútbol · Europa · Hearts',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/hearts-local-2627/frontal.jpg',
+        'assets/productos/hearts-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'hearts-away-2627': {
+      name: 'Camiseta Hearts Visitante 26/27',
+      cat: 'Fútbol · Europa · Hearts',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/hearts-away-2627/frontal.jpg',
+        'assets/productos/hearts-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'tunez-away-2026': {
+      name: 'Camiseta Túnez Visitante 2026',
+      cat: 'Fútbol · Selecciones · Túnez',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/tunez-away-2026/frontal.jpg',
+        'assets/productos/tunez-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'corea-del-sur-local-2026': {
+      name: 'Camiseta Corea del Sur Local 2026',
+      cat: 'Fútbol · Selecciones · Corea del Sur',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/corea-del-sur-local-2026/frontal.jpg',
+        'assets/productos/corea-del-sur-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'corea-del-sur-away-2026': {
+      name: 'Camiseta Corea del Sur Visitante 2026',
+      cat: 'Fútbol · Selecciones · Corea del Sur',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/corea-del-sur-away-2026/frontal.jpg',
+        'assets/productos/corea-del-sur-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'francia-local-2026': {
+      name: 'Camiseta Francia Local 2026',
+      cat: 'Fútbol · Selecciones · Francia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/francia-local-2026/frontal.jpg',
+        'assets/productos/francia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'francia-away-2026': {
+      name: 'Camiseta Francia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Francia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/francia-away-2026/frontal.jpg',
+        'assets/productos/francia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'australia-local-2026': {
+      name: 'Camiseta Australia Local 2026',
+      cat: 'Fútbol · Selecciones · Australia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/australia-local-2026/frontal.jpg',
+        'assets/productos/australia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'australia-away-2026': {
+      name: 'Camiseta Australia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Australia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/australia-away-2026/frontal.jpg',
+        'assets/productos/australia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'paraguay-local-2026': {
+      name: 'Camiseta Paraguay Local 2026',
+      cat: 'Fútbol · Selecciones · Paraguay',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/paraguay-local-2026/frontal.jpg',
+        'assets/productos/paraguay-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'paraguay-away-2026': {
+      name: 'Camiseta Paraguay Visitante 2026',
+      cat: 'Fútbol · Selecciones · Paraguay',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/paraguay-away-2026/frontal.jpg',
+        'assets/productos/paraguay-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'sudafrica-local-2026': {
+      name: 'Camiseta Sudáfrica Local 2026',
+      cat: 'Fútbol · Selecciones · Sudáfrica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/sudafrica-local-2026/frontal.jpg',
+        'assets/productos/sudafrica-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'noruega-local-2026': {
+      name: 'Camiseta Noruega Local 2026',
+      cat: 'Fútbol · Selecciones · Noruega',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/noruega-local-2026/frontal.jpg',
+        'assets/productos/noruega-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'noruega-away-2026': {
+      name: 'Camiseta Noruega Visitante 2026',
+      cat: 'Fútbol · Selecciones · Noruega',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/noruega-away-2026/frontal.jpg',
+        'assets/productos/noruega-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'noruega-alt-2026': {
+      name: 'Camiseta Noruega Alternativa 2026',
+      cat: 'Fútbol · Selecciones · Noruega',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/noruega-alt-2026/frontal.jpg',
+        'assets/productos/noruega-alt-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'turquia-local-2026': {
+      name: 'Camiseta Turquía Local 2026',
+      cat: 'Fútbol · Selecciones · Turquía',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/turquia-local-2026/frontal.jpg',
+        'assets/productos/turquia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'turquia-away-2026': {
+      name: 'Camiseta Turquía Visitante 2026',
+      cat: 'Fútbol · Selecciones · Turquía',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/turquia-away-2026/frontal.jpg',
+        'assets/productos/turquia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'republica-del-congo-local-2026': {
+      name: 'Camiseta República del Congo Local 2026',
+      cat: 'Fútbol · Selecciones · República del Congo',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/republica-del-congo-local-2026/frontal.jpg',
+        'assets/productos/republica-del-congo-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'republica-del-congo-away-2026': {
+      name: 'Camiseta República del Congo Visitante 2026',
+      cat: 'Fútbol · Selecciones · República del Congo',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/republica-del-congo-away-2026/frontal.jpg',
+        'assets/productos/republica-del-congo-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'ecuador-local-2026': {
+      name: 'Camiseta Ecuador Local 2026',
+      cat: 'Fútbol · Selecciones · Ecuador',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/ecuador-local-2026/frontal.jpg',
+        'assets/productos/ecuador-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'ecuador-away-2026': {
+      name: 'Camiseta Ecuador Visitante 2026',
+      cat: 'Fútbol · Selecciones · Ecuador',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/ecuador-away-2026/frontal.jpg',
+        'assets/productos/ecuador-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'ecuador-alt-2026': {
+      name: 'Camiseta Ecuador Alternativa 2026',
+      cat: 'Fútbol · Selecciones · Ecuador',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/ecuador-alt-2026/frontal.jpg',
+        'assets/productos/ecuador-alt-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'inglaterra-local-2026': {
+      name: 'Camiseta Inglaterra Local 2026',
+      cat: 'Fútbol · Selecciones · Inglaterra',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/inglaterra-local-2026/frontal.jpg',
+        'assets/productos/inglaterra-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'inglaterra-away-2026': {
+      name: 'Camiseta Inglaterra Visitante 2026',
+      cat: 'Fútbol · Selecciones · Inglaterra',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/inglaterra-away-2026/frontal.jpg',
+        'assets/productos/inglaterra-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'croacia-local-2026': {
+      name: 'Camiseta Croacia Local 2026',
+      cat: 'Fútbol · Selecciones · Croacia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/croacia-local-2026/frontal.jpg',
+        'assets/productos/croacia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'croacia-away-2026': {
+      name: 'Camiseta Croacia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Croacia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/croacia-away-2026/frontal.jpg',
+        'assets/productos/croacia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'suecia-local-2026': {
+      name: 'Camiseta Suecia Local 2026',
+      cat: 'Fútbol · Selecciones · Suecia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/suecia-local-2026/frontal.jpg',
+        'assets/productos/suecia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'suecia-away-2026': {
+      name: 'Camiseta Suecia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Suecia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/suecia-away-2026/frontal.jpg',
+        'assets/productos/suecia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'curazao-local-2026': {
+      name: 'Camiseta Curazao Local 2026',
+      cat: 'Fútbol · Selecciones · Curazao',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/curazao-local-2026/frontal.jpg',
+        'assets/productos/curazao-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'curazao-away-2026': {
+      name: 'Camiseta Curazao Visitante 2026',
+      cat: 'Fútbol · Selecciones · Curazao',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/curazao-away-2026/frontal.jpg',
+        'assets/productos/curazao-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'bosnia-local-2026': {
+      name: 'Camiseta Bosnia Local 2026',
+      cat: 'Fútbol · Selecciones · Bosnia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/bosnia-local-2026/frontal.jpg',
+        'assets/productos/bosnia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'bosnia-away-2026': {
+      name: 'Camiseta Bosnia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Bosnia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/bosnia-away-2026/frontal.jpg',
+        'assets/productos/bosnia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'espana-local-2026': {
+      name: 'Camiseta España Local 2026 (2 Estrellas)',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/espana-local-2026/frontal.jpg',
+        'assets/productos/espana-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        championsPatchLabel: 'Final Mundial 2026'
+      }
+    },
+    'espana-away-2026': {
+      name: 'Camiseta España Visitante 2026 (2 Estrellas)',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/espana-away-2026/frontal.jpg',
+        'assets/productos/espana-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        championsPatchLabel: 'Final Mundial 2026'
       }
     },
     'bayern-munich-local-2627': {
@@ -1386,8 +4430,58 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Bundesliga'
+      }
+    },
+    'borussia-dortmund-local-2627': {
+      name: 'Camiseta Local B. Dortmund 26/27',
+      cat: 'Fútbol · Bundesliga · Borussia Dortmund',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/borussia-dortmund-local-2627/frontal.jpg',
+        'assets/productos/borussia-dortmund-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Bundesliga'
+      }
+    },
+    'fortuna-dusseldorf-local-2627': {
+      name: 'Camiseta Düsseldorf Local 26/27',
+      cat: 'Fútbol · Bundesliga · Fortuna Düsseldorf',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/fortuna-dusseldorf-local-2627/frontal.jpg',
+        'assets/productos/fortuna-dusseldorf-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Bundesliga',
+        noChampions: true
+      }
+    },
+    'borussia-monchengladbach-local-2627': {
+      name: 'Camiseta Borussia Mönchengladbach Local 26/27',
+      cat: 'Fútbol · Bundesliga · Borussia Mönchengladbach',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/borussia-monchengladbach-local-2627/frontal.jpg',
+        'assets/productos/borussia-monchengladbach-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Bundesliga',
+        noChampions: true
       }
     },
     'bayern-munich-visitante-2627': {
@@ -1402,7 +4496,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Bundesliga'
       }
     },
@@ -1418,7 +4512,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga'
       }
     },
@@ -1434,7 +4528,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League'
       }
     },
@@ -1450,8 +4544,90 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga'
+      }
+    },
+    'real-madrid-girl-2627': {
+      name: 'Camiseta Real Madrid Local 26/27 (Girl Version)',
+      cat: 'Fútbol · Liga Española · Real Madrid',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/real-madrid-girl-2627/frontal.jpg',
+        'assets/productos/real-madrid-girl-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga'
+      }
+    },
+    'arsenal-player-2627': {
+      name: 'Camiseta Arsenal Local 26/27 (Player Version)',
+      cat: 'Fútbol · Premier League · Arsenal',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/arsenal-player-2627/frontal.jpg',
+        'assets/productos/arsenal-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'arsenal-girl-2627': {
+      name: 'Camiseta Arsenal Local 26/27 (Girl Version)',
+      cat: 'Fútbol · Premier League · Arsenal',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/arsenal-girl-2627/frontal.jpg',
+        'assets/productos/arsenal-girl-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League'
+      }
+    },
+    'aston-villa-local-2627': {
+      name: 'Camiseta Aston Villa Local 26/27',
+      cat: 'Fútbol · Premier League · Aston Villa',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/aston-villa-local-2627/frontal.jpg',
+        'assets/productos/aston-villa-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        noChampions: true
+      }
+    },
+    'aston-villa-player-2627': {
+      name: 'Camiseta Aston Villa Local 26/27 (Player Version)',
+      cat: 'Fútbol · Premier League · Aston Villa',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/aston-villa-player-2627/frontal.jpg',
+        'assets/productos/aston-villa-player-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        noChampions: true
       }
     },
     'real-madrid-kids-2627': {
@@ -1467,7 +4643,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga',
         socksFee: 5
       }
@@ -1485,7 +4661,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Bundesliga',
         socksFee: 5
       }
@@ -1503,9 +4679,90 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League',
         socksFee: 5
+      }
+    },
+    'aston-villa-kids-2627': {
+      name: 'Equipación Niño Aston Villa Local 26/27',
+      cat: 'Fútbol · Premier League · Aston Villa',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/aston-villa-kids-2627/frontal.jpg',
+        'assets/productos/aston-villa-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Premier League',
+        socksFee: 5,
+        noChampions: true
+      }
+    },
+    'benfica-local-2627': {
+      name: 'Camiseta Benfica Local 26/27',
+      cat: 'Fútbol · Liga Portugal · Benfica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/benfica-local-2627/frontal.jpg',
+        'assets/productos/benfica-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'oporto-local-2627': {
+      name: 'Camiseta Oporto Local 26/27',
+      cat: 'Fútbol · Liga Portugal · Oporto',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/oporto-local-2627/frontal.jpg',
+        'assets/productos/oporto-local-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'benfica-away-2627': {
+      name: 'Camiseta Benfica Visitante 26/27',
+      cat: 'Fútbol · Liga Portugal · Benfica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/benfica-away-2627/frontal.jpg',
+        'assets/productos/benfica-away-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'benfica-kids-2627': {
+      name: 'Equipación Niño Benfica Local 26/27',
+      cat: 'Fútbol · Liga Portugal · Benfica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/benfica-kids-2627/frontal.jpg',
+        'assets/productos/benfica-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        socksFee: 5,
+        noPatch: true
       }
     },
     'arsenal-away-kids-2627': {
@@ -1520,7 +4777,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Premier League',
         socksFee: 5
       }
@@ -1538,7 +4795,25 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Liga',
+        socksFee: 5
+      }
+    },
+    'fc-barcelona-gk-kids-2627': {
+      name: 'Equipación Niño FC Barcelona Portero 26/27',
+      cat: 'Fútbol · Liga Española · FC Barcelona',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/fc-barcelona-gk-kids-2627/frontal.jpg',
+        'assets/productos/fc-barcelona-gk-kids-2627/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga',
         socksFee: 5
       }
@@ -1556,7 +4831,7 @@
       ],
       customization: {
         nameNumberFee: 2,
-        patchFee: 1,
+        patchFee: 1.5,
         leaguePatchLabel: 'Liga',
         socksFee: 5
       }
@@ -1579,8 +4854,10 @@
   const modalCustomize = document.getElementById('modalCustomize');
   const customName = document.getElementById('customName');
   const customNumber = document.getElementById('customNumber');
+  const patchBlock = document.getElementById('patchBlock');
   const customPatch = document.getElementById('customPatch');
   const customPatchLeagueOption = document.getElementById('customPatchLeagueOption');
+  const customPatchChampionsOption = document.getElementById('customPatchChampionsOption');
   const socksBlock = document.getElementById('socksBlock');
   const customSocks = document.getElementById('customSocks');
   const customizeNote = document.getElementById('customizeNote');
@@ -1683,7 +4960,14 @@
       customName.value = '';
       customNumber.value = '';
       customPatch.value = 'none';
-      customPatchLeagueOption.textContent = `${product.customization.leaguePatchLabel} (+${product.customization.patchFee}€)`;
+      if (product.customization.noPatch) {
+        patchBlock.style.display = 'none';
+      } else {
+        patchBlock.style.display = '';
+        customPatchLeagueOption.textContent = `${product.customization.leaguePatchLabel} (+${product.customization.patchFee}€)`;
+        customPatchChampionsOption.textContent = `${product.customization.championsPatchLabel || 'Champions League'} (+${product.customization.patchFee}€)`;
+        customPatchChampionsOption.style.display = product.customization.noChampions ? 'none' : '';
+      }
       if (product.customization.socksFee) {
         socksBlock.style.display = '';
         customSocks.value = 'no';
@@ -1756,6 +5040,42 @@
   const cartHeadCountEl = document.getElementById('cartHeadCount');
   const cartTotalEl = document.getElementById('cartTotal');
 
+  // ===== Cupón de descuento =====
+  const COUPONS = {
+    'BIENVENIDO10': { type: 'percent', value: 10, label: '10% de descuento' },
+    'KICKGENIUS5': { type: 'fixed', value: 5, label: '5€ de descuento' }
+  };
+  const COUPON_KEY = 'kickGeniusCoupon';
+  function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
+  function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
+  function calcDiscount(subtotal, code){
+    const coupon = code ? COUPONS[code] : null;
+    if (!coupon || subtotal <= 0) return 0;
+    const raw = coupon.type === 'percent' ? subtotal * coupon.value / 100 : coupon.value;
+    return Math.min(Math.round(raw * 100) / 100, subtotal);
+  }
+  const couponInput = document.getElementById('couponInput');
+  const couponBtn = document.getElementById('couponBtn');
+  const couponMsg = document.getElementById('couponMsg');
+  function applyCouponCode(rawCode){
+    const code = rawCode.trim().toUpperCase();
+    if (!code) return;
+    if (COUPONS[code]) {
+      saveCouponCode(code);
+      couponInput.value = '';
+      couponInput.classList.remove('invalid');
+    } else {
+      saveCouponCode(null);
+      couponInput.classList.add('invalid');
+      couponMsg.className = 'coupon-msg error';
+      couponMsg.textContent = 'Código no válido.';
+    }
+    renderCart();
+  }
+  couponBtn.addEventListener('click', () => applyCouponCode(couponInput.value));
+  couponInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCouponCode(couponInput.value); } });
+  couponInput.addEventListener('input', () => couponInput.classList.remove('invalid'));
+
   function renderCart(){
     const cart = getCart();
     const count = cart.reduce((n,i) => n + i.qty, 0);
@@ -1769,6 +5089,8 @@
           <a href="catalogo.html">Ver catálogo</a>
         </div>`;
       cartTotalEl.textContent = '0€';
+      document.getElementById('cartSubtotalRow').style.display = 'none';
+      document.getElementById('cartDiscountRow').style.display = 'none';
       return;
     }
     let total = 0;
@@ -1804,7 +5126,31 @@
           </div>
         </div>`;
     }).join('');
-    cartTotalEl.textContent = total + '€';
+
+    const appliedCoupon = getCoupon();
+    const discount = calcDiscount(total, appliedCoupon);
+    const finalTotal = Math.round((total - discount) * 100) / 100;
+    const subtotalRow = document.getElementById('cartSubtotalRow');
+    const discountRow = document.getElementById('cartDiscountRow');
+    if (discount > 0) {
+      subtotalRow.style.display = 'flex';
+      discountRow.style.display = 'flex';
+      document.getElementById('cartSubtotal').textContent = total + '€';
+      document.getElementById('cartDiscount').textContent = '-' + discount + '€';
+    } else {
+      subtotalRow.style.display = 'none';
+      discountRow.style.display = 'none';
+    }
+    cartTotalEl.textContent = finalTotal + '€';
+
+    if (appliedCoupon && COUPONS[appliedCoupon]) {
+      couponMsg.className = 'coupon-msg success';
+      couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> aplicado (${COUPONS[appliedCoupon].label}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
+      document.getElementById('couponRemoveBtn').addEventListener('click', () => { saveCouponCode(null); renderCart(); });
+    } else if (!appliedCoupon) {
+      couponMsg.className = 'coupon-msg';
+      couponMsg.textContent = '';
+    }
 
     cartItemsEl.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1890,7 +5236,14 @@
         if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
       }
     });
-    msg += `\n*Total del pedido: ${total}€*\n\n`;
+    const appliedCouponCode = getCoupon();
+    const orderDiscount = calcDiscount(total, appliedCouponCode);
+    const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
+    if (orderDiscount > 0) {
+      msg += `\nSubtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+    } else {
+      msg += `\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+    }
     msg += `📦 *Datos de envío*\n`;
     shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
     msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
@@ -1913,6 +5266,10 @@
 
 })();
 </script>
+
+<a href="https://wa.me/34644039760?text=Hola%20Kick%20Genius%2C%20tengo%20una%20duda" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Escríbenos por WhatsApp" title="¿Dudas? Escríbenos por WhatsApp">
+  <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.646 4.47 1.77 6.31L4 29l7.86-1.74A11.93 11.93 0 0 0 16.004 27C22.63 27 28 21.63 28 15S22.63 3 16.004 3zm0 21.9c-1.98 0-3.85-.53-5.46-1.46l-.39-.23-4.66 1.03 1.05-4.55-.25-.4A9.86 9.86 0 0 1 6.1 15c0-5.46 4.45-9.9 9.9-9.9 5.46 0 9.9 4.44 9.9 9.9 0 5.46-4.44 9.9-9.9 9.9zm5.44-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.47 0 1.45 1.06 2.86 1.2 3.06.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+</a>
 
 </body>
 </html>
