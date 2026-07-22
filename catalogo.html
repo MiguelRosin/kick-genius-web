@@ -443,6 +443,7 @@
   }
   .shipping-input:focus{outline:none;border-color:var(--teal);}
   .shipping-input.invalid{border-color:#c0392b;}
+  select.shipping-input{cursor:pointer;}
   .shipping-row{display:flex;gap:10px;}
   .shipping-row .shipping-field{flex:1;min-width:0;}
   .shipping-error{
@@ -537,6 +538,7 @@
       <li><a href="index.html">Inicio</a></li>
       <li><a href="nosotros.html">Nosotros</a></li>
       <li><a href="catalogo.html" class="active">Catálogo</a></li>
+      <li><a href="tallas.html">Tallas</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
@@ -586,6 +588,14 @@
               <div class="tree-children">
                 <button class="tree-item tree-subsub" data-cat="sneakers" data-brand="nike" data-model="nike-mind-001" data-label="Categoría: Sneakers · Nike · Nike Mind 001">
                   Nike Mind 001
+                </button>
+              </div>
+              <button class="tree-item tree-sub" data-cat="sneakers" data-brand="jordan" data-label="Categoría: Sneakers · Jordan">
+                <span>Jordan</span><span class="tree-toggle">+</span>
+              </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="sneakers" data-brand="jordan" data-model="jordan-1-low" data-label="Categoría: Sneakers · Jordan · Jordan 1 Low">
+                  Jordan 1 Low
                 </button>
               </div>
             </div>
@@ -731,11 +741,23 @@
                 <span>Selecciones</span><span class="tree-toggle">+</span>
               </button>
               <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="alemania" data-label="Categoría: Fútbol · Selecciones · Alemania">
+                  Alemania
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="argentina" data-label="Categoría: Fútbol · Selecciones · Argentina">
+                  Argentina
+                </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="australia" data-label="Categoría: Fútbol · Selecciones · Australia">
                   Australia
                 </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="belgica" data-label="Categoría: Fútbol · Selecciones · Bélgica">
+                  Bélgica
+                </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="bosnia" data-label="Categoría: Fútbol · Selecciones · Bosnia">
                   Bosnia
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="brasil" data-label="Categoría: Fútbol · Selecciones · Brasil">
+                  Brasil
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="corea-del-sur" data-label="Categoría: Fútbol · Selecciones · Corea del Sur">
                   Corea del Sur
@@ -749,20 +771,32 @@
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="ecuador" data-label="Categoría: Fútbol · Selecciones · Ecuador">
                   Ecuador
                 </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="escocia" data-label="Categoría: Fútbol · Selecciones · Escocia">
+                  Escocia
+                </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Selecciones · España">
                   España
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="francia" data-label="Categoría: Fútbol · Selecciones · Francia">
                   Francia
                 </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="holanda" data-label="Categoría: Fútbol · Selecciones · Holanda">
+                  Holanda
+                </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="inglaterra" data-label="Categoría: Fútbol · Selecciones · Inglaterra">
                   Inglaterra
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="marruecos" data-label="Categoría: Fútbol · Selecciones · Marruecos">
+                  Marruecos
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="noruega" data-label="Categoría: Fútbol · Selecciones · Noruega">
                   Noruega
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="paraguay" data-label="Categoría: Fútbol · Selecciones · Paraguay">
                   Paraguay
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="portugal" data-label="Categoría: Fútbol · Selecciones · Portugal">
+                  Portugal
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="republica-del-congo" data-label="Categoría: Fútbol · Selecciones · República del Congo">
                   República del Congo
@@ -773,11 +807,17 @@
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="suecia" data-label="Categoría: Fútbol · Selecciones · Suecia">
                   Suecia
                 </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="suiza" data-label="Categoría: Fútbol · Selecciones · Suiza">
+                  Suiza
+                </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="tunez" data-label="Categoría: Fútbol · Selecciones · Túnez">
                   Túnez
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="turquia" data-label="Categoría: Fútbol · Selecciones · Turquía">
                   Turquía
+                </button>
+                <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="uruguay" data-label="Categoría: Fútbol · Selecciones · Uruguay">
+                  Uruguay
                 </button>
               </div>
             </div>
@@ -896,6 +936,24 @@
             <span class="price-original">85€</span>
             <span class="price-final">65€</span>
             <span class="price-save">Ahorras 20€ · oferta por tiempo limitado</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="sneakers" data-brand="jordan" data-model="jordan-1-low" data-id="jordan-1-low-fragment-travis-scott">
+        <div class="product-media">
+          <span class="badge-offer">-29%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/jordan-1-low-fragment-travis-scott/vista-lateral-1.jpg" alt="Jordan 1 Retro Low OG SP Fragment x Travis Scott vista lateral">
+          <img class="img-b" loading="lazy" src="assets/productos/jordan-1-low-fragment-travis-scott/vista-frontal.jpg" alt="Jordan 1 Retro Low OG SP Fragment x Travis Scott vista frontal">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Sneakers · Jordan · Jordan 1 Low</span>
+          <span class="product-name">Jordan 1 Retro Low OG SP Fragment x Travis Scott</span>
+          <div class="price-row">
+            <span class="price-original">85€</span>
+            <span class="price-final">60€</span>
+            <span class="price-save">Ahorras 25€ · oferta por tiempo limitado</span>
           </div>
         </div>
       </article>
@@ -1837,6 +1895,78 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="alemania" data-id="alemania-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/alemania-local-2026/frontal.jpg" alt="Camiseta Alemania Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/alemania-local-2026/trasera.jpg" alt="Camiseta Alemania Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Alemania</span>
+          <span class="product-name">Camiseta Alemania Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="alemania" data-id="alemania-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/alemania-away-2026/frontal.jpg" alt="Camiseta Alemania Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/alemania-away-2026/trasera.jpg" alt="Camiseta Alemania Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Alemania</span>
+          <span class="product-name">Camiseta Alemania Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="argentina" data-id="argentina-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/argentina-local-2026/frontal.jpg" alt="Camiseta Argentina Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/argentina-local-2026/trasera.jpg" alt="Camiseta Argentina Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Argentina</span>
+          <span class="product-name">Camiseta Argentina Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="argentina" data-id="argentina-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/argentina-away-2026/frontal.jpg" alt="Camiseta Argentina Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/argentina-away-2026/trasera.jpg" alt="Camiseta Argentina Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Argentina</span>
+          <span class="product-name">Camiseta Argentina Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="australia" data-id="australia-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -2017,6 +2147,114 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="uruguay" data-id="uruguay-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/uruguay-local-2026/frontal.jpg" alt="Camiseta Uruguay Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/uruguay-local-2026/trasera.jpg" alt="Camiseta Uruguay Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Uruguay</span>
+          <span class="product-name">Camiseta Uruguay Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="uruguay" data-id="uruguay-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/uruguay-away-2026/frontal.jpg" alt="Camiseta Uruguay Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/uruguay-away-2026/trasera.jpg" alt="Camiseta Uruguay Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Uruguay</span>
+          <span class="product-name">Camiseta Uruguay Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="holanda" data-id="holanda-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/holanda-local-2026/frontal.jpg" alt="Camiseta Holanda Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/holanda-local-2026/trasera.jpg" alt="Camiseta Holanda Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Holanda</span>
+          <span class="product-name">Camiseta Holanda Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="holanda" data-id="holanda-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/holanda-away-2026/frontal.jpg" alt="Camiseta Holanda Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/holanda-away-2026/trasera.jpg" alt="Camiseta Holanda Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Holanda</span>
+          <span class="product-name">Camiseta Holanda Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="portugal" data-id="portugal-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/portugal-local-2026/frontal.jpg" alt="Camiseta Portugal Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/portugal-local-2026/trasera.jpg" alt="Camiseta Portugal Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Portugal</span>
+          <span class="product-name">Camiseta Portugal Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="portugal" data-id="portugal-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/portugal-away-2026/frontal.jpg" alt="Camiseta Portugal Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/portugal-away-2026/trasera.jpg" alt="Camiseta Portugal Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Portugal</span>
+          <span class="product-name">Camiseta Portugal Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="republica-del-congo" data-id="republica-del-congo-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -2107,6 +2345,42 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="escocia" data-id="escocia-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/escocia-local-2026/frontal.jpg" alt="Camiseta Escocia Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/escocia-local-2026/trasera.jpg" alt="Camiseta Escocia Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Escocia</span>
+          <span class="product-name">Camiseta Escocia Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="escocia" data-id="escocia-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/escocia-away-2026/frontal.jpg" alt="Camiseta Escocia Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/escocia-away-2026/trasera.jpg" alt="Camiseta Escocia Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Escocia</span>
+          <span class="product-name">Camiseta Escocia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="inglaterra" data-id="inglaterra-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -2134,6 +2408,42 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · Inglaterra</span>
           <span class="product-name">Camiseta Inglaterra Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="marruecos" data-id="marruecos-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/marruecos-local-2026/frontal.jpg" alt="Camiseta Marruecos Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/marruecos-local-2026/trasera.jpg" alt="Camiseta Marruecos Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Marruecos</span>
+          <span class="product-name">Camiseta Marruecos Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="marruecos" data-id="marruecos-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/marruecos-away-2026/frontal.jpg" alt="Camiseta Marruecos Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/marruecos-away-2026/trasera.jpg" alt="Camiseta Marruecos Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Marruecos</span>
+          <span class="product-name">Camiseta Marruecos Visitante 2026</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -2215,6 +2525,24 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="suiza" data-id="suiza-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/suiza-local-2026/frontal.jpg" alt="Camiseta Suiza Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/suiza-local-2026/trasera.jpg" alt="Camiseta Suiza Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Suiza</span>
+          <span class="product-name">Camiseta Suiza Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="curazao" data-id="curazao-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -2251,6 +2579,42 @@
       </article>
 
       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="belgica" data-id="belgica-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/belgica-local-2026/frontal.jpg" alt="Camiseta Bélgica Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/belgica-local-2026/trasera.jpg" alt="Camiseta Bélgica Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Bélgica</span>
+          <span class="product-name">Camiseta Bélgica Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="belgica" data-id="belgica-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/belgica-away-2026/frontal.jpg" alt="Camiseta Bélgica Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/belgica-away-2026/trasera.jpg" alt="Camiseta Bélgica Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Bélgica</span>
+          <span class="product-name">Camiseta Bélgica Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="bosnia" data-id="bosnia-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -2278,6 +2642,42 @@
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · Bosnia</span>
           <span class="product-name">Camiseta Bosnia Visitante 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="brasil" data-id="brasil-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/brasil-local-2026/frontal.jpg" alt="Camiseta Brasil Local 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/brasil-local-2026/trasera.jpg" alt="Camiseta Brasil Local 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Brasil</span>
+          <span class="product-name">Camiseta Brasil Local 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="brasil" data-id="brasil-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/brasil-away-2026/frontal.jpg" alt="Camiseta Brasil Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/brasil-away-2026/trasera.jpg" alt="Camiseta Brasil Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Brasil</span>
+          <span class="product-name">Camiseta Brasil Visitante 2026</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -3012,6 +3412,14 @@
           <input type="email" id="shipEmail" class="shipping-input">
         </div>
       </div>
+      <div class="shipping-field">
+        <label for="shipPayment">Método de pago</label>
+        <select id="shipPayment" class="shipping-input">
+          <option value="" disabled selected>Selecciona un método</option>
+          <option value="PayPal">PayPal</option>
+          <option value="Transferencia bancaria">Transferencia bancaria</option>
+        </select>
+      </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
     <div class="coupon-row">
@@ -3115,6 +3523,19 @@
 
   // ===== Product catalog data (ficha completa) =====
   const PRODUCTS = {
+    'jordan-1-low-fragment-travis-scott': {
+      name: 'Jordan 1 Retro Low OG SP Fragment x Travis Scott',
+      cat: 'Sneakers · Jordan · Jordan 1 Low',
+      price: 60,
+      originalPrice: 85,
+      sizes: [36,36.5,37,37.5,38,38.5,39,39.5,40,40.5,41,41.5,42,42.5,43,43.5,44,44.5,45,45.5,46,46.5,47,47.5,48,48.5],
+      images: [
+        'assets/productos/jordan-1-low-fragment-travis-scott/vista-lateral-1.jpg',
+        'assets/productos/jordan-1-low-fragment-travis-scott/vista-lateral-2.jpg',
+        'assets/productos/jordan-1-low-fragment-travis-scott/vista-frontal.jpg',
+        'assets/productos/jordan-1-low-fragment-travis-scott/vista-superior.jpg'
+      ]
+    },
     'nike-mind-001': {
       name: 'Nike Mind 001 Slide — Geode Teal Light Menta',
       cat: 'Sneakers · Nike · Nike Mind 001',
@@ -4054,6 +4475,74 @@
         noChampions: true
       }
     },
+    'alemania-local-2026': {
+      name: 'Camiseta Alemania Local 2026',
+      cat: 'Fútbol · Selecciones · Alemania',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/alemania-local-2026/frontal.jpg',
+        'assets/productos/alemania-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'alemania-away-2026': {
+      name: 'Camiseta Alemania Visitante 2026',
+      cat: 'Fútbol · Selecciones · Alemania',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/alemania-away-2026/frontal.jpg',
+        'assets/productos/alemania-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'argentina-local-2026': {
+      name: 'Camiseta Argentina Local 2026',
+      cat: 'Fútbol · Selecciones · Argentina',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/argentina-local-2026/frontal.jpg',
+        'assets/productos/argentina-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'argentina-away-2026': {
+      name: 'Camiseta Argentina Visitante 2026',
+      cat: 'Fútbol · Selecciones · Argentina',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/argentina-away-2026/frontal.jpg',
+        'assets/productos/argentina-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
     'australia-local-2026': {
       name: 'Camiseta Australia Local 2026',
       cat: 'Fútbol · Selecciones · Australia',
@@ -4224,6 +4713,108 @@
         noChampions: true
       }
     },
+    'uruguay-local-2026': {
+      name: 'Camiseta Uruguay Local 2026',
+      cat: 'Fútbol · Selecciones · Uruguay',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/uruguay-local-2026/frontal.jpg',
+        'assets/productos/uruguay-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'uruguay-away-2026': {
+      name: 'Camiseta Uruguay Visitante 2026',
+      cat: 'Fútbol · Selecciones · Uruguay',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/uruguay-away-2026/frontal.jpg',
+        'assets/productos/uruguay-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'holanda-local-2026': {
+      name: 'Camiseta Holanda Local 2026',
+      cat: 'Fútbol · Selecciones · Holanda',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/holanda-local-2026/frontal.jpg',
+        'assets/productos/holanda-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'holanda-away-2026': {
+      name: 'Camiseta Holanda Visitante 2026',
+      cat: 'Fútbol · Selecciones · Holanda',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/holanda-away-2026/frontal.jpg',
+        'assets/productos/holanda-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'portugal-local-2026': {
+      name: 'Camiseta Portugal Local 2026',
+      cat: 'Fútbol · Selecciones · Portugal',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/portugal-local-2026/frontal.jpg',
+        'assets/productos/portugal-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'portugal-away-2026': {
+      name: 'Camiseta Portugal Visitante 2026',
+      cat: 'Fútbol · Selecciones · Portugal',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/portugal-away-2026/frontal.jpg',
+        'assets/productos/portugal-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
     'republica-del-congo-local-2026': {
       name: 'Camiseta República del Congo Local 2026',
       cat: 'Fútbol · Selecciones · República del Congo',
@@ -4309,6 +4900,40 @@
         noChampions: true
       }
     },
+    'escocia-local-2026': {
+      name: 'Camiseta Escocia Local 2026',
+      cat: 'Fútbol · Selecciones · Escocia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/escocia-local-2026/frontal.jpg',
+        'assets/productos/escocia-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'escocia-away-2026': {
+      name: 'Camiseta Escocia Visitante 2026',
+      cat: 'Fútbol · Selecciones · Escocia',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/escocia-away-2026/frontal.jpg',
+        'assets/productos/escocia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
     'inglaterra-local-2026': {
       name: 'Camiseta Inglaterra Local 2026',
       cat: 'Fútbol · Selecciones · Inglaterra',
@@ -4335,6 +4960,40 @@
       images: [
         'assets/productos/inglaterra-away-2026/frontal.jpg',
         'assets/productos/inglaterra-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'marruecos-local-2026': {
+      name: 'Camiseta Marruecos Local 2026',
+      cat: 'Fútbol · Selecciones · Marruecos',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/marruecos-local-2026/frontal.jpg',
+        'assets/productos/marruecos-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'marruecos-away-2026': {
+      name: 'Camiseta Marruecos Visitante 2026',
+      cat: 'Fútbol · Selecciones · Marruecos',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/marruecos-away-2026/frontal.jpg',
+        'assets/productos/marruecos-away-2026/trasera.jpg'
       ],
       customization: {
         nameNumberFee: 2,
@@ -4411,6 +5070,23 @@
         noChampions: true
       }
     },
+    'suiza-local-2026': {
+      name: 'Camiseta Suiza Local 2026',
+      cat: 'Fútbol · Selecciones · Suiza',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/suiza-local-2026/frontal.jpg',
+        'assets/productos/suiza-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
     'curazao-local-2026': {
       name: 'Camiseta Curazao Local 2026',
       cat: 'Fútbol · Selecciones · Curazao',
@@ -4445,6 +5121,40 @@
         noChampions: true
       }
     },
+    'belgica-local-2026': {
+      name: 'Camiseta Bélgica Local 2026',
+      cat: 'Fútbol · Selecciones · Bélgica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/belgica-local-2026/frontal.jpg',
+        'assets/productos/belgica-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'belgica-away-2026': {
+      name: 'Camiseta Bélgica Visitante 2026',
+      cat: 'Fútbol · Selecciones · Bélgica',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/belgica-away-2026/frontal.jpg',
+        'assets/productos/belgica-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
     'bosnia-local-2026': {
       name: 'Camiseta Bosnia Local 2026',
       cat: 'Fútbol · Selecciones · Bosnia',
@@ -4471,6 +5181,40 @@
       images: [
         'assets/productos/bosnia-away-2026/frontal.jpg',
         'assets/productos/bosnia-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'brasil-local-2026': {
+      name: 'Camiseta Brasil Local 2026',
+      cat: 'Fútbol · Selecciones · Brasil',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/brasil-local-2026/frontal.jpg',
+        'assets/productos/brasil-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'brasil-away-2026': {
+      name: 'Camiseta Brasil Visitante 2026',
+      cat: 'Fútbol · Selecciones · Brasil',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/brasil-away-2026/frontal.jpg',
+        'assets/productos/brasil-away-2026/trasera.jpg'
       ],
       customization: {
         nameNumberFee: 2,
@@ -5371,11 +6115,7 @@
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
-  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail'];
-  const shipLabels = {
-    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población', shipProvince: 'Provincia',
-    shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
-  };
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail','shipPayment'];
 
   (function loadShipping(){
     try {
@@ -5409,31 +6149,43 @@
     }
     shippingError.classList.remove('visible');
 
+    const DIVIDER = '━━━━━━━━━━━━━━━━━━━━';
     let total = 0;
-    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n\n*Productos:*\n`;
+    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n${DIVIDER}\n\n`;
+
+    msg += `🛍️ *PRODUCTOS (${cart.length})*\n\n`;
     cart.forEach((item, idx) => {
-      total += item.price * item.qty;
-      msg += `${idx + 1}. ${item.name}\n   Talla: ${item.size} · Cantidad: ${item.qty} · Precio: ${item.price * item.qty}€\n`;
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      msg += `${idx + 1}. *${item.name}*\n`;
+      msg += `   Talla: ${item.size} · Cantidad: ${item.qty} · ${subtotal}€\n`;
       if (item.customization) {
         const bits = [];
         if (item.customization.name) bits.push(`Nombre: ${item.customization.name}`);
         if (item.customization.number) bits.push(`Nº: ${item.customization.number}`);
         if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
         if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
-        if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
+        if (bits.length) msg += `   ${bits.join(' · ')}\n`;
       }
+      msg += `\n`;
     });
+
     const appliedCouponCode = getCoupon();
     const orderDiscount = calcDiscount(total, appliedCouponCode);
     const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
+    msg += `${DIVIDER}\n💰 *RESUMEN*\n`;
     if (orderDiscount > 0) {
-      msg += `\nSubtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
-    } else {
-      msg += `\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+      msg += `Subtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n`;
     }
-    msg += `📦 *Datos de envío*\n`;
-    shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
-    msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
+    msg += `*Total a pagar: ${orderFinalTotal}€*\n\n`;
+
+    msg += `${DIVIDER}\n💳 *MÉTODO DE PAGO*\n${shipping.shipPayment}\n\n`;
+
+    msg += `${DIVIDER}\n📦 *DATOS DE ENVÍO*\n`;
+    msg += `${shipping.shipName}\n${shipping.shipAddress}\n${shipping.shipCity}, ${shipping.shipProvince}, ${shipping.shipCountry} — ${shipping.shipZip}\n`;
+    msg += `Tel: ${shipping.shipPhone} · Email: ${shipping.shipEmail}\n\n`;
+
+    msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
   });

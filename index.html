@@ -373,6 +373,7 @@
   }
   .shipping-input:focus{outline:none;border-color:var(--teal);}
   .shipping-input.invalid{border-color:#c0392b;}
+  select.shipping-input{cursor:pointer;}
   .shipping-row{display:flex;gap:10px;}
   .shipping-row .shipping-field{flex:1;min-width:0;}
   .shipping-error{font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:4px;margin-bottom:0;display:none;}
@@ -453,6 +454,7 @@
       <li><a href="index.html" class="active">Inicio</a></li>
       <li><a href="nosotros.html">Nosotros</a></li>
       <li><a href="catalogo.html">Catálogo</a></li>
+      <li><a href="tallas.html">Tallas</a></li>
       <li><a href="faq.html">FAQ</a></li>
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
@@ -812,6 +814,14 @@
           <input type="email" id="shipEmail" class="shipping-input">
         </div>
       </div>
+      <div class="shipping-field">
+        <label for="shipPayment">Método de pago</label>
+        <select id="shipPayment" class="shipping-input">
+          <option value="" disabled selected>Selecciona un método</option>
+          <option value="PayPal">PayPal</option>
+          <option value="Transferencia bancaria">Transferencia bancaria</option>
+        </select>
+      </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
     <div class="coupon-row">
@@ -1017,11 +1027,7 @@
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
-  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail'];
-  const shipLabels = {
-    shipName: 'Nombre y apellidos', shipAddress: 'Dirección', shipCity: 'Población', shipProvince: 'Provincia',
-    shipCountry: 'País', shipZip: 'Código postal', shipPhone: 'Teléfono', shipEmail: 'Email'
-  };
+  const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail','shipPayment'];
 
   (function loadShipping(){
     try {
@@ -1055,31 +1061,43 @@
     }
     shippingError.classList.remove('visible');
 
+    const DIVIDER = '━━━━━━━━━━━━━━━━━━━━';
     let total = 0;
-    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n\n*Productos:*\n`;
+    let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n${DIVIDER}\n\n`;
+
+    msg += `🛍️ *PRODUCTOS (${cart.length})*\n\n`;
     cart.forEach((item, idx) => {
-      total += item.price * item.qty;
-      msg += `${idx + 1}. ${item.name}\n   Talla: ${item.size} · Cantidad: ${item.qty} · Precio: ${item.price * item.qty}€\n`;
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      msg += `${idx + 1}. *${item.name}*\n`;
+      msg += `   Talla: ${item.size} · Cantidad: ${item.qty} · ${subtotal}€\n`;
       if (item.customization) {
         const bits = [];
         if (item.customization.name) bits.push(`Nombre: ${item.customization.name}`);
         if (item.customization.number) bits.push(`Nº: ${item.customization.number}`);
         if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
         if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
-        if (bits.length) msg += `   Personalización: ${bits.join(' · ')}\n`;
+        if (bits.length) msg += `   ${bits.join(' · ')}\n`;
       }
+      msg += `\n`;
     });
+
     const appliedCouponCode = getCoupon();
     const orderDiscount = calcDiscount(total, appliedCouponCode);
     const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
+    msg += `${DIVIDER}\n💰 *RESUMEN*\n`;
     if (orderDiscount > 0) {
-      msg += `\nSubtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
-    } else {
-      msg += `\n*Total del pedido: ${orderFinalTotal}€*\n\n`;
+      msg += `Subtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n`;
     }
-    msg += `📦 *Datos de envío*\n`;
-    shipFieldIds.forEach(id => { msg += `${shipLabels[id]}: ${shipping[id]}\n`; });
-    msg += `\n¡Gracias por tu compra en Kick Genius! 🖤`;
+    msg += `*Total a pagar: ${orderFinalTotal}€*\n\n`;
+
+    msg += `${DIVIDER}\n💳 *MÉTODO DE PAGO*\n${shipping.shipPayment}\n\n`;
+
+    msg += `${DIVIDER}\n📦 *DATOS DE ENVÍO*\n`;
+    msg += `${shipping.shipName}\n${shipping.shipAddress}\n${shipping.shipCity}, ${shipping.shipProvince}, ${shipping.shipCountry} — ${shipping.shipZip}\n`;
+    msg += `Tel: ${shipping.shipPhone} · Email: ${shipping.shipEmail}\n\n`;
+
+    msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
   });
