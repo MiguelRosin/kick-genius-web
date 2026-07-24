@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ejemplo-equipo-local-2627",
+    "type": "futbol",
+    "league": "premier-league",
+    "leagueLabel": "Premier League",
+    "team": "ejemplo-equipo",
+    "teamLabel": "Ejemplo Equipo",
+    "name": "Camiseta Ejemplo Equipo Local 26/27",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": ["S", "M", "L", "XL", "XXL", "3XL", "4XL"],
+    "images": ["frontal.jpg", "trasera.jpg"],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 2,
+      "leaguePatchLabel": "Premier League"
+    }
+  },
+  {
+    "id": "ejemplo-equipo-away-2627",
+    "type": "futbol",
+    "league": "premier-league",
+    "leagueLabel": "Premier League",
+    "team": "ejemplo-equipo",
+    "teamLabel": "Ejemplo Equipo",
+    "name": "Camiseta Ejemplo Equipo Visitante 26/27",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": ["S", "M", "L", "XL", "XXL", "3XL", "4XL"],
+    "images": ["frontal.jpg", "trasera.jpg"],
+    "customization": {
+      "nameNumberFee": 2,
+      "noPatch": true
+    }
+  },
+  {
+    "id": "ejemplo-modelo-sneaker",
+    "type": "sneaker",
+    "brand": "nike",
+    "brandLabel": "Nike",
+    "model": "ejemplo-modelo",
+    "modelLabel": "Ejemplo Modelo",
+    "name": "Ejemplo Modelo Sneaker",
+    "price": 55,
+    "originalPrice": 80,
+    "sizes": [38, 39, 40, 41, 42, 43, 44, 45],
+    "images": ["frontal.jpg", "lateral.jpg"]
+  }
+]

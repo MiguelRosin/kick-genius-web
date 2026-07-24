@@ -1,2 +1,5 @@
 .DS_Store
 .claude/
+scripts/node_modules/
+scripts/.backups/
+scripts/products-queue.json

@@ -1,0 +1,9 @@
+{
+  "name": "kick-genius-scripts",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Herramientas internas para gestionar el catálogo de Kick Genius",
+  "dependencies": {
+    "sharp": "^0.33.0"
+  }
+}
