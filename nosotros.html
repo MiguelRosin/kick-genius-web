@@ -542,10 +542,7 @@
   const cartTotalEl = document.getElementById('cartTotal');
 
   // ===== Cupón de descuento =====
-  const COUPONS = {
-    'BIENVENIDO10': { type: 'percent', value: 10, label: '10% de descuento' },
-    'KICKGENIUS5': { type: 'fixed', value: 5, label: '5€ de descuento' }
-  };
+  const COUPONS = {};
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
   function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
