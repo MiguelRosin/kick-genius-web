@@ -542,7 +542,9 @@
   const cartTotalEl = document.getElementById('cartTotal');
 
   // ===== Cupón de descuento =====
-  const COUPONS = {};
+  const COUPONS = {
+    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento' }
+  };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
   function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
