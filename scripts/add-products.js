@@ -173,7 +173,7 @@ function buildCardHtml(p) {
   const save = +(p.originalPrice - p.price).toFixed(2);
   const saveText = p.saveText || defaultSaveText(p, save);
 
-  const imgTags = p.images.map((file, i) => {
+  const imgTags = p.images.slice(0, 2).map((file, i) => {
     const cls = i === 0 ? 'img-a' : 'img-b';
     const side = i === 0 ? 'frontal' : 'trasera';
     return `          <img class="${cls}" loading="lazy" src="assets/productos/${p.id}/${file}" alt="${p.name} ${side}">`;

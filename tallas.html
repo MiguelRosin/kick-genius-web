@@ -249,6 +249,7 @@
   .shipping-input:focus{outline:none;border-color:var(--teal);}
   .shipping-input.invalid{border-color:#c0392b;}
   select.shipping-input{cursor:pointer;}
+  textarea.shipping-input{resize:vertical;min-height:60px;font-family:inherit;}
   .shipping-row{display:flex;gap:10px;}
   .shipping-row .shipping-field{flex:1;min-width:0;}
   .shipping-error{font-size:0.78rem;color:#c0392b;font-weight:700;margin-top:4px;margin-bottom:0;display:none;}
@@ -497,6 +498,10 @@
           <option value="Transferencia bancaria">Transferencia bancaria</option>
         </select>
       </div>
+      <div class="shipping-field">
+        <label for="shipComments">Comentarios (opcional)</label>
+        <textarea id="shipComments" class="shipping-input" rows="2" placeholder="Instrucciones especiales, referencias, etc."></textarea>
+      </div>
       <p class="shipping-error" id="shippingError">Completa todos los datos de envío para continuar.</p>
     </div>
     <div class="coupon-row">
@@ -697,17 +702,18 @@
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
   const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail','shipPayment'];
+  const allShipFieldIds = [...shipFieldIds, 'shipComments'];
 
   (function loadShipping(){
     try {
       const saved = JSON.parse(localStorage.getItem(SHIP_KEY)) || {};
-      shipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
+      allShipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
     } catch(e){}
   })();
 
   function saveShipping(){
     const data = {};
-    shipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
+    allShipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
     localStorage.setItem(SHIP_KEY, JSON.stringify(data));
     return data;
   }
@@ -765,7 +771,11 @@
 
     msg += `${DIVIDER}\n📦 *DATOS DE ENVÍO*\n`;
     msg += `${shipping.shipName}\n${shipping.shipAddress}\n${shipping.shipCity}, ${shipping.shipProvince}, ${shipping.shipCountry} — ${shipping.shipZip}\n`;
-    msg += `Tel: ${shipping.shipPhone} · Email: ${shipping.shipEmail}\n\n`;
+    msg += `Tel: ${shipping.shipPhone} · Email: ${shipping.shipEmail}\n`;
+    if (shipping.shipComments) {
+      msg += `\n💬 *Comentarios:* ${shipping.shipComments}\n`;
+    }
+    msg += `\n`;
 
     msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
