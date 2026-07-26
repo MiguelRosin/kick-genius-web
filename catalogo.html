@@ -206,8 +206,13 @@
   .tree-children.open{max-height:2000px;}
   .tree-subsub{
     padding:8px 12px 8px 40px;font-size:0.8rem;font-weight:600;color:rgba(36,31,25,0.75);
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
   }
   .tree-subsub.active{color:var(--navy-deep);}
+  .tree-subsubsub{
+    padding:7px 12px 7px 54px;font-size:0.76rem;font-weight:600;color:rgba(36,31,25,0.65);
+  }
+  .tree-subsubsub.active{color:var(--navy-deep);font-weight:800;}
 
 
   /* ===== CATALOG GRID ===== */
@@ -560,7 +565,7 @@
   <div class="wrap catalog-toolbar-inner">
     <div class="catalog-toolbar-title">
       <h1>Catálogo</h1>
-      <span>Sneakers · Fútbol · Retro</span>
+      <span>Sneakers · Fútbol</span>
     </div>
 
     <div class="filters-bar">
@@ -621,8 +626,16 @@
                   Burgos CF
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="cadiz" data-label="Categoría: Fútbol · Liga Española · Cádiz CF">
-                  Cádiz CF
+                  <span>Cádiz CF</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="liga-espanola" data-team="cadiz" data-label="Categoría: Fútbol · Liga Española · Cádiz CF · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="liga-espanola" data-team="cadiz" data-label="Categoría: Fútbol · Liga Española · Cádiz CF · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="celta-vigo" data-label="Categoría: Fútbol · Liga Española · Celta de Vigo">
                   Celta de Vigo
                 </button>
@@ -630,17 +643,41 @@
                   Deportivo Alavés
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="deportivo" data-label="Categoría: Fútbol · Liga Española · Deportivo de la Coruña">
-                  Deportivo de la Coruña
+                  <span>Deportivo de la Coruña</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="liga-espanola" data-team="deportivo" data-label="Categoría: Fútbol · Liga Española · Deportivo de la Coruña · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="liga-espanola" data-team="deportivo" data-label="Categoría: Fútbol · Liga Española · Deportivo de la Coruña · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="eibar" data-label="Categoría: Fútbol · Liga Española · Eibar">
                   Eibar
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-label="Categoría: Fútbol · Liga Española · FC Barcelona">
-                  FC Barcelona
+                  <span>FC Barcelona</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="liga-espanola" data-team="fc-barcelona" data-label="Categoría: Fútbol · Liga Española · FC Barcelona · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="liga-espanola" data-team="fc-barcelona" data-label="Categoría: Fútbol · Liga Española · FC Barcelona · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="malaga" data-label="Categoría: Fútbol · Liga Española · Málaga">
-                  Málaga
+                  <span>Málaga</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="liga-espanola" data-team="malaga" data-label="Categoría: Fútbol · Liga Española · Málaga · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="liga-espanola" data-team="malaga" data-label="Categoría: Fútbol · Liga Española · Málaga · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="betis" data-label="Categoría: Fútbol · Liga Española · Real Betis">
                   Real Betis
                 </button>
@@ -671,8 +708,16 @@
                   Leeds United
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="liverpool" data-label="Categoría: Fútbol · Premier League · Liverpool">
-                  Liverpool
+                  <span>Liverpool</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="premier-league" data-team="liverpool" data-label="Categoría: Fútbol · Premier League · Liverpool · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="premier-league" data-team="liverpool" data-label="Categoría: Fútbol · Premier League · Liverpool · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="premier-league" data-team="manchester-city" data-label="Categoría: Fútbol · Premier League · Manchester City">
                   Manchester City
                 </button>
@@ -794,8 +839,16 @@
                   Escocia
                 </button>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Selecciones · España">
-                  España
+                  <span>España</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Selecciones · España · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Selecciones · España · Retro">
+                    Retro
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="selecciones" data-team="francia" data-label="Categoría: Fútbol · Selecciones · Francia">
                   Francia
                 </button>
@@ -840,12 +893,6 @@
                 </button>
               </div>
             </div>
-          </div>
-
-          <div class="tree-group">
-            <button class="tree-item tree-cat" data-cat="retro" data-label="Categoría: Retro">
-              <span>🕰️ Retro</span>
-            </button>
           </div>
         </div>
       </div>
@@ -5861,7 +5908,7 @@
   document.querySelectorAll('.tree-toggle').forEach(toggleIcon => {
     toggleIcon.addEventListener('click', (e) => {
       e.stopPropagation();
-      const children = toggleIcon.closest('.tree-cat, .tree-sub').nextElementSibling;
+      const children = toggleIcon.closest('.tree-cat, .tree-sub, .tree-subsub').nextElementSibling;
       const isOpen = children.classList.toggle('open');
       toggleIcon.classList.toggle('open', isOpen);
     });
