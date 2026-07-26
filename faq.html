@@ -559,14 +559,15 @@
 
   // ===== Cupón de descuento =====
   const COUPONS = {
-    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento' }
+    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 5 }
   };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
   function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
-  function calcDiscount(subtotal, code){
+  function calcDiscount(subtotal, code, itemCount){
     const coupon = code ? COUPONS[code] : null;
     if (!coupon || subtotal <= 0) return 0;
+    if (coupon.minQty && itemCount < coupon.minQty) return 0;
     const raw = coupon.type === 'percent' ? subtotal * coupon.value / 100 : coupon.value;
     return Math.min(Math.round(raw * 100) / 100, subtotal);
   }
@@ -644,7 +645,7 @@
     }).join('');
 
     const appliedCoupon = getCoupon();
-    const discount = calcDiscount(total, appliedCoupon);
+    const discount = calcDiscount(total, appliedCoupon, count);
     const finalTotal = Math.round((total - discount) * 100) / 100;
     const subtotalRow = document.getElementById('cartSubtotalRow');
     const discountRow = document.getElementById('cartDiscountRow');
@@ -660,8 +661,15 @@
     cartTotalEl.textContent = finalTotal + '€';
 
     if (appliedCoupon && COUPONS[appliedCoupon]) {
-      couponMsg.className = 'coupon-msg success';
-      couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> aplicado (${COUPONS[appliedCoupon].label}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
+      const activeCoupon = COUPONS[appliedCoupon];
+      const missingQty = activeCoupon.minQty ? activeCoupon.minQty - count : 0;
+      if (missingQty > 0) {
+        couponMsg.className = 'coupon-msg error';
+        couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> guardado: añade ${missingQty} artículo${missingQty === 1 ? '' : 's'} más para activarlo (mínimo ${activeCoupon.minQty}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
+      } else {
+        couponMsg.className = 'coupon-msg success';
+        couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> aplicado (${activeCoupon.label}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
+      }
       document.getElementById('couponRemoveBtn').addEventListener('click', () => { saveCouponCode(null); renderCart(); });
     } else if (!appliedCoupon) {
       couponMsg.className = 'coupon-msg';
@@ -756,7 +764,8 @@
     });
 
     const appliedCouponCode = getCoupon();
-    const orderDiscount = calcDiscount(total, appliedCouponCode);
+    const orderItemCount = cart.reduce((n,i) => n + i.qty, 0);
+    const orderDiscount = calcDiscount(total, appliedCouponCode, orderItemCount);
     const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
     msg += `${DIVIDER}\n💰 *RESUMEN*\n`;
     if (orderDiscount > 0) {
