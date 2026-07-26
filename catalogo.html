@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catálogo — Kick Genius</title>
+<meta name="description" content="Catálogo de Kick Genius: camisetas de fútbol actuales y retro de clubes y selecciones, más sneakers. Filtra por equipo, temporada o busca por nombre y personaliza con nombre, dorsal y parche.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -222,6 +223,14 @@
     padding:40px 0;
   }
   .empty-state.visible{display:block;}
+  .load-more-wrap{display:none;text-align:center;margin-top:36px;}
+  .load-more-wrap.visible{display:block;}
+  .load-more-btn{
+    padding:14px 34px;border-radius:100px;border:1px solid var(--teal);background:transparent;color:var(--teal);
+    font-weight:800;font-size:0.82rem;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .load-more-btn:hover{background:var(--teal);color:var(--navy-deep);}
   .product-grid{
     display:grid;grid-template-columns:repeat(auto-fit, minmax(270px,1fr));gap:28px;
   }
@@ -5714,6 +5723,10 @@
     </div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
+
+    <div class="load-more-wrap" id="loadMoreWrap">
+      <button type="button" class="load-more-btn" id="loadMoreBtn">Cargar más productos</button>
+    </div>
   </div>
 </section>
 
@@ -5896,6 +5909,10 @@
   const treeItems = document.querySelectorAll('.tree-item');
   const searchInput = document.getElementById('searchInput');
   const searchClear = document.getElementById('searchClear');
+  const loadMoreWrap = document.getElementById('loadMoreWrap');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const PAGE_SIZE = 24;
+  let visibleLimit = PAGE_SIZE;
 
   const toggle = filterDropdown.querySelector('.dropdown-toggle');
   toggle.addEventListener('click', (e) => {
@@ -5927,11 +5944,13 @@
     return haystack.includes(query);
   }
 
-  function applyFilters() {
+  function applyFilters(resetPage = true) {
+    if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
     const query = searchInput.value.trim().toLowerCase();
     searchClear.classList.toggle('visible', query.length > 0);
-    let visibleCount = 0;
+    let matchedCount = 0;
+    let shownCount = 0;
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
       const matchesBrand = activeBrand === 'all' || card.dataset.brand === activeBrand;
@@ -5939,12 +5958,23 @@
       const matchesLeague = activeLeague === 'all' || card.dataset.league === activeLeague;
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
-      const show = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
+      const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
+      let show = false;
+      if (matches) {
+        matchedCount++;
+        show = matchedCount <= visibleLimit;
+        if (show) shownCount++;
+      }
       card.style.display = show ? '' : 'none';
-      if (show) visibleCount++;
     });
-    emptyState.classList.toggle('visible', visibleCount === 0);
+    emptyState.classList.toggle('visible', matchedCount === 0);
+    loadMoreWrap.classList.toggle('visible', shownCount < matchedCount);
   }
+
+  loadMoreBtn.addEventListener('click', () => {
+    visibleLimit += PAGE_SIZE;
+    applyFilters(false);
+  });
 
   treeItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -5969,6 +5999,8 @@
     applyFilters();
     searchInput.focus();
   });
+
+  applyFilters();
 
   // ===== Product catalog data (ficha completa) =====
   const PRODUCTS = {

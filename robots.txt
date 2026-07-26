@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://remarkable-kataifi-203907.netlify.app/sitemap.xml
