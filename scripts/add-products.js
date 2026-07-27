@@ -218,7 +218,12 @@ function buildProductEntry(p) {
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
-  const sizesJs = '[' + p.sizes.map(s => (typeof s === 'number' ? s : jsStringLiteral(s))).join(',') + ']';
+  const sizeGroupsJs = p.sizeGroups
+    ? '[\n' + p.sizeGroups.map(g =>
+        `        { label: ${jsStringLiteral(g.label)}, sizes: [${g.sizes.map(s => (typeof s === 'number' ? s : jsStringLiteral(s))).join(',')}] }`
+      ).join(',\n') + '\n      ]'
+    : null;
+  const sizesJs = p.sizes ? '[' + p.sizes.map(s => (typeof s === 'number' ? s : jsStringLiteral(s))).join(',') + ']' : null;
   const imagesJs = p.images.map(f => `        'assets/productos/${p.id}/${f}'`).join(',\n');
 
   let customJs = '';
@@ -231,22 +236,26 @@ function buildProductEntry(p) {
   }
 
   const noteJs = p.note ? `,\n      note: ${jsStringLiteral(p.note)}` : '';
+  const sizesLineJs = sizeGroupsJs
+    ? `      sizeGroups: ${sizeGroupsJs}${noteJs},\n`
+    : `      sizes: ${sizesJs}${noteJs},\n`;
 
   return `    ${jsStringLiteral(p.id)}: {\n` +
     `      name: ${jsStringLiteral(p.name)},\n` +
     `      cat: ${jsStringLiteral(catLabel)},\n` +
     `      price: ${p.price},\n` +
     `      originalPrice: ${p.originalPrice},\n` +
-    `      sizes: ${sizesJs}${noteJs},\n` +
+    sizesLineJs +
     `      images: [\n${imagesJs}\n      ]${customJs}\n` +
     `    }`;
 }
 
 function validateProduct(p, errors) {
-  const required = ['id', 'name', 'price', 'originalPrice', 'sizes', 'images'];
+  const required = ['id', 'name', 'price', 'originalPrice', 'images'];
   for (const f of required) {
     if (p[f] === undefined || p[f] === null) errors.push(`falta el campo "${f}"`);
   }
+  if (!p.sizes && !p.sizeGroups) errors.push('falta el campo "sizes" o "sizeGroups"');
   if (p.type === 'sneaker') {
     for (const f of ['brand', 'brandLabel', 'model', 'modelLabel']) {
       if (!p[f]) errors.push(`falta el campo "${f}" (producto tipo sneaker)`);
