@@ -179,9 +179,12 @@ function buildCardHtml(p) {
     return `          <img class="${cls}" loading="lazy" src="assets/productos/${p.id}/${file}" alt="${p.name} ${side}">`;
   }).join('\n');
 
+  const newBadge = p.isNew ? `          <span class="badge-new">🆕 Nuevo</span>\n` : '';
+
   return `      <!-- PRODUCTO REAL -->\n` +
     `      <article class="product-card" ${catAttr} data-id="${p.id}">\n` +
     `        <div class="product-media">\n` +
+    newBadge +
     `          <span class="badge-offer">${badge}</span>\n` +
     imgTags + '\n' +
     `        </div>\n` +

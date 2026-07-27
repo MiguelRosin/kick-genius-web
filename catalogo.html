@@ -263,6 +263,11 @@
     0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(27,63,115,0.35);}
     50%{transform:scale(1.06);box-shadow:0 0 0 6px rgba(27,63,115,0);}
   }
+  .badge-new{
+    position:absolute;top:14px;left:14px;background:#2e8b57;color:#fff;
+    font-size:0.66rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.4px;
+    text-transform:uppercase;z-index:2;
+  }
   .product-info{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1;}
   .product-cat{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:700;}
   .product-name{font-size:1.05rem;font-weight:800;line-height:1.3;}
@@ -332,6 +337,29 @@
   }
   .product-note.visible{display:flex;}
   .size-label{font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(36,31,25,0.55);font-weight:700;display:block;margin-bottom:10px;}
+  .size-label-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+  .size-label-row .size-label{margin-bottom:0;}
+  .size-guide-link{
+    background:none;border:none;color:var(--teal);font-size:0.75rem;font-weight:700;
+    text-decoration:underline;cursor:pointer;padding:0;white-space:nowrap;
+  }
+  .size-guide-link:hover{color:var(--white);}
+  .size-guide-overlay{
+    position:fixed;inset:0;background:rgba(36,31,25,0.55);backdrop-filter:blur(6px);
+    z-index:3500;display:none;align-items:center;justify-content:center;padding:24px;
+  }
+  .size-guide-overlay.open{display:flex;}
+  .size-guide-box{
+    background:var(--navy);border-radius:var(--radius);width:min(680px,100%);height:min(80vh,720px);
+    position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.35);
+  }
+  .size-guide-box iframe{width:100%;height:100%;border:none;}
+  .size-guide-close{
+    position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;
+    background:rgba(36,31,25,0.7);color:#fff;border:none;font-size:1.2rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;z-index:2;line-height:1;
+  }
+  .size-guide-close:hover{background:rgba(36,31,25,0.9);}
   .modal-sizes{margin-bottom:26px;}
   .modal-sizes .size-row{display:flex;flex-wrap:wrap;gap:8px;}
   .modal-sizes .size-chip{width:auto;min-width:42px;height:38px;padding:0 10px;font-size:0.8rem;white-space:nowrap;}
@@ -3215,6 +3243,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="sneakers" data-brand="adidas" data-model="samba" data-id="adidas-samba-mule-cream-white">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-28%</span>
           <img class="img-a" loading="lazy" src="assets/productos/adidas-samba-mule-cream-white/vista-lateral-1.jpg" alt="adidas Samba Mule Woven Basketweave Cream White lateral">
           <img class="img-b" loading="lazy" src="assets/productos/adidas-samba-mule-cream-white/vista-frontal.jpg" alt="adidas Samba Mule Woven Basketweave Cream White frontal">
@@ -5213,6 +5242,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-rosa">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-rosa/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Rosa 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-rosa/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Rosa 26/27 trasera">
@@ -5231,6 +5261,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-light-yellow">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-light-yellow/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Amarillo Claro 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-light-yellow/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Amarillo Claro 26/27 trasera">
@@ -5249,6 +5280,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-blanco">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-blanco/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Blanco 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-blanco/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Blanco 26/27 trasera">
@@ -5267,6 +5299,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-verde">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-verde/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Verde 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-verde/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Verde 26/27 trasera">
@@ -5285,6 +5318,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-azul-marino">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-azul-marino/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Azul Marino 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-azul-marino/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Azul Marino 26/27 trasera">
@@ -5303,6 +5337,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-negro">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-negro/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Negro 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-negro/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Negro 26/27 trasera">
@@ -5321,6 +5356,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-verde-amarillo">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-verde-amarillo/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Verde/Amarillo 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-verde-amarillo/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Verde/Amarillo 26/27 trasera">
@@ -5339,6 +5375,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-blanco-azul">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-blanco-azul/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Blanco/Azul 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-blanco-azul/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Blanco/Azul 26/27 trasera">
@@ -5357,6 +5394,7 @@
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="real-madrid" data-id="real-madrid-chandal-entrenamiento-azul-dark">
         <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
           <span class="badge-offer">-18%</span>
           <img class="img-a" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-azul-dark/frontal.jpg" alt="Chándal Real Madrid Entrenamiento Azul Oscuro 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/real-madrid-chandal-entrenamiento-azul-dark/trasera.jpg" alt="Chándal Real Madrid Entrenamiento Azul Oscuro 26/27 trasera">
@@ -6052,7 +6090,10 @@
         <p class="product-note" id="productNote"></p>
         <div class="modal-sizes">
           <div class="size-group-toggle" id="sizeGroupToggle"></div>
-          <span class="size-label">Selecciona tu talla</span>
+          <div class="size-label-row">
+            <span class="size-label">Selecciona tu talla</span>
+            <button type="button" class="size-guide-link" id="sizeGuideLink">¿Qué talla elijo?</button>
+          </div>
           <div class="size-row" id="modalSizeRow"></div>
         </div>
 
@@ -6085,6 +6126,14 @@
         <p class="modal-note" id="modalNote">Al añadir al carrito podrás finalizar tu pedido por WhatsApp.</p>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- GUÍA DE TALLAS (lightbox) -->
+<div class="size-guide-overlay" id="sizeGuideOverlay">
+  <div class="size-guide-box">
+    <button type="button" class="size-guide-close" id="sizeGuideClose" aria-label="Cerrar guía de tallas">&times;</button>
+    <iframe id="sizeGuideIframe" src="" title="Guía de Tallas"></iframe>
   </div>
 </div>
 
@@ -10748,6 +10797,19 @@
   // ===== Ficha de producto (modal) =====
   const modalOverlay = document.getElementById('productModalOverlay');
   const modalClose = document.getElementById('modalClose');
+  const sizeGuideLink = document.getElementById('sizeGuideLink');
+  const sizeGuideOverlay = document.getElementById('sizeGuideOverlay');
+  const sizeGuideClose = document.getElementById('sizeGuideClose');
+  const sizeGuideIframe = document.getElementById('sizeGuideIframe');
+  function openSizeGuide(){
+    if (!sizeGuideIframe.src) sizeGuideIframe.src = 'tallas.html';
+    sizeGuideOverlay.classList.add('open');
+  }
+  function closeSizeGuide(){ sizeGuideOverlay.classList.remove('open'); }
+  sizeGuideLink.addEventListener('click', openSizeGuide);
+  sizeGuideClose.addEventListener('click', closeSizeGuide);
+  sizeGuideOverlay.addEventListener('click', (e) => { if (e.target === sizeGuideOverlay) closeSizeGuide(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSizeGuide(); });
   const modalMainImg = document.getElementById('modalMainImg');
   const modalThumbs = document.getElementById('modalThumbs');
   const modalCat = document.getElementById('modalCat');
