@@ -122,6 +122,23 @@
   .filters-bar{
     display:flex;gap:12px;flex-wrap:wrap;align-items:center;
   }
+  .active-filters{display:none;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .active-filters.visible{display:flex;}
+  .filter-chip{
+    display:flex;align-items:center;gap:8px;padding:7px 10px 7px 14px;border-radius:100px;
+    background:rgba(27,63,115,0.08);color:var(--teal);font-size:0.78rem;font-weight:700;
+  }
+  .filter-chip button{
+    background:rgba(27,63,115,0.15);border:none;color:var(--teal);width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;line-height:1;
+    transition:background .2s ease;
+  }
+  .filter-chip button:hover{background:var(--teal);color:var(--navy-deep);}
+  .clear-all-filters{
+    padding:7px 14px;border-radius:100px;border:1px solid var(--line);background:transparent;
+    color:rgba(36,31,25,0.55);font-size:0.78rem;font-weight:700;cursor:pointer;transition:all .2s ease;
+  }
+  .clear-all-filters:hover{border-color:var(--teal);color:var(--teal);}
   .search-box{
     display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:100px;
     border:1px solid var(--line);background:var(--navy);transition:border-color .25s ease;
@@ -602,6 +619,16 @@
   .whatsapp-float:hover{transform:scale(1.08);box-shadow:0 10px 28px rgba(37,211,102,0.55);}
   .whatsapp-float svg{width:30px;height:30px;}
   @media(max-width:640px){.whatsapp-float{right:16px;bottom:16px;width:52px;height:52px;}.whatsapp-float svg{width:26px;height:26px;}}
+  .back-to-top{
+    position:fixed;right:20px;bottom:90px;width:46px;height:46px;border-radius:50%;
+    background:var(--teal);color:var(--navy-deep);border:none;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(27,63,115,0.35);z-index:1400;cursor:pointer;font-size:1.1rem;
+    opacity:0;pointer-events:none;transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, box-shadow .2s ease;
+  }
+  .back-to-top.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+  .back-to-top:hover{box-shadow:0 10px 24px rgba(27,63,115,0.45);}
+  @media(max-width:640px){.back-to-top{right:16px;bottom:78px;width:40px;height:40px;font-size:1rem;}}
   .checkout-btn{
     width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
     color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
@@ -1057,6 +1084,7 @@
         </div>
       </div>
     </div>
+    <div class="active-filters" id="activeFilters"></div>
   </div>
 </div>
 
@@ -6739,6 +6767,62 @@
     });
     emptyState.classList.toggle('visible', matchedCount === 0);
     loadMoreWrap.classList.toggle('visible', shownCount < matchedCount);
+    renderActiveFilterChips();
+  }
+
+  function renderActiveFilterChips() {
+    const container = document.getElementById('activeFilters');
+    const chips = [];
+
+    const hasCategory = currentCategoryFilter.cat !== 'all' || currentCategoryFilter.brand !== 'all' ||
+      currentCategoryFilter.model !== 'all' || currentCategoryFilter.league !== 'all' || currentCategoryFilter.team !== 'all';
+    if (hasCategory) {
+      chips.push({
+        text: filterLabel.textContent.replace('Categoría: ', ''),
+        onRemove: () => document.querySelector('.tree-all').click()
+      });
+    }
+
+    if (activePriceMin !== PRICE_ABS_MIN || activePriceMax !== PRICE_ABS_MAX) {
+      chips.push({
+        text: `${activePriceMin}€ - ${activePriceMax}€`,
+        onRemove: () => { priceMinInput.value = PRICE_ABS_MIN; priceMaxInput.value = PRICE_ABS_MAX; handlePriceInput(); }
+      });
+    }
+
+    const query = searchInput.value.trim();
+    if (query) {
+      chips.push({ text: `"${query}"`, onRemove: () => { searchInput.value = ''; applyFilters(); } });
+    }
+
+    container.innerHTML = '';
+    container.classList.toggle('visible', chips.length > 0);
+    chips.forEach(chip => {
+      const el = document.createElement('span');
+      el.className = 'filter-chip';
+      const label = document.createElement('span');
+      label.textContent = chip.text;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Quitar filtro');
+      btn.textContent = '✕';
+      btn.addEventListener('click', chip.onRemove);
+      el.appendChild(label);
+      el.appendChild(btn);
+      container.appendChild(el);
+    });
+    if (chips.length > 1) {
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'clear-all-filters';
+      clearBtn.textContent = 'Limpiar todo';
+      clearBtn.addEventListener('click', () => {
+        document.querySelector('.tree-all').click();
+        priceMinInput.value = PRICE_ABS_MIN; priceMaxInput.value = PRICE_ABS_MAX; handlePriceInput();
+        searchInput.value = ''; applyFilters();
+      });
+      container.appendChild(clearBtn);
+    }
   }
 
   loadMoreBtn.addEventListener('click', () => {
@@ -11512,7 +11596,10 @@
     imageZoomOverlay.classList.add('open');
   }
   function closeImageZoom(){ imageZoomOverlay.classList.remove('open'); }
-  modalMainImg.addEventListener('click', openImageZoom);
+  modalMainImg.addEventListener('click', () => {
+    if (mainImgDidSwipe) { mainImgDidSwipe = false; return; }
+    openImageZoom();
+  });
   imageZoomClose.addEventListener('click', closeImageZoom);
   imageZoomOverlay.addEventListener('click', (e) => { if (e.target === imageZoomOverlay) closeImageZoom(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeImageZoom(); });
@@ -11540,6 +11627,29 @@
   const customizeNote = document.getElementById('customizeNote');
   const productNote = document.getElementById('productNote');
   let currentProductId = null;
+  let currentModalImages = [];
+  let currentImageIndex = 0;
+  function showModalImage(index) {
+    if (!currentModalImages.length) return;
+    currentImageIndex = (index + currentModalImages.length) % currentModalImages.length;
+    modalMainImg.src = currentModalImages[currentImageIndex];
+    modalThumbs.querySelectorAll('img').forEach((im, i) => im.classList.toggle('active', i === currentImageIndex));
+  }
+  let mainImgTouchStartX = null;
+  let mainImgDidSwipe = false;
+  modalMainImg.addEventListener('touchstart', (e) => {
+    mainImgTouchStartX = e.touches[0].clientX;
+    mainImgDidSwipe = false;
+  }, { passive: true });
+  modalMainImg.addEventListener('touchend', (e) => {
+    if (mainImgTouchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - mainImgTouchStartX;
+    if (Math.abs(dx) > 40) {
+      mainImgDidSwipe = true;
+      showModalImage(currentImageIndex + (dx < 0 ? 1 : -1));
+    }
+    mainImgTouchStartX = null;
+  }, { passive: true });
   let currentSize = null;
 
   function updateCustomizeNote() {
@@ -11620,18 +11730,16 @@
       productNote.classList.remove('visible');
     }
 
-    modalMainImg.src = product.images[0];
+    currentModalImages = product.images;
+    currentImageIndex = 0;
+    modalMainImg.src = currentModalImages[0];
 
     modalThumbs.innerHTML = '';
     product.images.forEach((src, i) => {
       const t = document.createElement('img');
       t.src = src;
       if (i === 0) t.classList.add('active');
-      t.addEventListener('click', () => {
-        modalMainImg.src = src;
-        modalThumbs.querySelectorAll('img').forEach(im => im.classList.remove('active'));
-        t.classList.add('active');
-      });
+      t.addEventListener('click', () => showModalImage(i));
       modalThumbs.appendChild(t);
     });
 
@@ -12081,8 +12189,19 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // ===== Volver arriba =====
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  window.addEventListener('scroll', () => {
+    backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+  }, { passive: true });
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
 })();
 </script>
+
+<button type="button" class="back-to-top" id="backToTopBtn" aria-label="Volver arriba" title="Volver arriba">↑</button>
 
 <a href="https://wa.me/34644039760?text=Hola%20Kick%20Genius%2C%20tengo%20una%20duda" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Escríbenos por WhatsApp" title="¿Dudas? Escríbenos por WhatsApp">
   <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.31.646 4.47 1.77 6.31L4 29l7.86-1.74A11.93 11.93 0 0 0 16.004 27C22.63 27 28 21.63 28 15S22.63 3 16.004 3zm0 21.9c-1.98 0-3.85-.53-5.46-1.46l-.39-.23-4.66 1.03 1.05-4.55-.25-.4A9.86 9.86 0 0 1 6.1 15c0-5.46 4.45-9.9 9.9-9.9 5.46 0 9.9 4.44 9.9 9.9 0 5.46-4.44 9.9-9.9 9.9zm5.44-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.47 0 1.45 1.06 2.86 1.2 3.06.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
