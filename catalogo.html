@@ -6923,9 +6923,13 @@
     return haystack.includes(query);
   }
 
+  const cardPriceCache = new WeakMap();
   function getCardPrice(card) {
+    if (cardPriceCache.has(card)) return cardPriceCache.get(card);
     const text = card.querySelector('.price-final')?.textContent || '';
-    return parseFloat(text.replace('€', '').replace(',', '.')) || 0;
+    const price = parseFloat(text.replace('€', '').replace(',', '.')) || 0;
+    cardPriceCache.set(card, price);
+    return price;
   }
 
   // ===== Filtro de rango de precio =====
@@ -6964,6 +6968,7 @@
       : `Precio: ${minV}€ - ${maxV}€`;
   }
 
+  let priceFilterRafId = null;
   function handlePriceInput() {
     let minV = parseFloat(priceMinInput.value);
     let maxV = parseFloat(priceMaxInput.value);
@@ -6974,7 +6979,11 @@
     activePriceMin = minV;
     activePriceMax = maxV;
     updatePriceSliderUI(minV, maxV);
-    applyFilters();
+    if (priceFilterRafId) cancelAnimationFrame(priceFilterRafId);
+    priceFilterRafId = requestAnimationFrame(() => {
+      priceFilterRafId = null;
+      applyFilters();
+    });
   }
   priceMinInput.addEventListener('input', handlePriceInput);
   priceMaxInput.addEventListener('input', handlePriceInput);
@@ -11989,8 +11998,18 @@
   const sizeGuideOverlay = document.getElementById('sizeGuideOverlay');
   const sizeGuideClose = document.getElementById('sizeGuideClose');
   const sizeGuideIframe = document.getElementById('sizeGuideIframe');
+  function sizeGuideAnchorForCurrentProduct(){
+    const product = PRODUCTS[currentProductId];
+    if (!product) return '';
+    if (product.sizeGroups) {
+      const activeGroup = sizeGroupToggle.querySelector('.size-group-btn.active');
+      return activeGroup && activeGroup.textContent.trim() === 'Niño' ? '#ninos-chandal' : '';
+    }
+    if (/Niño/.test(product.name || '')) return '#ninos-futbol';
+    return '';
+  }
   function openSizeGuide(){
-    if (!sizeGuideIframe.src) sizeGuideIframe.src = 'tallas.html';
+    sizeGuideIframe.src = 'tallas.html' + sizeGuideAnchorForCurrentProduct();
     sizeGuideOverlay.classList.add('open');
   }
   function closeSizeGuide(){ sizeGuideOverlay.classList.remove('open'); }
