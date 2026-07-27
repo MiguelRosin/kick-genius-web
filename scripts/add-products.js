@@ -164,7 +164,7 @@ function ensureTreeEntry(html, p) {
 function buildCardHtml(p) {
   const catAttr = p.type === 'sneaker'
     ? `data-cat="sneakers" data-brand="${p.brand}" data-model="${p.model}"`
-    : `data-cat="futbol" data-league="${p.league}" data-team="${p.team}"`;
+    : `data-cat="${p.dataCat || 'futbol'}" data-league="${p.league}" data-team="${p.team}"`;
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
