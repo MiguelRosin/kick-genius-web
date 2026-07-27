@@ -190,35 +190,6 @@
   .dropdown-item:hover{background:rgba(36,31,25,0.06);}
   .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
 
-  /* ===== Filtro de rango de precio ===== */
-  .price-menu{min-width:240px;padding:18px 16px 14px;}
-  .price-range-values{
-    text-align:center;font-size:0.85rem;font-weight:800;color:var(--white);margin-bottom:18px;
-  }
-  .price-slider{position:relative;height:20px;}
-  .price-slider-track{
-    position:absolute;top:50%;left:0;right:0;height:4px;transform:translateY(-50%);
-    background:var(--line);border-radius:4px;
-  }
-  .price-slider-fill{
-    position:absolute;top:50%;height:4px;transform:translateY(-50%);
-    background:var(--teal);border-radius:4px;
-  }
-  .price-slider input[type="range"]{
-    position:absolute;top:0;left:0;width:100%;height:20px;margin:0;
-    background:none;pointer-events:none;-webkit-appearance:none;appearance:none;
-  }
-  .price-slider input[type="range"]::-webkit-slider-thumb{
-    -webkit-appearance:none;pointer-events:auto;width:18px;height:18px;border-radius:50%;
-    background:var(--teal);border:3px solid var(--navy);box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;
-  }
-  .price-slider input[type="range"]::-moz-range-thumb{
-    pointer-events:auto;width:18px;height:18px;border-radius:50%;
-    background:var(--teal);border:3px solid var(--navy);box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;
-  }
-  .price-slider input[type="range"]::-webkit-slider-runnable-track{background:transparent;}
-  .price-slider input[type="range"]::-moz-range-track{background:transparent;}
-
   /* ===== Árbol de categorías (filtro único y claro) ===== */
   .tree-menu{min-width:270px;max-height:420px;padding:10px;}
   .tree-item{
@@ -1088,22 +1059,6 @@
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="dropdown" id="priceDropdown">
-        <button class="dropdown-toggle" type="button">
-          <span id="priceLabel">Precio: Todos</span><span class="chevron">▾</span>
-        </button>
-        <div class="dropdown-menu price-menu">
-          <div class="price-range-values">
-            <span id="priceRangeMinLabel">0€</span> — <span id="priceRangeMaxLabel">60€</span>
-          </div>
-          <div class="price-slider">
-            <div class="price-slider-track"></div>
-            <div class="price-slider-fill" id="priceSliderFill"></div>
-            <input type="range" id="priceMinInput" min="0" max="60" step="1" value="0">
-            <input type="range" id="priceMaxInput" min="0" max="60" step="1" value="60">
           </div>
         </div>
       </div>
@@ -6922,7 +6877,6 @@
   const toggle = filterDropdown.querySelector('.dropdown-toggle');
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
-    document.getElementById('priceDropdown')?.classList.remove('open');
     filterDropdown.classList.toggle('open');
   });
   document.addEventListener('click', () => filterDropdown.classList.remove('open'));
@@ -6950,72 +6904,6 @@
     return haystack.includes(query);
   }
 
-  const cardPriceCache = new WeakMap();
-  function getCardPrice(card) {
-    if (cardPriceCache.has(card)) return cardPriceCache.get(card);
-    const text = card.querySelector('.price-final')?.textContent || '';
-    const price = parseFloat(text.replace('€', '').replace(',', '.')) || 0;
-    cardPriceCache.set(card, price);
-    return price;
-  }
-
-  // ===== Filtro de rango de precio =====
-  const priceDropdown = document.getElementById('priceDropdown');
-  const priceLabel = document.getElementById('priceLabel');
-  const priceMinInput = document.getElementById('priceMinInput');
-  const priceMaxInput = document.getElementById('priceMaxInput');
-  const priceRangeMinLabel = document.getElementById('priceRangeMinLabel');
-  const priceRangeMaxLabel = document.getElementById('priceRangeMaxLabel');
-  const priceSliderFill = document.getElementById('priceSliderFill');
-  const PRICE_ABS_MIN = parseFloat(priceMinInput.min);
-  const PRICE_ABS_MAX = parseFloat(priceMaxInput.max);
-  let activePriceMin = PRICE_ABS_MIN;
-  let activePriceMax = PRICE_ABS_MAX;
-
-  const pricetoggle = priceDropdown.querySelector('.dropdown-toggle');
-  pricetoggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    filterDropdown.classList.remove('open');
-    priceDropdown.classList.toggle('open');
-  });
-  document.addEventListener('click', () => priceDropdown.classList.remove('open'));
-  priceDropdown.querySelector('.dropdown-menu').addEventListener('click', (e) => e.stopPropagation());
-  priceMinInput.addEventListener('pointerdown', () => { priceMinInput.style.zIndex = 5; priceMaxInput.style.zIndex = 4; });
-  priceMaxInput.addEventListener('pointerdown', () => { priceMaxInput.style.zIndex = 5; priceMinInput.style.zIndex = 4; });
-
-  function updatePriceSliderUI(minV, maxV) {
-    const pctMin = (minV - PRICE_ABS_MIN) / (PRICE_ABS_MAX - PRICE_ABS_MIN) * 100;
-    const pctMax = (maxV - PRICE_ABS_MIN) / (PRICE_ABS_MAX - PRICE_ABS_MIN) * 100;
-    priceSliderFill.style.left = pctMin + '%';
-    priceSliderFill.style.width = (pctMax - pctMin) + '%';
-    priceRangeMinLabel.textContent = minV + '€';
-    priceRangeMaxLabel.textContent = maxV + '€';
-    priceLabel.textContent = (minV === PRICE_ABS_MIN && maxV === PRICE_ABS_MAX)
-      ? 'Precio: Todos'
-      : `Precio: ${minV}€ - ${maxV}€`;
-  }
-
-  let priceFilterRafId = null;
-  function handlePriceInput() {
-    let minV = parseFloat(priceMinInput.value);
-    let maxV = parseFloat(priceMaxInput.value);
-    if (minV > maxV) {
-      if (document.activeElement === priceMaxInput) { priceMinInput.value = maxV; minV = maxV; }
-      else { priceMaxInput.value = minV; maxV = minV; }
-    }
-    activePriceMin = minV;
-    activePriceMax = maxV;
-    updatePriceSliderUI(minV, maxV);
-    if (priceFilterRafId) cancelAnimationFrame(priceFilterRafId);
-    priceFilterRafId = requestAnimationFrame(() => {
-      priceFilterRafId = null;
-      applyFilters();
-    });
-  }
-  priceMinInput.addEventListener('input', handlePriceInput);
-  priceMaxInput.addEventListener('input', handlePriceInput);
-  updatePriceSliderUI(activePriceMin, activePriceMax);
-
   function applyFilters(resetPage = true) {
     if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
@@ -7030,9 +6918,7 @@
       const matchesLeague = activeLeague === 'all' || card.dataset.league === activeLeague;
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
-      const cardPrice = getCardPrice(card);
-      const matchesPrice = cardPrice >= activePriceMin && cardPrice <= activePriceMax;
-      const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch && matchesPrice;
+      const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
       let show = false;
       if (matches) {
         matchedCount++;
@@ -7056,13 +6942,6 @@
       chips.push({
         text: filterLabel.textContent.replace('Categoría: ', ''),
         onRemove: () => document.querySelector('.tree-all').click()
-      });
-    }
-
-    if (activePriceMin !== PRICE_ABS_MIN || activePriceMax !== PRICE_ABS_MAX) {
-      chips.push({
-        text: `${activePriceMin}€ - ${activePriceMax}€`,
-        onRemove: () => { priceMinInput.value = PRICE_ABS_MIN; priceMaxInput.value = PRICE_ABS_MAX; handlePriceInput(); }
       });
     }
 
@@ -7094,7 +6973,6 @@
       clearBtn.textContent = 'Limpiar todo';
       clearBtn.addEventListener('click', () => {
         document.querySelector('.tree-all').click();
-        priceMinInput.value = PRICE_ABS_MIN; priceMaxInput.value = PRICE_ABS_MAX; handlePriceInput();
         searchInput.value = ''; applyFilters();
       });
       container.appendChild(clearBtn);
