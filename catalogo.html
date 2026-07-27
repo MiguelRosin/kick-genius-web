@@ -167,6 +167,35 @@
   .dropdown-item:hover{background:rgba(36,31,25,0.06);}
   .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
 
+  /* ===== Filtro de rango de precio ===== */
+  .price-menu{min-width:240px;padding:18px 16px 14px;}
+  .price-range-values{
+    text-align:center;font-size:0.85rem;font-weight:800;color:var(--white);margin-bottom:18px;
+  }
+  .price-slider{position:relative;height:20px;}
+  .price-slider-track{
+    position:absolute;top:50%;left:0;right:0;height:4px;transform:translateY(-50%);
+    background:var(--line);border-radius:4px;
+  }
+  .price-slider-fill{
+    position:absolute;top:50%;height:4px;transform:translateY(-50%);
+    background:var(--teal);border-radius:4px;
+  }
+  .price-slider input[type="range"]{
+    position:absolute;top:0;left:0;width:100%;height:20px;margin:0;
+    background:none;pointer-events:none;-webkit-appearance:none;appearance:none;
+  }
+  .price-slider input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;pointer-events:auto;width:18px;height:18px;border-radius:50%;
+    background:var(--teal);border:3px solid var(--navy);box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;
+  }
+  .price-slider input[type="range"]::-moz-range-thumb{
+    pointer-events:auto;width:18px;height:18px;border-radius:50%;
+    background:var(--teal);border:3px solid var(--navy);box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;
+  }
+  .price-slider input[type="range"]::-webkit-slider-runnable-track{background:transparent;}
+  .price-slider input[type="range"]::-moz-range-track{background:transparent;}
+
   /* ===== Árbol de categorías (filtro único y claro) ===== */
   .tree-menu{min-width:270px;max-height:420px;padding:10px;}
   .tree-item{
@@ -289,6 +318,12 @@
   }
   .add-cart-btn:hover{filter:brightness(1.1);}
   .add-cart-btn:disabled{background:rgba(36,31,25,0.06);color:rgba(36,31,25,0.35);cursor:not-allowed;}
+  .share-btn{
+    margin-top:10px;width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--white);font-weight:700;font-size:0.78rem;
+    letter-spacing:0.3px;cursor:pointer;transition:border-color .2s ease, color .2s ease;
+  }
+  .share-btn:hover{border-color:var(--teal);color:var(--teal);}
 
   /* ===== PRODUCT MODAL (ficha de producto) ===== */
   .product-modal-overlay{
@@ -315,13 +350,44 @@
     aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--navy-deep);
     border:1px solid var(--line);
   }
-  .modal-main-img img{width:100%;height:100%;object-fit:contain;padding:14px;}
+  .modal-main-img img{width:100%;height:100%;object-fit:contain;padding:14px;cursor:zoom-in;}
+  .image-zoom-overlay{
+    position:fixed;inset:0;background:rgba(20,17,13,0.9);
+    z-index:3600;display:none;align-items:center;justify-content:center;padding:32px;
+    cursor:zoom-out;
+  }
+  .image-zoom-overlay.open{display:flex;}
+  .image-zoom-overlay img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;}
+  .image-zoom-close{
+    position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,0.12);color:#fff;border:none;font-size:1.3rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;z-index:2;line-height:1;
+  }
+  .image-zoom-close:hover{background:rgba(255,255,255,0.22);}
   .modal-thumbs{display:flex;gap:10px;margin-top:14px;overflow-x:auto;padding-bottom:4px;}
   .modal-thumbs img{
     width:64px;height:64px;object-fit:cover;border-radius:10px;cursor:pointer;flex-shrink:0;
     border:2px solid transparent;opacity:0.55;transition:all .2s ease;
   }
   .modal-thumbs img.active, .modal-thumbs img:hover{border-color:var(--teal);opacity:1;}
+  .modal-related{
+    display:none;padding:24px 32px 32px;border-top:1px solid var(--line);
+  }
+  .modal-related.visible{display:block;}
+  .related-grid{display:grid;grid-template-columns:repeat(4, 1fr);gap:14px;margin-top:14px;}
+  .related-card{
+    cursor:pointer;background:var(--navy-deep);border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;transition:transform .25s ease, border-color .25s ease;
+  }
+  .related-card:hover{transform:translateY(-4px);border-color:var(--teal);}
+  .related-card-img{aspect-ratio:1/1;overflow:hidden;}
+  .related-card-img img{width:100%;height:100%;object-fit:contain;padding:8px;}
+  .related-card-info{padding:8px 10px 10px;}
+  .related-card-name{
+    font-size:0.72rem;font-weight:700;line-height:1.3;display:-webkit-box;
+    -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.4em;
+  }
+  .related-card-price{font-size:0.8rem;font-weight:800;color:var(--teal);margin-top:4px;}
   .modal-details{padding:32px;display:flex;flex-direction:column;}
   .modal-details .product-cat{margin-bottom:8px;}
   .modal-details h3{font-size:1.5rem;font-family:'Manrope',sans-serif;text-transform:none;font-weight:800;line-height:1.3;margin-bottom:14px;}
@@ -394,6 +460,8 @@
     .modal-main-img{aspect-ratio:4/3;}
     .modal-close{top:12px;right:12px;}
     .customize-fields{flex-wrap:wrap;}
+    .modal-related{padding:16px 16px 20px;}
+    .related-grid{grid-template-columns:repeat(2, 1fr);}
   }
 
   footer{
@@ -969,6 +1037,22 @@
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown" id="priceDropdown">
+        <button class="dropdown-toggle" type="button">
+          <span id="priceLabel">Precio: Todos</span><span class="chevron">▾</span>
+        </button>
+        <div class="dropdown-menu price-menu">
+          <div class="price-range-values">
+            <span id="priceRangeMinLabel">0€</span> — <span id="priceRangeMaxLabel">60€</span>
+          </div>
+          <div class="price-slider">
+            <div class="price-slider-track"></div>
+            <div class="price-slider-fill" id="priceSliderFill"></div>
+            <input type="range" id="priceMinInput" min="0" max="60" step="1" value="0">
+            <input type="range" id="priceMaxInput" min="0" max="60" step="1" value="60">
           </div>
         </div>
       </div>
@@ -6419,10 +6503,21 @@
         </div>
 
         <button class="add-cart-btn" id="modalAddBtn" disabled>Elige una talla</button>
+        <button type="button" class="share-btn" id="modalShareBtn">🔗 Compartir este producto</button>
         <p class="modal-note" id="modalNote">Al añadir al carrito podrás finalizar tu pedido por WhatsApp.</p>
       </div>
     </div>
+    <div class="modal-related" id="modalRelated">
+      <span class="size-label">También te puede interesar</span>
+      <div class="related-grid" id="relatedGrid"></div>
+    </div>
   </div>
+</div>
+
+<!-- ZOOM DE IMAGEN -->
+<div class="image-zoom-overlay" id="imageZoomOverlay">
+  <button type="button" class="image-zoom-close" id="imageZoomClose" aria-label="Cerrar zoom">&times;</button>
+  <img id="imageZoomImg" src="" alt="Foto de producto ampliada">
 </div>
 
 <!-- GUÍA DE TALLAS (lightbox) -->
@@ -6532,6 +6627,7 @@
   const toggle = filterDropdown.querySelector('.dropdown-toggle');
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
+    document.getElementById('priceDropdown')?.classList.remove('open');
     filterDropdown.classList.toggle('open');
   });
   document.addEventListener('click', () => filterDropdown.classList.remove('open'));
@@ -6559,6 +6655,63 @@
     return haystack.includes(query);
   }
 
+  function getCardPrice(card) {
+    const text = card.querySelector('.price-final')?.textContent || '';
+    return parseFloat(text.replace('€', '').replace(',', '.')) || 0;
+  }
+
+  // ===== Filtro de rango de precio =====
+  const priceDropdown = document.getElementById('priceDropdown');
+  const priceLabel = document.getElementById('priceLabel');
+  const priceMinInput = document.getElementById('priceMinInput');
+  const priceMaxInput = document.getElementById('priceMaxInput');
+  const priceRangeMinLabel = document.getElementById('priceRangeMinLabel');
+  const priceRangeMaxLabel = document.getElementById('priceRangeMaxLabel');
+  const priceSliderFill = document.getElementById('priceSliderFill');
+  const PRICE_ABS_MIN = parseFloat(priceMinInput.min);
+  const PRICE_ABS_MAX = parseFloat(priceMaxInput.max);
+  let activePriceMin = PRICE_ABS_MIN;
+  let activePriceMax = PRICE_ABS_MAX;
+
+  const pricetoggle = priceDropdown.querySelector('.dropdown-toggle');
+  pricetoggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    filterDropdown.classList.remove('open');
+    priceDropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', () => priceDropdown.classList.remove('open'));
+  priceDropdown.querySelector('.dropdown-menu').addEventListener('click', (e) => e.stopPropagation());
+  priceMinInput.addEventListener('pointerdown', () => { priceMinInput.style.zIndex = 5; priceMaxInput.style.zIndex = 4; });
+  priceMaxInput.addEventListener('pointerdown', () => { priceMaxInput.style.zIndex = 5; priceMinInput.style.zIndex = 4; });
+
+  function updatePriceSliderUI(minV, maxV) {
+    const pctMin = (minV - PRICE_ABS_MIN) / (PRICE_ABS_MAX - PRICE_ABS_MIN) * 100;
+    const pctMax = (maxV - PRICE_ABS_MIN) / (PRICE_ABS_MAX - PRICE_ABS_MIN) * 100;
+    priceSliderFill.style.left = pctMin + '%';
+    priceSliderFill.style.width = (pctMax - pctMin) + '%';
+    priceRangeMinLabel.textContent = minV + '€';
+    priceRangeMaxLabel.textContent = maxV + '€';
+    priceLabel.textContent = (minV === PRICE_ABS_MIN && maxV === PRICE_ABS_MAX)
+      ? 'Precio: Todos'
+      : `Precio: ${minV}€ - ${maxV}€`;
+  }
+
+  function handlePriceInput() {
+    let minV = parseFloat(priceMinInput.value);
+    let maxV = parseFloat(priceMaxInput.value);
+    if (minV > maxV) {
+      if (document.activeElement === priceMaxInput) { priceMinInput.value = maxV; minV = maxV; }
+      else { priceMaxInput.value = minV; maxV = minV; }
+    }
+    activePriceMin = minV;
+    activePriceMax = maxV;
+    updatePriceSliderUI(minV, maxV);
+    applyFilters();
+  }
+  priceMinInput.addEventListener('input', handlePriceInput);
+  priceMaxInput.addEventListener('input', handlePriceInput);
+  updatePriceSliderUI(activePriceMin, activePriceMax);
+
   function applyFilters(resetPage = true) {
     if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
@@ -6573,7 +6726,9 @@
       const matchesLeague = activeLeague === 'all' || card.dataset.league === activeLeague;
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
-      const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
+      const cardPrice = getCardPrice(card);
+      const matchesPrice = cardPrice >= activePriceMin && cardPrice <= activePriceMax;
+      const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch && matchesPrice;
       let show = false;
       if (matches) {
         matchedCount++;
@@ -11347,6 +11502,20 @@
   sizeGuideOverlay.addEventListener('click', (e) => { if (e.target === sizeGuideOverlay) closeSizeGuide(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSizeGuide(); });
   const modalMainImg = document.getElementById('modalMainImg');
+  const modalRelated = document.getElementById('modalRelated');
+  const relatedGrid = document.getElementById('relatedGrid');
+  const imageZoomOverlay = document.getElementById('imageZoomOverlay');
+  const imageZoomImg = document.getElementById('imageZoomImg');
+  const imageZoomClose = document.getElementById('imageZoomClose');
+  function openImageZoom(){
+    imageZoomImg.src = modalMainImg.src;
+    imageZoomOverlay.classList.add('open');
+  }
+  function closeImageZoom(){ imageZoomOverlay.classList.remove('open'); }
+  modalMainImg.addEventListener('click', openImageZoom);
+  imageZoomClose.addEventListener('click', closeImageZoom);
+  imageZoomOverlay.addEventListener('click', (e) => { if (e.target === imageZoomOverlay) closeImageZoom(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeImageZoom(); });
   const modalThumbs = document.getElementById('modalThumbs');
   const modalCat = document.getElementById('modalCat');
   const modalName = document.getElementById('modalName');
@@ -11519,15 +11688,101 @@
       modalCustomize.style.display = 'none';
     }
 
+    // ===== Productos relacionados =====
+    relatedGrid.innerHTML = '';
+    const sourceCard = document.querySelector('.product-card[data-id="' + id + '"]');
+    let relatedPicks = [];
+    if (sourceCard) {
+      const allCards = Array.from(document.querySelectorAll('.product-card[data-id]'));
+      let candidates = [];
+      if (sourceCard.dataset.cat === 'sneakers') {
+        candidates = allCards.filter(c => c !== sourceCard && c.dataset.brand === sourceCard.dataset.brand);
+      } else if (sourceCard.dataset.team) {
+        candidates = allCards.filter(c => c !== sourceCard && c.dataset.team === sourceCard.dataset.team);
+        if (candidates.length < 4 && sourceCard.dataset.league) {
+          const extra = allCards.filter(c => c !== sourceCard && c.dataset.team !== sourceCard.dataset.team && c.dataset.league === sourceCard.dataset.league);
+          candidates = candidates.concat(extra);
+        }
+      }
+      const seen = new Set();
+      for (const c of candidates) {
+        const pid = c.dataset.id;
+        if (seen.has(pid)) continue;
+        seen.add(pid);
+        relatedPicks.push(c);
+        if (relatedPicks.length >= 4) break;
+      }
+    }
+    if (relatedPicks.length > 0) {
+      modalRelated.classList.add('visible');
+      relatedPicks.forEach(c => {
+        const pid = c.dataset.id;
+        const p = PRODUCTS[pid];
+        if (!p) return;
+        const card = document.createElement('div');
+        card.className = 'related-card';
+        card.innerHTML = `
+          <div class="related-card-img"><img src="${p.images[0]}" alt="${p.name}" loading="lazy"></div>
+          <div class="related-card-info">
+            <div class="related-card-name">${p.name}</div>
+            <div class="related-card-price">${p.price}€</div>
+          </div>`;
+        card.addEventListener('click', () => openProductModal(pid));
+        relatedGrid.appendChild(card);
+      });
+    } else {
+      modalRelated.classList.remove('visible');
+    }
+
     modalOverlay.classList.add('open');
+    const newUrl = `${location.pathname}?p=${id}`;
+    if (location.search !== `?p=${id}`) history.pushState({ productId: id }, '', newUrl);
   }
-  function closeProductModal(){ modalOverlay.classList.remove('open'); }
+  function closeProductModal(){
+    modalOverlay.classList.remove('open');
+    if (location.search) history.pushState({}, '', location.pathname);
+  }
 
   document.querySelectorAll('.product-card[data-id]').forEach(card => {
     card.addEventListener('click', () => openProductModal(card.dataset.id));
   });
   modalClose.addEventListener('click', closeProductModal);
   modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeProductModal(); });
+
+  // ===== Compartir producto / enlace directo =====
+  const modalShareBtn = document.getElementById('modalShareBtn');
+  modalShareBtn.addEventListener('click', async () => {
+    if (!currentProductId) return;
+    const product = PRODUCTS[currentProductId];
+    const shareUrl = `${location.origin}${location.pathname}?p=${currentProductId}`;
+    const shareText = `Mira ${product.name} en Kick Genius`;
+    if (navigator.share) {
+      try { await navigator.share({ title: product.name, text: shareText, url: shareUrl }); }
+      catch (e) { /* usuario canceló, no hacer nada */ }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      const original = modalShareBtn.textContent;
+      modalShareBtn.textContent = '✅ ¡Enlace copiado!';
+      setTimeout(() => { modalShareBtn.textContent = original; }, 2000);
+    } catch (e) {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    const params = new URLSearchParams(location.search);
+    const pid = params.get('p');
+    if (pid && PRODUCTS[pid]) openProductModal(pid);
+    else closeProductModal();
+  });
+
+  (function openFromUrlIfPresent(){
+    const params = new URLSearchParams(location.search);
+    const pid = params.get('p');
+    if (pid && PRODUCTS[pid]) openProductModal(pid);
+  })();
 
   modalAddBtn.addEventListener('click', () => {
     if (!currentProductId || !currentSize) return;
