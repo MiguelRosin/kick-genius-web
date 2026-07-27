@@ -292,6 +292,32 @@
   }
   @media(max-width:860px){.testimonials-grid{grid-template-columns:1fr;}}
 
+  /* ===== PEDIDOS REALES (marquee) ===== */
+  .orders-caption{
+    text-align:center;margin-top:44px;font-size:0.85rem;font-weight:700;
+    letter-spacing:0.5px;color:rgba(36,31,25,0.6);
+  }
+  .orders-marquee{
+    width:100%;overflow:hidden;position:relative;margin-top:14px;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .orders-track{
+    display:flex;gap:18px;width:max-content;
+    animation:ordersScroll 48s linear infinite;
+  }
+  .orders-marquee:hover .orders-track{animation-play-state:paused;}
+  .orders-track img{
+    height:320px;width:auto;border-radius:16px;object-fit:cover;
+    border:1px solid var(--line);box-shadow:0 10px 30px rgba(36,31,25,0.12);
+    flex-shrink:0;background:var(--navy-soft);
+  }
+  @keyframes ordersScroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media(max-width:640px){.orders-track img{height:200px;}.orders-caption{margin-top:32px;}}
+
   /* ===== CTA BANNER ===== */
   .cta-banner{
     background:linear-gradient(145deg, var(--navy-soft), var(--navy-deep));
@@ -722,6 +748,36 @@
         <p class="testimonial-quote">Encantado con el pedido, voy a volver a repetir sí o sí. Calidad y servicio de 10.</p>
         <span class="testimonial-author">Cliente Kick Genius</span>
       </div>
+    </div>
+  </div>
+
+  <p class="orders-caption reveal">📦 Pedidos reales ya entregados a nuestros clientes</p>
+  <div class="orders-marquee reveal">
+    <div class="orders-track">
+      <img src="assets/pedidos-reales/01.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/02.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/03.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/04.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/05.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/06.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/07.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/08.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/09.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/10.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/11.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/12.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/01.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/02.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/03.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/04.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/05.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/06.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/07.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/08.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/09.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/10.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/11.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
+      <img src="assets/pedidos-reales/12.jpeg" alt="Pedido real de un cliente de Kick Genius" loading="lazy">
     </div>
   </div>
 </section>
