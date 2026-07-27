@@ -335,6 +335,14 @@
   .modal-sizes{margin-bottom:26px;}
   .modal-sizes .size-row{display:flex;flex-wrap:wrap;gap:8px;}
   .modal-sizes .size-chip{width:auto;min-width:42px;height:38px;padding:0 10px;font-size:0.8rem;white-space:nowrap;}
+  .size-group-toggle{display:none;gap:8px;margin-bottom:12px;}
+  .size-group-toggle.visible{display:flex;}
+  .size-group-btn{
+    padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--white);
+    font-weight:700;font-size:0.78rem;cursor:pointer;transition:all .2s ease;
+  }
+  .size-group-btn:hover{border-color:var(--teal);}
+  .size-group-btn.active{background:var(--teal);color:var(--navy-deep);border-color:var(--teal);}
   .modal-note{font-size:0.85rem;color:rgba(36,31,25,0.5);margin-top:auto;padding-top:18px;line-height:1.5;}
   .modal-customize{margin-bottom:22px;}
   .customize-fields{display:flex;gap:10px;margin-top:8px;}
@@ -6061,6 +6069,7 @@
         <p class="price-save" id="modalPriceSave" style="margin-bottom:22px;display:block;"></p>
         <p class="product-note" id="productNote"></p>
         <div class="modal-sizes">
+          <div class="size-group-toggle" id="sizeGroupToggle"></div>
           <span class="size-label">Selecciona tu talla</span>
           <div class="size-row" id="modalSizeRow"></div>
         </div>
@@ -10641,7 +10650,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-rosa/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-rosa/trasera.jpg'
@@ -10652,7 +10664,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-light-yellow/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-light-yellow/trasera.jpg'
@@ -10663,7 +10678,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-blanco/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-blanco/trasera.jpg'
@@ -10674,7 +10692,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-verde/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-verde/trasera.jpg'
@@ -10685,7 +10706,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-azul-marino/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-azul-marino/trasera.jpg'
@@ -10696,7 +10720,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-negro/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-negro/trasera.jpg'
@@ -10707,7 +10734,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-verde-amarillo/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-verde-amarillo/trasera.jpg'
@@ -10718,7 +10748,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-blanco-azul/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-blanco-azul/trasera.jpg'
@@ -10729,7 +10762,10 @@
       cat: 'Fútbol · Liga Española · Real Madrid',
       price: 45,
       originalPrice: 55,
-      sizes: ['S','M','L','XL','XXL'],
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
       images: [
         'assets/productos/real-madrid-chandal-entrenamiento-azul-dark/frontal.jpg',
         'assets/productos/real-madrid-chandal-entrenamiento-azul-dark/trasera.jpg'
@@ -10749,6 +10785,7 @@
   const modalOfferTag = document.getElementById('modalOfferTag');
   const modalPriceSave = document.getElementById('modalPriceSave');
   const modalSizeRow = document.getElementById('modalSizeRow');
+  const sizeGroupToggle = document.getElementById('sizeGroupToggle');
   const modalAddBtn = document.getElementById('modalAddBtn');
   const modalCustomize = document.getElementById('modalCustomize');
   const customName = document.getElementById('customName');
@@ -10794,6 +10831,27 @@
   customPatch.addEventListener('change', updateCustomizeNote);
   customSocks.addEventListener('change', updateCustomizeNote);
 
+  function renderSizeChips(sizesArr) {
+    modalSizeRow.innerHTML = '';
+    currentSize = null;
+    modalAddBtn.disabled = true;
+    modalAddBtn.textContent = 'Elige una talla';
+    sizesArr.forEach(s => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'size-chip';
+      chip.textContent = s;
+      chip.addEventListener('click', () => {
+        modalSizeRow.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        currentSize = s;
+        modalAddBtn.disabled = false;
+        modalAddBtn.textContent = 'Añadir al carrito';
+      });
+      modalSizeRow.appendChild(chip);
+    });
+  }
+
   function openProductModal(id) {
     const product = PRODUCTS[id];
     if (!product) return;
@@ -10838,23 +10896,26 @@
       modalThumbs.appendChild(t);
     });
 
-    modalSizeRow.innerHTML = '';
-    product.sizes.forEach(s => {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'size-chip';
-      chip.textContent = s;
-      chip.addEventListener('click', () => {
-        modalSizeRow.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
-        chip.classList.add('selected');
-        currentSize = s;
-        modalAddBtn.disabled = false;
-        modalAddBtn.textContent = 'Añadir al carrito';
+    sizeGroupToggle.innerHTML = '';
+    if (product.sizeGroups) {
+      sizeGroupToggle.classList.add('visible');
+      product.sizeGroups.forEach((group, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'size-group-btn' + (i === 0 ? ' active' : '');
+        btn.textContent = group.label;
+        btn.addEventListener('click', () => {
+          sizeGroupToggle.querySelectorAll('.size-group-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderSizeChips(group.sizes);
+        });
+        sizeGroupToggle.appendChild(btn);
       });
-      modalSizeRow.appendChild(chip);
-    });
-    modalAddBtn.disabled = true;
-    modalAddBtn.textContent = 'Elige una talla';
+      renderSizeChips(product.sizeGroups[0].sizes);
+    } else {
+      sizeGroupToggle.classList.remove('visible');
+      renderSizeChips(product.sizes);
+    }
 
     if (product.customization) {
       modalCustomize.style.display = '';
