@@ -784,8 +784,16 @@
                   </button>
                 </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-label="Categoría: Fútbol · Liga Española · Atlético de Madrid">
-                  Atlético de Madrid
+                  <span>Atlético de Madrid</span><span class="tree-toggle">+</span>
                 </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="liga-espanola" data-team="atletico-madrid" data-label="Categoría: Fútbol · Liga Española · Atlético de Madrid · Actual">
+                    Actual
+                  </button>
+                  <button class="tree-item tree-subsubsub" data-cat="chandal" data-league="liga-espanola" data-team="atletico-madrid" data-label="Categoría: Fútbol · Liga Española · Atlético de Madrid · Chándal">
+                    Chándal
+                  </button>
+                </div>
                 <button class="tree-item tree-subsub" data-cat="futbol" data-league="liga-espanola" data-team="burgos" data-label="Categoría: Fútbol · Liga Española · Burgos CF">
                   Burgos CF
                 </button>
@@ -6670,6 +6678,25 @@
         </div>
       </article>
 
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="chandal" data-league="liga-espanola" data-team="atletico-madrid" data-id="atletico-madrid-chandal-entrenamiento-negro">
+        <div class="product-media">
+          <span class="badge-new">🆕 Nuevo</span>
+          <span class="badge-offer">-18%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/atletico-madrid-chandal-entrenamiento-negro/frontal.jpg" alt="Chándal Atlético de Madrid Entrenamiento Negro 26/27 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/atletico-madrid-chandal-entrenamiento-negro/trasera.jpg" alt="Chándal Atlético de Madrid Entrenamiento Negro 26/27 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Liga Española · Atlético de Madrid</span>
+          <span class="product-name">Chándal Atlético de Madrid Entrenamiento Negro 26/27</span>
+          <div class="price-row">
+            <span class="price-original">55€</span>
+            <span class="price-final">45€</span>
+            <span class="price-save">Ahorras 10€ · sin personalización</span>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
@@ -11987,6 +12014,20 @@
       images: [
         'assets/productos/fc-barcelona-chandal-entrenamiento-gris-oscuro/frontal.jpg',
         'assets/productos/fc-barcelona-chandal-entrenamiento-gris-oscuro/trasera.jpg'
+      ]
+    },
+    'atletico-madrid-chandal-entrenamiento-negro': {
+      name: 'Chándal Atlético de Madrid Entrenamiento Negro 26/27',
+      cat: 'Fútbol · Liga Española · Atlético de Madrid',
+      price: 45,
+      originalPrice: 55,
+      sizeGroups: [
+        { label: 'Adulto', sizes: ['S','M','L','XL','XXL'] },
+        { label: 'Niño', sizes: ['10','12','14','16','18'] }
+      ],
+      images: [
+        'assets/productos/atletico-madrid-chandal-entrenamiento-negro/frontal.jpg',
+        'assets/productos/atletico-madrid-chandal-entrenamiento-negro/trasera.jpg'
       ]
     }
   };
