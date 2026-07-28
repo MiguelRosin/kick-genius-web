@@ -3833,7 +3833,7 @@
           <div class="price-row">
             <span class="price-original">35€</span>
             <span class="price-final">28€</span>
-            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche Final UCL 2015</span>
           </div>
         </div>
       </article>
@@ -3995,7 +3995,7 @@
           <div class="price-row">
             <span class="price-original">35€</span>
             <span class="price-final">28€</span>
-            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche Final Eurocopa 2012</span>
           </div>
         </div>
       </article>
@@ -4175,7 +4175,7 @@
           <div class="price-row">
             <span class="price-original">35€</span>
             <span class="price-final">28€</span>
-            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche Final UCL 2011</span>
           </div>
         </div>
       </article>
@@ -4229,7 +4229,7 @@
           <div class="price-row">
             <span class="price-original">35€</span>
             <span class="price-final">28€</span>
-            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche Final Mundial 2010</span>
           </div>
         </div>
       </article>
@@ -4445,7 +4445,7 @@
           <div class="price-row">
             <span class="price-original">35€</span>
             <span class="price-final">28€</span>
-            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre, número y parche Final UCL 2006</span>
           </div>
         </div>
       </article>
@@ -10013,7 +10013,10 @@
       ],
       customization: {
         nameNumberFee: 2,
-        noPatch: true
+        noLeague: true,
+        noChampions: true,
+        patchFee: 1.5,
+        thirdPatchLabel: 'Final UCL 2006'
       }
     },
     'fc-barcelona-away-0506': {
@@ -10148,7 +10151,10 @@
       ],
       customization: {
         nameNumberFee: 2,
-        noPatch: true
+        noLeague: true,
+        noChampions: true,
+        patchFee: 1.5,
+        thirdPatchLabel: 'Final UCL 2011'
       }
     },
     'fc-barcelona-away-1011': {
@@ -10283,7 +10289,10 @@
       ],
       customization: {
         nameNumberFee: 2,
-        noPatch: true
+        noLeague: true,
+        noChampions: true,
+        patchFee: 1.5,
+        thirdPatchLabel: 'Final UCL 2015'
       }
     },
     'fc-barcelona-away-1415': {
@@ -11070,7 +11079,10 @@
       ],
       customization: {
         nameNumberFee: 2,
-        noPatch: true
+        noLeague: true,
+        noChampions: true,
+        patchFee: 1.5,
+        thirdPatchLabel: 'Final Mundial 2010'
       }
     },
     'espana-away-2011': {
@@ -11100,7 +11112,10 @@
       ],
       customization: {
         nameNumberFee: 2,
-        noPatch: true
+        noLeague: true,
+        noChampions: true,
+        patchFee: 1.5,
+        thirdPatchLabel: 'Final Eurocopa 2012'
       }
     },
     'espana-away-2012': {
@@ -12533,7 +12548,10 @@
         patchBlock.style.display = 'none';
       } else {
         patchBlock.style.display = '';
-        customPatchLeagueOption.textContent = `${product.customization.leaguePatchLabel} (+${product.customization.patchFee}€)`;
+        customPatchLeagueOption.style.display = product.customization.noLeague ? 'none' : '';
+        if (!product.customization.noLeague) {
+          customPatchLeagueOption.textContent = `${product.customization.leaguePatchLabel} (+${product.customization.patchFee}€)`;
+        }
         customPatchChampionsOption.textContent = `${product.customization.championsPatchLabel || 'Champions League'} (+${product.customization.patchFee}€)`;
         customPatchChampionsOption.style.display = product.customization.noChampions ? 'none' : '';
         if (product.customization.thirdPatchLabel) {
