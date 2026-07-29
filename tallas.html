@@ -93,7 +93,7 @@
 
   /* ===== NAV ===== */
   header{
-    position:fixed;top:0;left:0;right:0;z-index:1000;
+    position:fixed;top:var(--banner-h,38px);left:0;right:0;z-index:1000;
     background:rgba(var(--cream-rgb),0.92);
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
@@ -149,7 +149,26 @@
     :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-toggle .icon-sun{display:block;}
     :root:not([data-theme="light"]):not([data-theme="dark"]) .theme-toggle .icon-moon{display:none;}
   }
-  .header-spacer{height:70px;}
+  .promo-banner{
+    position:fixed;top:0;left:0;right:0;z-index:1100;
+    background:var(--teal);color:var(--navy-deep);
+    display:flex;align-items:center;justify-content:center;
+    padding:10px 44px;text-align:center;gap:8px;
+  }
+  .promo-banner a{font-size:0.8rem;font-weight:700;letter-spacing:0.2px;}
+  .promo-banner a:hover{text-decoration:underline;}
+  .promo-banner-close{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:var(--navy-deep);font-size:1.2rem;
+    cursor:pointer;line-height:1;padding:4px 8px;opacity:0.8;
+  }
+  .promo-banner-close:hover{opacity:1;}
+  .promo-banner.hidden{display:none;}
+  @media (max-width:480px){
+    .promo-banner{padding:8px 34px;}
+    .promo-banner a{font-size:0.72rem;}
+  }
+  .header-spacer{height:calc(var(--banner-h,38px) + 70px);}
 
   /* ===== PAGE HEAD ===== */
   .page-head{padding:64px 0 20px;text-align:center;}
@@ -362,6 +381,11 @@
 </style>
 </head>
 <body>
+
+<div class="promo-banner" id="promoBanner">
+  <a href="catalogo.html">🔥 25€ de descuento en pedidos de 5 o más artículos con el código <strong>PROMO</strong></a>
+  <button type="button" class="promo-banner-close" id="promoBannerClose" aria-label="Cerrar aviso">&times;</button>
+</div>
 
 <header id="siteHeader">
   <nav>
@@ -851,6 +875,29 @@
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('kickGeniusTheme', next); } catch(e){}
   });
+  // ===== Banner promocional =====
+  (function initPromoBanner(){
+    const banner = document.getElementById('promoBanner');
+    const closeBtn = document.getElementById('promoBannerClose');
+    const BANNER_KEY = 'kickGeniusPromoBannerDismissed';
+    function applyBannerHeight(){
+      const h = banner.classList.contains('hidden') ? 0 : banner.offsetHeight;
+      document.documentElement.style.setProperty('--banner-h', h + 'px');
+    }
+    let dismissed = false;
+    try { dismissed = localStorage.getItem(BANNER_KEY) === '1'; } catch(e){}
+    if (dismissed) banner.classList.add('hidden');
+    applyBannerHeight();
+    window.addEventListener('resize', applyBannerHeight);
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      banner.classList.add('hidden');
+      applyBannerHeight();
+      try { localStorage.setItem(BANNER_KEY, '1'); } catch(err){}
+    });
+  })();
+
   const burger = document.getElementById('burgerBtn');
   const navLinks = document.querySelector('.nav-links');
   burger.addEventListener('click', () => {
