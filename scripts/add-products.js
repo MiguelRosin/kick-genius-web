@@ -38,6 +38,7 @@ const FUTBOL_TYPES = {
   futbol: { label: 'Camisetas', icon: '👕' },
   retro: { label: 'Camisetas Retro', icon: '🕰️' },
   nino: { label: 'Equipaciones Niño', icon: '🧒' },
+  chaqueta: { label: 'Chaquetas', icon: '🧥' },
   chandal: { label: 'Chándal Entrenamiento', icon: '🏃' },
   'chandal-paseo': { label: 'Chándal Paseo', icon: '🚶' }
 };
