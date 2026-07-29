@@ -427,7 +427,9 @@ async function main() {
   const queue = readQueue();
   if (queue.length === 0) fail('La cola está vacía.');
 
-  let html = fs.readFileSync(CATALOGO_PATH, 'utf8');
+  // Normaliza a LF: git (core.autocrlf) puede dejar el archivo en CRLF tras
+  // un checkout, y todos los anclajes/regex de este script asumen '\n'.
+  let html = fs.readFileSync(CATALOGO_PATH, 'utf8').replace(/\r\n/g, '\n');
 
   fs.mkdirSync(BACKUP_DIR, { recursive: true });
   const backupPath = path.join(BACKUP_DIR, `catalogo.${Date.now()}.html`);
