@@ -22,7 +22,24 @@ const INDENT = {
   sub: '              ',    // 14
   subInner: '                ', // 16
   subsub: '                ',   // 16
-  subsubInner: '                  ' // 18
+  subsubInner: '                  ', // 18
+  // Árbol de Fútbol (4 niveles): Fútbol > Tipo > Liga > Equipo
+  type: '              ',        // 14
+  typeInner: '                ', // 16
+  league: '                ',    // 16
+  leagueInner: '                  ', // 18
+  leaf: '                  ',    // 18
+  leafInner: '                    ' // 20
+};
+
+// Tipos dentro de Fútbol tras la reorganización del árbol (Tipo > Liga > Equipo).
+// La clave es el valor de data-cat que llevan las tarjetas de ese tipo.
+const FUTBOL_TYPES = {
+  futbol: { label: 'Camisetas', icon: '👕' },
+  retro: { label: 'Camisetas Retro', icon: '🕰️' },
+  nino: { label: 'Equipaciones Niño', icon: '🧒' },
+  chandal: { label: 'Chándal Entrenamiento', icon: '🏃' },
+  'chandal-paseo': { label: 'Chándal Paseo', icon: '🚶' }
 };
 
 function lineStart(html, idx) {
@@ -92,63 +109,72 @@ function buildSubButton(dataAttrs, label, text, subsubHtml) {
          `${INDENT.sub}</div>\n`;
 }
 
-// Inserta (si hace falta) la entrada de árbol para un producto de fútbol o sneaker.
-// Devuelve el html actualizado.
-function ensureTreeEntry(html, p) {
-  const isFutbol = p.type !== 'sneaker';
-  const catSelector = isFutbol ? 'futbol' : 'sneakers';
-  const catLabel = isFutbol ? 'Categoría: Fútbol' : 'Categoría: Sneakers';
+function buildLeafButton(dataAttrs, label, text) {
+  return `${INDENT.leaf}<button class="tree-item tree-subsubsub" ${dataAttrs} data-label="${label}">\n` +
+         `${INDENT.leafInner}${text}\n` +
+         `${INDENT.leaf}</button>\n`;
+}
 
-  const catBtnRe = new RegExp(`<button class="tree-item tree-cat" data-cat="${catSelector}" data-label="${catLabel}">`);
+function buildLeagueBlock(dataAttrs, label, text, leafHtml) {
+  return `${INDENT.league}<button class="tree-item tree-subsub" ${dataAttrs} data-label="${label}">\n` +
+         `${INDENT.leagueInner}<span>${text}</span><span class="tree-toggle">+</span>\n` +
+         `${INDENT.league}</button>\n` +
+         `${INDENT.league}<div class="tree-children">\n` +
+         leafHtml +
+         `${INDENT.league}</div>\n`;
+}
+
+function buildTypeBlock(dataAttrs, label, text, leagueHtml) {
+  return `${INDENT.type}<button class="tree-item tree-sub" ${dataAttrs} data-label="${label}">\n` +
+         `${INDENT.typeInner}<span>${text}</span><span class="tree-toggle">+</span>\n` +
+         `${INDENT.type}</button>\n` +
+         `${INDENT.type}<div class="tree-children">\n` +
+         leagueHtml +
+         `${INDENT.type}</div>\n`;
+}
+
+// Inserta (si hace falta) la entrada de árbol para un producto de sneaker.
+// Estructura sin cambios: Sneakers > Marca > Modelo.
+function ensureSneakerTreeEntry(html, p) {
+  const catBtnRe = /<button class="tree-item tree-cat" data-cat="sneakers" data-label="Categoría: Sneakers">/;
   const catBtnMatch = catBtnRe.exec(html);
-  if (!catBtnMatch) throw new Error(`No se encontró la categoría raíz "${catSelector}" en el árbol.`);
+  if (!catBtnMatch) throw new Error('No se encontró la categoría raíz "sneakers" en el árbol.');
   const catBlock = childrenBlockAfter(html, catBtnMatch.index);
 
-  const subKey = isFutbol ? p.league : p.brand;
-  const subLabel = isFutbol ? p.leagueLabel : p.brandLabel;
-  const leafKey = isFutbol ? p.team : p.model;
-  const leafLabel = isFutbol ? p.teamLabel : p.modelLabel;
-  const subAttr = isFutbol ? 'data-league' : 'data-brand';
-  const leafAttr = isFutbol ? 'data-team' : 'data-model';
+  const subKey = p.brand;
+  const subLabel = p.brandLabel;
+  const leafKey = p.model;
+  const leafLabel = p.modelLabel;
 
   const section = html.slice(catBlock.contentStart, catBlock.contentEnd);
-  const subBtnRe = new RegExp(`<button class="tree-item tree-sub" data-cat="${catSelector}" ${subAttr}="${subKey}" data-label="[^"]*">`);
+  const subBtnRe = new RegExp(`<button class="tree-item tree-sub" data-cat="sneakers" data-brand="${subKey}" data-label="[^"]*">`);
   const subBtnMatchLocal = subBtnRe.exec(section);
 
-  const leafDataAttrs = isFutbol
-    ? `data-cat="futbol" data-league="${subKey}" data-team="${leafKey}"`
-    : `data-cat="sneakers" data-brand="${subKey}" data-model="${leafKey}"`;
-  const leafFullLabel = isFutbol
-    ? `Categoría: Fútbol · ${subLabel} · ${leafLabel}`
-    : `Categoría: Sneakers · ${subLabel} · ${leafLabel}`;
+  const leafDataAttrs = `data-cat="sneakers" data-brand="${subKey}" data-model="${leafKey}"`;
+  const leafFullLabel = `Categoría: Sneakers · ${subLabel} · ${leafLabel}`;
 
   if (!subBtnMatchLocal) {
-    // Liga/marca nueva: se añade un bloque nuevo al final de la categoría.
-    const subFullLabel = isFutbol ? `Categoría: Fútbol · ${subLabel}` : `Categoría: Sneakers · ${subLabel}`;
-    const subDataAttrs = isFutbol
-      ? `data-cat="futbol" ${subAttr}="${subKey}"`
-      : `data-cat="sneakers" ${subAttr}="${subKey}"`;
+    const subFullLabel = `Categoría: Sneakers · ${subLabel}`;
+    const subDataAttrs = `data-cat="sneakers" data-brand="${subKey}"`;
     const subsubHtml = buildSubsubButton(2, leafDataAttrs, leafFullLabel, leafLabel);
     const newBlock = buildSubButton(subDataAttrs, subFullLabel, subLabel, subsubHtml);
     const insertAt = lineStart(html, catBlock.closeTagStart);
-    console.log(`  + Nueva ${isFutbol ? 'liga' : 'marca'} en el árbol: ${subLabel}`);
+    console.log(`  + Nueva marca en el árbol: ${subLabel}`);
     return html.slice(0, insertAt) + newBlock + html.slice(insertAt);
   }
 
-  // Liga/marca existente: comprobar si el equipo/modelo ya está.
   const subBtnAbsIndex = catBlock.contentStart + subBtnMatchLocal.index;
   const leafBlock = childrenBlockAfter(html, subBtnAbsIndex);
   const leafSection = html.slice(leafBlock.contentStart, leafBlock.contentEnd);
 
-  const existingLeafRe = new RegExp(`${leafAttr}="${leafKey}"`);
+  const existingLeafRe = new RegExp(`data-model="${leafKey}"`);
   if (existingLeafRe.test(leafSection)) {
     return html; // ya existe, nada que hacer
   }
 
-  // Insertar alfabéticamente (colación española) entre los hermanos existentes.
   const itemRe = /[ \t]*<button class="tree-item tree-subsub"[^>]*>\s*\n\s*([^\n]+?)\s*\n\s*<\/button>\n/g;
   let m;
-  let insertOffset = lineStart(html, leafBlock.contentEnd); // por defecto, al final
+  let insertOffset = lineStart(html, leafBlock.contentEnd);
   while ((m = itemRe.exec(leafSection))) {
     const existingLabel = m[1].trim();
     if (esCompare(leafLabel, existingLabel) < 0) {
@@ -157,8 +183,108 @@ function ensureTreeEntry(html, p) {
     }
   }
   const newSubsub = buildSubsubButton(2, leafDataAttrs, leafFullLabel, leafLabel);
-  console.log(`  + Nuevo ${isFutbol ? 'equipo' : 'modelo'} en el árbol: ${leafLabel} (${subLabel})`);
+  console.log(`  + Nuevo modelo en el árbol: ${leafLabel} (${subLabel})`);
   return html.slice(0, insertOffset) + newSubsub + html.slice(insertOffset);
+}
+
+// Inserta (si hace falta) la entrada de árbol para un producto de fútbol.
+// Estructura: Fútbol > Tipo (Camisetas/Retro/Niño/Chándal...) > Liga > Equipo.
+function ensureFutbolTreeEntry(html, p) {
+  const dataCat = p.dataCat || 'futbol';
+  const typeMeta = FUTBOL_TYPES[dataCat];
+  if (!typeMeta) throw new Error(`dataCat desconocido para el árbol de Fútbol: "${dataCat}"`);
+
+  const catBtnRe = /<button class="tree-item tree-cat" data-cat="futbol" data-label="Categoría: Fútbol">/;
+  const catBtnMatch = catBtnRe.exec(html);
+  if (!catBtnMatch) throw new Error('No se encontró la categoría raíz "futbol" en el árbol.');
+  const catBlock = childrenBlockAfter(html, catBtnMatch.index);
+
+  const typeFullLabel = `Categoría: Fútbol · ${typeMeta.label}`;
+  const leagueFullLabel = `Categoría: Fútbol · ${typeMeta.label} · ${p.leagueLabel}`;
+  const leafFullLabel = `Categoría: Fútbol · ${typeMeta.label} · ${p.leagueLabel} · ${p.teamLabel}`;
+  const leafDataAttrs = `data-cat="${dataCat}" data-league="${p.league}" data-team="${p.team}"`;
+
+  const typeSection = html.slice(catBlock.contentStart, catBlock.contentEnd);
+
+  // El tipo puede estar ausente, presente como botón plano sin hijos (p.ej.
+  // "Chándal Paseo" mientras no tiene ningún producto), o presente y expandible.
+  const expandableTypeBtnRe = new RegExp(`<button class="tree-item tree-sub" data-cat="${dataCat}" data-label="${typeFullLabel}">\\n\\s*<span>`);
+  const flatTypeBtnRe = new RegExp(`([ \\t]*)<button class="tree-item tree-sub" data-cat="${dataCat}" data-label="${typeFullLabel}">\\n\\s*${typeMeta.icon} ${typeMeta.label}\\n[ \\t]*</button>\\n`);
+
+  const expandableMatch = expandableTypeBtnRe.exec(typeSection);
+  const flatMatch = !expandableMatch ? flatTypeBtnRe.exec(typeSection) : null;
+
+  if (!expandableMatch && !flatMatch) {
+    // El tipo no existe todavía: crearlo entero con su liga y equipo.
+    const leafHtml = buildLeafButton(leafDataAttrs, leafFullLabel, p.teamLabel);
+    const leagueHtml = buildLeagueBlock(`data-cat="${dataCat}" data-league="${p.league}"`, leagueFullLabel, p.leagueLabel, leafHtml);
+    const typeBlock = buildTypeBlock(`data-cat="${dataCat}"`, typeFullLabel, `${typeMeta.icon} ${typeMeta.label}`, leagueHtml);
+    const insertAt = lineStart(html, catBlock.closeTagStart);
+    console.log(`  + Nuevo tipo en el árbol: ${typeMeta.label} (con ${p.leagueLabel} · ${p.teamLabel})`);
+    return html.slice(0, insertAt) + typeBlock + html.slice(insertAt);
+  }
+
+  if (flatMatch) {
+    // El tipo existe pero sin productos (botón plano): convertirlo en expandible.
+    const leafHtml = buildLeafButton(leafDataAttrs, leafFullLabel, p.teamLabel);
+    const leagueHtml = buildLeagueBlock(`data-cat="${dataCat}" data-league="${p.league}"`, leagueFullLabel, p.leagueLabel, leafHtml);
+    const expandableBtn =
+      `${flatMatch[1]}<button class="tree-item tree-sub" data-cat="${dataCat}" data-label="${typeFullLabel}">\n` +
+      `${INDENT.typeInner}<span>${typeMeta.icon} ${typeMeta.label}</span><span class="tree-toggle">+</span>\n` +
+      `${flatMatch[1]}</button>\n` +
+      `${flatMatch[1]}<div class="tree-children">\n` +
+      leagueHtml +
+      `${flatMatch[1]}</div>\n`;
+    const absStart = catBlock.contentStart + flatMatch.index;
+    console.log(`  + "${typeMeta.label}" pasa a tener productos: ${p.leagueLabel} · ${p.teamLabel}`);
+    return html.slice(0, absStart) + expandableBtn + html.slice(absStart + flatMatch[0].length);
+  }
+
+  // El tipo existe y es expandible: localizar (o crear) la Liga dentro de él.
+  const typeBtnAbsIndex = catBlock.contentStart + expandableMatch.index;
+  const typeChildrenBlock = childrenBlockAfter(html, typeBtnAbsIndex);
+  const leagueSection = html.slice(typeChildrenBlock.contentStart, typeChildrenBlock.contentEnd);
+
+  const leagueBtnRe = new RegExp(`<button class="tree-item tree-subsub" data-cat="${dataCat}" data-league="${p.league}" data-label="[^"]*">`);
+  const leagueBtnMatch = leagueBtnRe.exec(leagueSection);
+
+  if (!leagueBtnMatch) {
+    const leafHtml = buildLeafButton(leafDataAttrs, leafFullLabel, p.teamLabel);
+    const leagueBlock = buildLeagueBlock(`data-cat="${dataCat}" data-league="${p.league}"`, leagueFullLabel, p.leagueLabel, leafHtml);
+    const insertAt = lineStart(html, typeChildrenBlock.closeTagStart);
+    console.log(`  + Nueva liga en "${typeMeta.label}": ${p.leagueLabel}`);
+    return html.slice(0, insertAt) + leagueBlock + html.slice(insertAt);
+  }
+
+  // La liga ya existe: localizar (o crear) el equipo (hoja) dentro de ella.
+  const leagueBtnAbsIndex = typeChildrenBlock.contentStart + leagueBtnMatch.index;
+  const leagueChildrenBlock = childrenBlockAfter(html, leagueBtnAbsIndex);
+  const teamSection = html.slice(leagueChildrenBlock.contentStart, leagueChildrenBlock.contentEnd);
+
+  const existingLeafRe = new RegExp(`data-team="${p.team}"`);
+  if (existingLeafRe.test(teamSection)) {
+    return html; // ya existe, nada que hacer
+  }
+
+  const itemRe = /[ \t]*<button class="tree-item tree-subsubsub"[^>]*>\s*\n\s*([^\n]+?)\s*\n\s*<\/button>\n/g;
+  let m;
+  let insertOffset = lineStart(html, leagueChildrenBlock.contentEnd);
+  while ((m = itemRe.exec(teamSection))) {
+    const existingLabel = m[1].trim();
+    if (esCompare(p.teamLabel, existingLabel) < 0) {
+      insertOffset = leagueChildrenBlock.contentStart + m.index;
+      break;
+    }
+  }
+  const newLeaf = buildLeafButton(leafDataAttrs, leafFullLabel, p.teamLabel);
+  console.log(`  + Nuevo equipo en "${typeMeta.label} · ${p.leagueLabel}": ${p.teamLabel}`);
+  return html.slice(0, insertOffset) + newLeaf + html.slice(insertOffset);
+}
+
+// Inserta (si hace falta) la entrada de árbol para un producto de fútbol o sneaker.
+// Devuelve el html actualizado.
+function ensureTreeEntry(html, p) {
+  return p.type === 'sneaker' ? ensureSneakerTreeEntry(html, p) : ensureFutbolTreeEntry(html, p);
 }
 
 function buildCardHtml(p) {
