@@ -136,6 +136,26 @@
     font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;font-weight:800;
   }
+  .fav-btn{
+    position:relative;display:flex;align-items:center;gap:6px;
+    background:none;border:1px solid var(--line);color:var(--white);
+    padding:9px 14px;border-radius:100px;font-weight:700;font-size:0.85rem;
+    cursor:pointer;transition:transform .2s ease, border-color .2s ease;
+  }
+  .fav-btn:hover{transform:translateY(-2px);border-color:var(--teal);}
+  .fav-count{
+    background:var(--teal);color:var(--navy-deep);
+    font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;
+  }
+  .fav-view-btn{
+    display:inline-block;margin-top:8px;font-size:0.78rem;font-weight:700;
+    color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal);
+  }
+  @media (max-width:760px){
+    .fav-btn{padding:9px 10px;font-size:0.75rem;gap:4px;}
+    .fav-btn .fav-label{display:none;}
+  }
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:24px;height:2px;background:var(--white);}
   .theme-toggle{
@@ -579,6 +599,9 @@
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
     <div class="nav-right">
+      <button class="fav-btn" id="favToggle" aria-label="Abrir favoritos">
+        ❤ <span class="fav-label">Favoritos</span> <span class="fav-count" id="favCount">0</span>
+      </button>
       <button class="cart-btn" id="cartToggle" aria-label="Abrir carrito">
         🛒 <span class="cart-label">Carrito</span> <span class="cart-count" id="cartCount">0</span>
       </button>
@@ -603,6 +626,7 @@
     <div class="btn-row">
       <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
       <a href="https://wa.me/34644039760" target="_blank" rel="noopener" class="btn btn-ghost">Escríbenos por WhatsApp</a>
+      <a href="catalogo.html?quiz=1" class="btn btn-ghost">🎯 Encuentra tu camiseta</a>
     </div>
     <div class="hero-trust">
       <span>🔒 Pago con PayPal o transferencia</span>
@@ -945,6 +969,16 @@
 
 <!-- CART -->
 <div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="favDrawer">
+  <div class="cart-head">
+    <div class="cart-head-title">
+      <h3>Mis favoritos</h3>
+      <span class="cart-head-count" id="favHeadCount"></span>
+    </div>
+    <button class="cart-close" id="favClose" aria-label="Cerrar favoritos">&times;</button>
+  </div>
+  <div class="cart-items" id="favItems"></div>
+</aside>
 <aside class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
     <div class="cart-head-title">
@@ -1025,6 +1059,80 @@
 
 <script>
 (function(){
+
+  // ===== Favoritos (localStorage, compartido entre páginas) =====
+  const FAV_KEY = 'kickGeniusFavorites';
+  function getFavorites(){ try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e){ return []; } }
+  function isFavorited(id){ return getFavorites().some(f => f.id === id); }
+  function toggleFavorite(product){
+    const favs = getFavorites();
+    const idx = favs.findIndex(f => f.id === product.id);
+    if (idx > -1) favs.splice(idx, 1); else favs.unshift(product);
+    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    renderFavorites();
+    return idx === -1;
+  }
+  function removeFavorite(id){
+    localStorage.setItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.id !== id)));
+    renderFavorites();
+  }
+  function renderFavorites(){
+    const favCountEl = document.getElementById('favCount');
+    const favHeadCountEl = document.getElementById('favHeadCount');
+    const favItemsEl = document.getElementById('favItems');
+    const favs = getFavorites();
+    if (favCountEl) favCountEl.textContent = favs.length;
+    if (favHeadCountEl) favHeadCountEl.textContent = favs.length > 0 ? `${favs.length} ${favs.length === 1 ? 'producto' : 'productos'}` : '';
+    if (!favItemsEl) return;
+    if (favs.length === 0) {
+      favItemsEl.innerHTML = `
+        <div class="cart-empty">
+          <span class="cart-empty-icon">🤍</span>
+          <p>Aún no tienes favoritos</p>
+          <a href="catalogo.html">Ver catálogo</a>
+        </div>`;
+      return;
+    }
+    favItemsEl.innerHTML = favs.map(f => `
+      <div class="cart-item">
+        <img src="${f.img}" alt="${f.name}" loading="lazy">
+        <div class="cart-item-info">
+          <div class="cart-item-top">
+            <span class="name">${f.name}</span>
+            <button class="remove-icon-btn" data-fav-remove="${f.id}" aria-label="Quitar de favoritos" title="Quitar">✕</button>
+          </div>
+          <div class="meta">${f.price}€${f.originalPrice ? ' · antes ' + f.originalPrice + '€' : ''}</div>
+          <a class="fav-view-btn" href="catalogo.html?p=${encodeURIComponent(f.id)}">Ver producto →</a>
+        </div>
+      </div>`).join('');
+    favItemsEl.querySelectorAll('[data-fav-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        removeFavorite(btn.dataset.favRemove);
+        if (typeof refreshAllHearts === 'function') refreshAllHearts();
+      });
+    });
+  }
+  renderFavorites();
+
+  const favDrawer = document.getElementById('favDrawer');
+  let favScrollY = 0;
+  function openFav(){
+    favScrollY = window.scrollY;
+    document.body.style.top = `-${favScrollY}px`;
+    document.getElementById('cartDrawer')?.classList.remove('open');
+    favDrawer.classList.add('open');
+    document.getElementById('overlay')?.classList.add('open');
+    document.body.classList.add('cart-open');
+  }
+  function closeFav(){
+    favDrawer.classList.remove('open');
+    document.getElementById('overlay')?.classList.remove('open');
+    document.body.classList.remove('cart-open');
+    document.body.style.top = '';
+    window.scrollTo(0, favScrollY);
+  }
+  document.getElementById('favToggle')?.addEventListener('click', openFav);
+  document.getElementById('favClose')?.addEventListener('click', closeFav);
 
   // ===== NAV scroll state =====
   const header = document.getElementById('siteHeader');
@@ -1207,6 +1315,7 @@
   function openCart(){
     cartScrollY = window.scrollY;
     document.body.style.top = `-${cartScrollY}px`;
+    document.getElementById('favDrawer')?.classList.remove('open');
     cartDrawer.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('cart-open');
   }
   function closeCart(){
@@ -1216,7 +1325,14 @@
   }
   document.getElementById('cartToggle').addEventListener('click', openCart);
   document.getElementById('cartClose').addEventListener('click', closeCart);
-  overlay.addEventListener('click', closeCart);
+  overlay.addEventListener('click', () => {
+    const wasFavOpen = document.getElementById('favDrawer')?.classList.contains('open');
+    cartDrawer.classList.remove('open');
+    document.getElementById('favDrawer')?.classList.remove('open');
+    overlay.classList.remove('open'); document.body.classList.remove('cart-open');
+    document.body.style.top = '';
+    window.scrollTo(0, wasFavOpen ? favScrollY : cartScrollY);
+  });
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';

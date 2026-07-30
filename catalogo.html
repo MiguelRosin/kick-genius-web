@@ -132,6 +132,79 @@
     font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;font-weight:800;
   }
+  .fav-btn{
+    position:relative;display:flex;align-items:center;gap:6px;
+    background:none;border:1px solid var(--line);color:var(--white);
+    padding:9px 14px;border-radius:100px;font-weight:700;font-size:0.85rem;
+    cursor:pointer;transition:transform .2s ease, border-color .2s ease;
+  }
+  .fav-btn:hover{transform:translateY(-2px);border-color:var(--teal);}
+  .fav-count{
+    background:var(--teal);color:var(--navy-deep);
+    font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:800;
+  }
+  .fav-view-btn{
+    display:inline-block;margin-top:8px;font-size:0.78rem;font-weight:700;
+    color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal);
+  }
+  @media (max-width:760px){
+    .fav-btn{padding:9px 10px;font-size:0.75rem;gap:4px;}
+    .fav-btn .fav-label{display:none;}
+  }
+  .fav-heart{
+    position:absolute;top:14px;left:14px;z-index:3;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(11,20,38,0.55);backdrop-filter:blur(4px);
+    border:none;color:#fff;font-size:1.05rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .fav-heart:hover{transform:scale(1.12);}
+  .fav-heart.active{background:var(--teal);color:var(--navy-deep);}
+  .quiz-launch-btn{
+    display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+    background:linear-gradient(90deg,var(--teal),#7cf0d6);color:var(--navy-deep);
+    border:none;border-radius:100px;padding:12px 18px;font-weight:800;font-size:0.8rem;
+    letter-spacing:0.3px;cursor:pointer;text-transform:uppercase;
+    transition:transform .2s ease, box-shadow .2s ease;white-space:nowrap;
+  }
+  .quiz-launch-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,63,115,0.28);}
+  .quiz-overlay{
+    position:fixed;inset:0;background:rgba(var(--ink-rgb),0.55);backdrop-filter:blur(6px);
+    z-index:3500;display:none;align-items:center;justify-content:center;padding:24px;
+  }
+  .quiz-overlay.open{display:flex;}
+  .quiz-box{
+    background:var(--navy);border-radius:var(--radius);width:min(560px,100%);
+    max-height:min(88vh,720px);overflow-y:auto;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.35);padding:36px 30px 30px;
+  }
+  .quiz-close{
+    position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;
+    background:rgba(var(--ink-rgb),0.08);color:var(--white);border:none;font-size:1.2rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;z-index:2;line-height:1;
+  }
+  .quiz-close:hover{background:rgba(var(--ink-rgb),0.16);}
+  .quiz-progress{display:flex;gap:6px;margin-bottom:22px;}
+  .quiz-progress span{flex:1;height:4px;border-radius:4px;background:rgba(var(--ink-rgb),0.12);}
+  .quiz-progress span.done{background:var(--teal);}
+  .quiz-box h3{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:0.5px;margin-bottom:6px;}
+  .quiz-sub{font-size:0.85rem;color:rgba(var(--ink-rgb),0.55);margin-bottom:18px;}
+  .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .quiz-option{
+    background:rgba(var(--ink-rgb),0.05);border:1px solid var(--line);border-radius:14px;
+    padding:16px 14px;text-align:left;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--white);
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .quiz-option:hover{border-color:var(--teal);transform:translateY(-2px);}
+  .quiz-option .emoji{display:block;font-size:1.4rem;margin-bottom:6px;}
+  .quiz-back{
+    margin-top:20px;background:none;border:none;color:rgba(var(--ink-rgb),0.5);
+    font-size:0.8rem;font-weight:700;cursor:pointer;
+  }
+  .quiz-back:hover{color:var(--white);}
+  @media (max-width:480px){ .quiz-options{grid-template-columns:1fr;} }
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:24px;height:2px;background:var(--white);}
   .theme-toggle{
@@ -749,6 +822,9 @@
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
     <div class="nav-right">
+      <button class="fav-btn" id="favToggle" aria-label="Abrir favoritos">
+        ❤ <span class="fav-label">Favoritos</span> <span class="fav-count" id="favCount">0</span>
+      </button>
       <button class="cart-btn" id="cartToggle" aria-label="Abrir carrito">
         🛒 <span class="cart-label">Carrito</span> <span class="cart-count" id="cartCount">0</span>
       </button>
@@ -778,6 +854,7 @@
         <input type="text" id="searchInput" placeholder="Buscar por producto, equipo, marca..." aria-label="Buscar productos">
         <button class="search-clear" id="searchClear" aria-label="Borrar búsqueda">✕</button>
       </div>
+      <button type="button" class="quiz-launch-btn" id="quizLaunchBtn">🎯 Encuentra tu camiseta</button>
       <div class="dropdown tree-dropdown" id="filterDropdown">
         <button class="dropdown-toggle" type="button">
           <span id="filterLabel">Categoría: Todos</span><span class="chevron">▾</span>
@@ -13881,6 +13958,7 @@
         </div>
 
         <button class="add-cart-btn" id="modalAddBtn" disabled>Elige una talla</button>
+        <button type="button" class="share-btn" id="modalFavBtn">♡ Guardar en favoritos</button>
         <button type="button" class="share-btn" id="modalShareBtn">🔗 Compartir este producto</button>
         <p class="modal-note" id="modalNote">Al añadir al carrito podrás finalizar tu pedido por WhatsApp.</p>
       </div>
@@ -13906,8 +13984,26 @@
   </div>
 </div>
 
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-box">
+    <button type="button" class="quiz-close" id="quizClose" aria-label="Cerrar">&times;</button>
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div id="quizBody"></div>
+  </div>
+</div>
+
 <!-- CART -->
 <div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="favDrawer">
+  <div class="cart-head">
+    <div class="cart-head-title">
+      <h3>Mis favoritos</h3>
+      <span class="cart-head-count" id="favHeadCount"></span>
+    </div>
+    <button class="cart-close" id="favClose" aria-label="Cerrar favoritos">&times;</button>
+  </div>
+  <div class="cart-items" id="favItems"></div>
+</aside>
 <aside class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
     <div class="cart-head-title">
@@ -13989,6 +14085,80 @@
 <script>
 (function(){
 
+  // ===== Favoritos (localStorage, compartido entre páginas) =====
+  const FAV_KEY = 'kickGeniusFavorites';
+  function getFavorites(){ try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e){ return []; } }
+  function isFavorited(id){ return getFavorites().some(f => f.id === id); }
+  function toggleFavorite(product){
+    const favs = getFavorites();
+    const idx = favs.findIndex(f => f.id === product.id);
+    if (idx > -1) favs.splice(idx, 1); else favs.unshift(product);
+    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    renderFavorites();
+    return idx === -1;
+  }
+  function removeFavorite(id){
+    localStorage.setItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.id !== id)));
+    renderFavorites();
+  }
+  function renderFavorites(){
+    const favCountEl = document.getElementById('favCount');
+    const favHeadCountEl = document.getElementById('favHeadCount');
+    const favItemsEl = document.getElementById('favItems');
+    const favs = getFavorites();
+    if (favCountEl) favCountEl.textContent = favs.length;
+    if (favHeadCountEl) favHeadCountEl.textContent = favs.length > 0 ? `${favs.length} ${favs.length === 1 ? 'producto' : 'productos'}` : '';
+    if (!favItemsEl) return;
+    if (favs.length === 0) {
+      favItemsEl.innerHTML = `
+        <div class="cart-empty">
+          <span class="cart-empty-icon">🤍</span>
+          <p>Aún no tienes favoritos</p>
+          <a href="catalogo.html">Ver catálogo</a>
+        </div>`;
+      return;
+    }
+    favItemsEl.innerHTML = favs.map(f => `
+      <div class="cart-item">
+        <img src="${f.img}" alt="${f.name}" loading="lazy">
+        <div class="cart-item-info">
+          <div class="cart-item-top">
+            <span class="name">${f.name}</span>
+            <button class="remove-icon-btn" data-fav-remove="${f.id}" aria-label="Quitar de favoritos" title="Quitar">✕</button>
+          </div>
+          <div class="meta">${f.price}€${f.originalPrice ? ' · antes ' + f.originalPrice + '€' : ''}</div>
+          <a class="fav-view-btn" href="catalogo.html?p=${encodeURIComponent(f.id)}">Ver producto →</a>
+        </div>
+      </div>`).join('');
+    favItemsEl.querySelectorAll('[data-fav-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        removeFavorite(btn.dataset.favRemove);
+        if (typeof refreshAllHearts === 'function') refreshAllHearts();
+      });
+    });
+  }
+  renderFavorites();
+
+  const favDrawer = document.getElementById('favDrawer');
+  let favScrollY = 0;
+  function openFav(){
+    favScrollY = window.scrollY;
+    document.body.style.top = `-${favScrollY}px`;
+    document.getElementById('cartDrawer')?.classList.remove('open');
+    favDrawer.classList.add('open');
+    document.getElementById('overlay')?.classList.add('open');
+    document.body.classList.add('cart-open');
+  }
+  function closeFav(){
+    favDrawer.classList.remove('open');
+    document.getElementById('overlay')?.classList.remove('open');
+    document.body.classList.remove('cart-open');
+    document.body.style.top = '';
+    window.scrollTo(0, favScrollY);
+  }
+  document.getElementById('favToggle')?.addEventListener('click', openFav);
+  document.getElementById('favClose')?.addEventListener('click', closeFav);
+
   // ===== Filtro único: árbol de categorías/subcategorías =====
   const filterDropdown = document.getElementById('filterDropdown');
   const filterLabel = document.getElementById('filterLabel');
@@ -14005,6 +14175,37 @@
       img.addEventListener('error', markLoaded, { once: true });
     }
   });
+
+  // ===== Favoritos: corazón sobre cada card =====
+  function refreshAllHearts(){
+    document.querySelectorAll('.product-card[data-id]').forEach(card => {
+      const btn = card.querySelector('.fav-heart');
+      if (!btn) return;
+      const active = isFavorited(card.dataset.id);
+      btn.classList.toggle('active', active);
+      btn.textContent = active ? '♥' : '♡';
+      btn.setAttribute('aria-label', active ? 'Quitar de favoritos' : 'Añadir a favoritos');
+    });
+  }
+  document.querySelectorAll('.product-card[data-id]').forEach(card => {
+    const media = card.querySelector('.product-media');
+    if (!media) return;
+    const id = card.dataset.id;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fav-heart';
+    btn.textContent = '♡';
+    btn.setAttribute('aria-label', 'Añadir a favoritos');
+    media.appendChild(btn);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const p = PRODUCTS[id];
+      if (!p) return;
+      toggleFavorite({ id, name: p.name, price: p.price, originalPrice: p.originalPrice || null, img: p.images[0] });
+      refreshAllHearts();
+    });
+  });
+  refreshAllHearts();
   const treeItems = document.querySelectorAll('.tree-item');
   const searchInput = document.getElementById('searchInput');
   const searchClear = document.getElementById('searchClear');
@@ -14148,6 +14349,115 @@
   });
 
   applyFilters();
+
+  // ===== Quiz "Encuentra tu camiseta" =====
+  const QUIZ_TYPES = [
+    { label:'Actuales', emoji:'⚡', cat:'futbol' },
+    { label:'Retro', emoji:'🕰️', cat:'retro' },
+    { label:'Equipación Niño', emoji:'🧒', cat:'nino' },
+    { label:'Chándal', emoji:'🏃', cat:'chandal' }
+  ];
+  const QUIZ_LEAGUES = [
+    { label:'La Liga', emoji:'🇪🇸', league:'liga-espanola' },
+    { label:'Premier League', emoji:'🏴', league:'premier-league' },
+    { label:'Serie A', emoji:'🇮🇹', league:'serie-a' },
+    { label:'Bundesliga', emoji:'🇩🇪', league:'bundesliga' },
+    { label:'Ligue 1', emoji:'🇫🇷', league:'ligue-1' },
+    { label:'Selecciones', emoji:'🌍', league:'selecciones' },
+    { label:'Sorpréndeme', emoji:'🎲', league:'all' }
+  ];
+  const QUIZ_DECADES = [
+    { label:'80s y antes', emoji:'📼', min:0, max:1989 },
+    { label:'90s', emoji:'📻', min:1990, max:1999 },
+    { label:'2000s', emoji:'💿', min:2000, max:2009 },
+    { label:'2010 en adelante', emoji:'📱', min:2010, max:2099 }
+  ];
+  const quizOverlay = document.getElementById('quizOverlay');
+  const quizBody = document.getElementById('quizBody');
+  const quizProgress = document.getElementById('quizProgress');
+  let quizStage = 'type';
+  let quizChoice = { cat: null, league: null, decadeMin: 0, decadeMax: 9999 };
+
+  function quizTotalSteps(){ return quizChoice.cat === 'retro' ? 3 : 2; }
+  function quizStepNumber(){ return quizStage === 'type' ? 1 : quizStage === 'league' ? 2 : 3; }
+  function quizRenderProgress(){
+    const total = quizTotalSteps();
+    const current = quizStepNumber();
+    quizProgress.innerHTML = Array.from({ length: total }, (_, i) => `<span class="${i < current ? 'done' : ''}"></span>`).join('');
+  }
+  function quizOptionsHtml(list){
+    return list.map((o, i) => `<button type="button" class="quiz-option" data-i="${i}"><span class="emoji">${o.emoji}</span>${o.label}</button>`).join('');
+  }
+  function renderQuizStep(){
+    quizRenderProgress();
+    if (quizStage === 'type') {
+      quizBody.innerHTML = `<h3>¿Qué buscas?</h3><p class="quiz-sub">Paso 1 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_TYPES)}</div>`;
+      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          quizChoice.cat = QUIZ_TYPES[+btn.dataset.i].cat;
+          quizStage = 'league';
+          renderQuizStep();
+        });
+      });
+    } else if (quizStage === 'league') {
+      quizBody.innerHTML = `<h3>¿Liga o selección?</h3><p class="quiz-sub">Paso 2 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_LEAGUES)}</div><button type="button" class="quiz-back" id="quizBack">← Atrás</button>`;
+      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          quizChoice.league = QUIZ_LEAGUES[+btn.dataset.i].league;
+          if (quizChoice.cat === 'retro') { quizStage = 'decade'; renderQuizStep(); }
+          else { quizFinish(); }
+        });
+      });
+      document.getElementById('quizBack').addEventListener('click', () => { quizStage = 'type'; renderQuizStep(); });
+    } else if (quizStage === 'decade') {
+      quizBody.innerHTML = `<h3>¿De qué época?</h3><p class="quiz-sub">Paso 3 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_DECADES)}</div><button type="button" class="quiz-back" id="quizBack">← Atrás</button>`;
+      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const d = QUIZ_DECADES[+btn.dataset.i];
+          quizChoice.decadeMin = d.min; quizChoice.decadeMax = d.max;
+          quizFinish();
+        });
+      });
+      document.getElementById('quizBack').addEventListener('click', () => { quizStage = 'league'; renderQuizStep(); });
+    }
+  }
+  function quizFinish(){
+    currentCategoryFilter = {
+      cat: quizChoice.cat, brand: 'all', model: 'all',
+      league: quizChoice.league === 'all' ? 'all' : quizChoice.league,
+      team: 'all'
+    };
+    treeItems.forEach(i => i.classList.remove('active'));
+    const typeLabel = QUIZ_TYPES.find(t => t.cat === quizChoice.cat)?.label || '';
+    const leagueLabel = quizChoice.league === 'all' ? '' : (QUIZ_LEAGUES.find(l => l.league === quizChoice.league)?.label || '');
+    filterLabel.textContent = 'Categoría: Fútbol' + (typeLabel ? ' · ' + typeLabel : '') + (leagueLabel ? ' · ' + leagueLabel : '');
+    applyFilters();
+    if (quizChoice.cat === 'retro') {
+      cards.forEach(card => {
+        if (card.style.display === 'none') return;
+        const name = card.querySelector('.product-name')?.textContent || '';
+        const m = name.match(/(19|20)\d{2}/);
+        const year = m ? parseInt(m[0], 10) : null;
+        if (year !== null && (year < quizChoice.decadeMin || year > quizChoice.decadeMax)) card.style.display = 'none';
+      });
+      const anyVisible = Array.from(cards).some(c => c.style.display !== 'none');
+      emptyState.classList.toggle('visible', !anyVisible);
+      loadMoreWrap.classList.remove('visible');
+    }
+    closeQuiz();
+    document.querySelector('.catalog-toolbar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function openQuiz(){
+    quizStage = 'type';
+    quizChoice = { cat: null, league: null, decadeMin: 0, decadeMax: 9999 };
+    renderQuizStep();
+    quizOverlay.classList.add('open');
+  }
+  function closeQuiz(){ quizOverlay.classList.remove('open'); }
+  document.getElementById('quizLaunchBtn').addEventListener('click', openQuiz);
+  document.getElementById('quizClose').addEventListener('click', closeQuiz);
+  quizOverlay.addEventListener('click', (e) => { if (e.target === quizOverlay) closeQuiz(); });
+  if (new URLSearchParams(location.search).get('quiz') === '1') openQuiz();
 
   // ===== Product catalog data (ficha completa) =====
   const PRODUCTS = {
@@ -24957,6 +25267,8 @@
     if (!product) return;
     currentProductId = id;
     currentSize = null;
+    const modalFavBtnEl = document.getElementById('modalFavBtn');
+    if (modalFavBtnEl) modalFavBtnEl.textContent = isFavorited(id) ? '♥ Guardado en favoritos' : '♡ Guardar en favoritos';
 
     modalCat.textContent = product.cat;
     modalName.textContent = product.name;
@@ -25131,6 +25443,15 @@
     } catch (e) {
       window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
     }
+  });
+
+  const modalFavBtn = document.getElementById('modalFavBtn');
+  modalFavBtn.addEventListener('click', () => {
+    if (!currentProductId) return;
+    const product = PRODUCTS[currentProductId];
+    const added = toggleFavorite({ id: currentProductId, name: product.name, price: product.price, originalPrice: product.originalPrice || null, img: product.images[0] });
+    modalFavBtn.textContent = added ? '♥ Guardado en favoritos' : '♡ Guardar en favoritos';
+    if (typeof refreshAllHearts === 'function') refreshAllHearts();
   });
 
   window.addEventListener('popstate', () => {
@@ -25336,6 +25657,7 @@
   function openCart(){
     cartScrollY = window.scrollY;
     document.body.style.top = `-${cartScrollY}px`;
+    document.getElementById('favDrawer')?.classList.remove('open');
     cartDrawer.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('cart-open');
   }
   function closeCart(){
@@ -25345,7 +25667,14 @@
   }
   document.getElementById('cartToggle').addEventListener('click', openCart);
   document.getElementById('cartClose').addEventListener('click', closeCart);
-  overlay.addEventListener('click', closeCart);
+  overlay.addEventListener('click', () => {
+    const wasFavOpen = document.getElementById('favDrawer')?.classList.contains('open');
+    cartDrawer.classList.remove('open');
+    document.getElementById('favDrawer')?.classList.remove('open');
+    overlay.classList.remove('open'); document.body.classList.remove('cart-open');
+    document.body.style.top = '';
+    window.scrollTo(0, wasFavOpen ? favScrollY : cartScrollY);
+  });
 
   // ===== Datos de envío (persistidos entre visitas) =====
   const SHIP_KEY = 'kickGeniusShipping';
