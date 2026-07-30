@@ -25757,6 +25757,17 @@
     msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
+
+    saveCart([]);
+    cartItemsEl.innerHTML = `
+      <div class="cart-empty">
+        <span class="cart-empty-icon">✅</span>
+        <p>¡Pedido enviado! Confirma el mensaje en WhatsApp para completarlo.</p>
+        <a href="catalogo.html">Seguir comprando</a>
+      </div>`;
+    document.getElementById('cartSubtotalRow').style.display = 'none';
+    document.getElementById('cartDiscountRow').style.display = 'none';
+    cartTotalEl.textContent = '0€';
   });
 
   renderCart();
