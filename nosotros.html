@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>(function(){try{var t=localStorage.getItem('kickGeniusTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script src="assets/stock-status.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nosotros — Kick Genius</title>
 <meta name="description" content="Conoce Kick Genius, tienda online de camisetas de fútbol (actuales y retro) y sneakers, con envíos a toda España.">
@@ -16,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  html[data-stock="hidden"] #navStockItem{display:none;}
   :root{
     --navy: #fffdf9;
     --navy-deep: #faf5ec;
@@ -424,7 +426,7 @@
       <li><a href="index.html">Inicio</a></li>
       <li><a href="nosotros.html" class="active">Nosotros</a></li>
       <li><a href="catalogo.html">Catálogo</a></li>
-      <li><a href="stock.html">Stock</a></li>
+      <li id="navStockItem"><a href="stock.html">Stock</a></li>
       <li><a href="tallas.html">Tallas</a></li>
       <li><a href="seguimiento.html">Seguimiento</a></li>
       <li><a href="faq.html">FAQ</a></li>

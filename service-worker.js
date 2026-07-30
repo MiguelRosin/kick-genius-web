@@ -32,9 +32,10 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin) return;
 
   const isHTML = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
+  const isStockStatus = url.pathname.endsWith('/assets/stock-status.js');
 
-  if (isHTML) {
-    // Network-first para páginas: el catálogo cambia a menudo y no queremos servir productos desactualizados.
+  if (isHTML || isStockStatus) {
+    // Network-first para páginas (y para stock-status.js): cambian a menudo y no queremos servir versiones desactualizadas.
     event.respondWith(
       fetch(req)
         .then((res) => {
