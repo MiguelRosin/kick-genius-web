@@ -134,24 +134,22 @@
     display:flex;align-items:center;justify-content:center;font-weight:800;
   }
   .fav-btn{
-    position:relative;display:flex;align-items:center;gap:6px;
-    background:none;border:1px solid var(--line);color:var(--white);
-    padding:9px 14px;border-radius:100px;font-weight:700;font-size:0.85rem;
-    cursor:pointer;transition:transform .2s ease, border-color .2s ease;
+    position:relative;
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+    background:transparent;color:var(--white);cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    transition:background .2s ease, transform .2s ease;
   }
-  .fav-btn:hover{transform:translateY(-2px);border-color:var(--teal);}
+  .fav-btn:hover{background:rgba(var(--ink-rgb),0.06);transform:translateY(-2px);}
   .fav-count{
+    position:absolute;top:-4px;right:-4px;
     background:var(--teal);color:var(--navy-deep);
-    font-size:0.7rem;min-width:18px;height:18px;border-radius:50%;
+    font-size:0.62rem;min-width:16px;height:16px;padding:0 3px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;font-weight:800;
   }
   .fav-view-btn{
     display:inline-block;margin-top:8px;font-size:0.78rem;font-weight:700;
     color:var(--teal);text-decoration:none;border-bottom:1px solid var(--teal);
-  }
-  @media (max-width:760px){
-    .fav-btn{padding:9px 10px;font-size:0.75rem;gap:4px;}
-    .fav-btn .fav-label{display:none;}
   }
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:24px;height:2px;background:var(--white);}
@@ -414,8 +412,8 @@
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
     <div class="nav-right">
-      <button class="fav-btn" id="favToggle" aria-label="Abrir favoritos">
-        ❤ <span class="fav-label">Favoritos</span> <span class="fav-count" id="favCount">0</span>
+      <button class="fav-btn" id="favToggle" aria-label="Abrir favoritos" title="Favoritos">
+        ❤<span class="fav-count" id="favCount">0</span>
       </button>
       <button class="cart-btn" id="cartToggle" aria-label="Abrir carrito">
         🛒 <span class="cart-label">Carrito</span> <span class="cart-count" id="cartCount">0</span>
