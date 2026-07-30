@@ -412,15 +412,34 @@ async function compressImages(p) {
   for (const file of p.images) {
     if (!/\.jpe?g$/i.test(file)) continue;
     const full = path.join(dir, file);
+    const stat = fs.statSync(full);
+    const meta = await sharp(full).metadata();
+    // Ya está en tamaño/peso razonable (p.ej. comprimida a mano antes de
+    // encolar el producto): no lo toques, evita reescrituras redundantes
+    // que en OneDrive a veces chocan con el sincronizado (EPERM en rename).
+    if ((!meta.width || meta.width <= 1200) && stat.size <= 300 * 1024) continue;
     const tmp = full + '.tmp';
-    const img = sharp(full).rotate();
-    const meta = await img.metadata();
-    let pipeline = img;
+    let pipeline = sharp(full).rotate();
     if (meta.width && meta.width > 1200) pipeline = pipeline.resize({ width: 1200 });
     await pipeline.jpeg({ quality: 80, mozjpeg: true }).toFile(tmp);
-    fs.renameSync(tmp, full);
+    await renameWithRetry(tmp, full);
   }
   return { ok: true, compressed: true };
+}
+
+// OneDrive puede bloquear brevemente un archivo recién escrito; reintenta el
+// rename unos segundos antes de rendirse.
+async function renameWithRetry(tmp, dest, attempts = 6, delayMs = 500) {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      fs.renameSync(tmp, dest);
+      return;
+    } catch (e) {
+      if (e.code !== 'EPERM' && e.code !== 'EBUSY') throw e;
+      if (i === attempts - 1) throw e;
+      await new Promise(r => setTimeout(r, delayMs));
+    }
+  }
 }
 
 async function main() {
