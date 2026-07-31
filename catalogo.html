@@ -1501,8 +1501,18 @@
                 </div>
               </div>
               <button class="tree-item tree-sub" data-cat="chandal-paseo" data-label="Categoría: Fútbol · Chándal Paseo">
-                🚶 Chándal Paseo
+                <span>🚶 Chándal Paseo</span><span class="tree-toggle">+</span>
               </button>
+              <div class="tree-children">
+                <button class="tree-item tree-subsub" data-cat="chandal-paseo" data-league="selecciones" data-label="Categoría: Fútbol · Chándal Paseo · Selecciones">
+                  <span>Selecciones</span><span class="tree-toggle">+</span>
+                </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="chandal-paseo" data-league="selecciones" data-team="espana" data-label="Categoría: Fútbol · Chándal Paseo · Selecciones · España">
+                    España
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -16800,6 +16810,24 @@
         </div>
       </article>
 
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="chandal-paseo" data-league="selecciones" data-team="espana" data-id="chandal-paseo-espana-rojo">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/chandal-paseo-espana-rojo/frontal.jpg" alt="Chándal Paseo España Rojo frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/chandal-paseo-espana-rojo/trasera.jpg" alt="Chándal Paseo España Rojo trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Chándal Paseo España Rojo</span>
+          <div class="price-row">
+            <span class="price-original">60€</span>
+            <span class="price-final">48€</span>
+            <span class="price-save">Ahorras 12€ · sin personalización</span>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
@@ -30509,6 +30537,17 @@
         nameNumberFee: 2,
         noPatch: true
       }
+    },
+    'chandal-paseo-espana-rojo': {
+      name: 'Chándal Paseo España Rojo',
+      cat: 'Fútbol · Selecciones · España',
+      price: 48,
+      originalPrice: 60,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/chandal-paseo-espana-rojo/frontal.jpg',
+        'assets/productos/chandal-paseo-espana-rojo/trasera.jpg'
+      ]
     }
   };
 
