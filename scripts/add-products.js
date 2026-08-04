@@ -36,6 +36,7 @@ const INDENT = {
 // La clave es el valor de data-cat que llevan las tarjetas de ese tipo.
 const FUTBOL_TYPES = {
   futbol: { label: 'Camisetas', icon: '👕' },
+  'manga-larga': { label: 'Camisetas Manga Larga', icon: '🧣' },
   retro: { label: 'Camisetas Retro', icon: '🕰️' },
   nino: { label: 'Equipaciones Niño', icon: '🧒' },
   chaqueta: { label: 'Chaquetas', icon: '🧥' },
