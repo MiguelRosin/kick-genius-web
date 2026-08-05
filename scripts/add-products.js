@@ -517,6 +517,10 @@ async function main() {
   }
   fs.unlinkSync(checkFile);
 
+  // Mantiene sincronizado el catálogo de precios que usa la Netlify Function
+  // validate-order.js para validar pedidos en el servidor.
+  require('./build-products-data.js').build();
+
   console.log(`\n✔ Añadidos ${added.length} producto(s): ${added.join(', ')}`);
   if (skipped.length) console.log('Omitidos:\n' + skipped.map(s => '  - ' + s).join('\n'));
   if (!sharp) console.log('\n(sharp no está instalado en scripts/node_modules — las imágenes no se han comprimido automáticamente; ejecuta "npm install" dentro de scripts/ para activarlo)');

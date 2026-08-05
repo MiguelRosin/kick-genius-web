@@ -937,7 +937,7 @@
   }
 
   // ===== Checkout via WhatsApp =====
-  document.getElementById('checkoutBtn').addEventListener('click', () => {
+  document.getElementById('checkoutBtn').addEventListener('click', async () => {
     const cart = getCart();
     if (cart.length === 0) return;
 
@@ -954,14 +954,49 @@
     }
     shippingError.classList.remove('visible');
 
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const originalBtnText = checkoutBtn.textContent;
+    function flashBtnMessage(text) {
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = text;
+      setTimeout(() => { checkoutBtn.textContent = originalBtnText; }, 3500);
+    }
+
+    if (cart.some(item => !item.productId)) {
+      flashBtnMessage('Recarga la página y vuelve a añadir los productos');
+      return;
+    }
+
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Comprobando pedido…';
+
+    const appliedCouponCode = getCoupon();
+    let validated;
+    try {
+      const res = await fetch('/.netlify/functions/validate-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(item => ({ productId: item.productId, qty: item.qty, customization: item.customization })),
+          couponCode: appliedCouponCode || ''
+        })
+      });
+      if (!res.ok) throw new Error('validation failed: ' + res.status);
+      validated = await res.json();
+    } catch (e) {
+      flashBtnMessage('No se pudo verificar el pedido, inténtalo de nuevo');
+      return;
+    }
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = originalBtnText;
+
     const DIVIDER = '━━━━━━━━━━━━━━━━━━━━';
-    let total = 0;
     let msg = `🧾 *NUEVO PEDIDO — KICK GENIUS*\n${DIVIDER}\n\n`;
 
     msg += `🛍️ *PRODUCTOS (${cart.length})*\n\n`;
     cart.forEach((item, idx) => {
-      const subtotal = item.price * item.qty;
-      total += subtotal;
+      const vItem = validated.items[idx];
+      const subtotal = Math.round(vItem.unitPrice * vItem.qty * 100) / 100;
       msg += `${idx + 1}. *${item.name}*\n`;
       msg += `   Talla: ${item.size} · Cantidad: ${item.qty} · ${subtotal}€\n`;
       if (item.customization) {
@@ -975,15 +1010,11 @@
       msg += `\n`;
     });
 
-    const appliedCouponCode = getCoupon();
-    const orderItemCount = cart.reduce((n,i) => n + i.qty, 0);
-    const orderDiscount = calcDiscount(total, appliedCouponCode, orderItemCount);
-    const orderFinalTotal = Math.round((total - orderDiscount) * 100) / 100;
     msg += `${DIVIDER}\n💰 *RESUMEN*\n`;
-    if (orderDiscount > 0) {
-      msg += `Subtotal: ${total}€\nCupón ${appliedCouponCode}: -${orderDiscount}€\n`;
+    if (validated.discount > 0) {
+      msg += `Subtotal: ${validated.subtotal}€\nCupón ${appliedCouponCode}: -${validated.discount}€\n`;
     }
-    msg += `*Total a pagar: ${orderFinalTotal}€*\n\n`;
+    msg += `*Total a pagar: ${validated.total}€*\n\n`;
 
     msg += `${DIVIDER}\n💳 *MÉTODO DE PAGO*\n${shipping.shipPayment}\n\n`;
 
