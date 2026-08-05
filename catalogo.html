@@ -40021,7 +40021,12 @@
   }
 
   // ===== Checkout via WhatsApp =====
+  let lastCheckoutAttempt = 0;
   document.getElementById('checkoutBtn').addEventListener('click', async () => {
+    const now = Date.now();
+    if (now - lastCheckoutAttempt < 5000) return;
+    lastCheckoutAttempt = now;
+
     const cart = getCart();
     if (cart.length === 0) return;
 
@@ -40174,12 +40179,16 @@
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // ===== Volver arriba =====
-  const backToTopBtn = document.getElementById('backToTopBtn');
-  window.addEventListener('scroll', () => {
-    backToTopBtn.classList.toggle('visible', window.scrollY > 500);
-  }, { passive: true });
-  backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // El botón vive más abajo en el HTML (tras este <script>), así que hay que
+  // esperar a que el DOM esté completo antes de buscarlo.
+  document.addEventListener('DOMContentLoaded', () => {
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    window.addEventListener('scroll', () => {
+      backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   });
 
 })();

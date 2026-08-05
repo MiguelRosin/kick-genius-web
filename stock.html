@@ -956,7 +956,12 @@
   }
 
   // ===== Checkout via WhatsApp =====
+  let lastCheckoutAttempt = 0;
   document.getElementById('checkoutBtn').addEventListener('click', async () => {
+    const now = Date.now();
+    if (now - lastCheckoutAttempt < 5000) return;
+    lastCheckoutAttempt = now;
+
     const cart = getCart();
     if (cart.length === 0) return;
 
