@@ -7,8 +7,7 @@
 const products = require('./products-data.json');
 
 const COUPONS = {
-  PROMO: { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-  ANGELAMOLINA10: { type: 'percent', value: 10, label: '10% de descuento' }
+  PROMO: { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 }
 };
 
 const MAX_QTY_PER_ITEM = 50;

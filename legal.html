@@ -766,8 +766,7 @@
 
   // ===== Cupón de descuento =====
   const COUPONS = {
-    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-    'ANGELAMOLINA10': { type: 'percent', value: 10, label: '10% de descuento' }
+    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 }
   };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
