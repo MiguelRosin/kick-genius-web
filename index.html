@@ -1060,6 +1060,15 @@
 <script>
 (function(){
 
+  // ===== Utilidades de escape (XSS / WhatsApp Markdown) =====
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function escapeWA(str){
+    return String(str).replace(/[*_~`]/g, '\\$&');
+  }
+
+
   // ===== Favoritos (localStorage, compartido entre páginas) =====
   const FAV_KEY = 'kickGeniusFavorites';
   function getFavorites(){ try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e){ return []; } }
@@ -1095,11 +1104,11 @@
     }
     favItemsEl.innerHTML = favs.map(f => `
       <div class="cart-item">
-        <img src="${f.img}" alt="${f.name}" loading="lazy">
+        <img src="${escapeHtml(f.img)}" alt="${escapeHtml(f.name)}" loading="lazy">
         <div class="cart-item-info">
           <div class="cart-item-top">
-            <span class="name">${f.name}</span>
-            <button class="remove-icon-btn" data-fav-remove="${f.id}" aria-label="Quitar de favoritos" title="Quitar">✕</button>
+            <span class="name">${escapeHtml(f.name)}</span>
+            <button class="remove-icon-btn" data-fav-remove="${escapeHtml(f.id)}" aria-label="Quitar de favoritos" title="Quitar">✕</button>
           </div>
           <div class="meta">${f.price}€${f.originalPrice ? ' · antes ' + f.originalPrice + '€' : ''}</div>
           <a class="fav-view-btn" href="catalogo.html?p=${encodeURIComponent(f.id)}">Ver producto →</a>
@@ -1236,21 +1245,21 @@
       total += subtotal;
       const tags = [];
       if (item.customization) {
-        if (item.customization.name) tags.push(`Nombre: ${item.customization.name}`);
-        if (item.customization.number) tags.push(`Nº ${item.customization.number}`);
-        if (item.customization.patch) tags.push(item.customization.patch);
+        if (item.customization.name) tags.push(`Nombre: ${escapeHtml(item.customization.name)}`);
+        if (item.customization.number) tags.push(`Nº ${escapeHtml(item.customization.number)}`);
+        if (item.customization.patch) tags.push(escapeHtml(item.customization.patch));
         if (item.customization.socks) tags.push('Medias');
       }
       const tagsHtml = tags.length ? `<div class="cart-tags">${tags.map(t => `<span class="cart-tag">${t}</span>`).join('')}</div>` : '';
       return `
         <div class="cart-item">
-          <img src="${item.img}" alt="${item.name}" loading="lazy">
+          <img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.name)}" loading="lazy">
           <div class="cart-item-info">
             <div class="cart-item-top">
-              <span class="name">${item.name}</span>
+              <span class="name">${escapeHtml(item.name)}</span>
               <button class="remove-icon-btn" data-action="remove" data-idx="${idx}" aria-label="Eliminar" title="Eliminar">✕</button>
             </div>
-            <div class="meta">Talla ${item.size} · ${item.price}€ / ud.</div>
+            <div class="meta">Talla ${escapeHtml(item.size)} · ${item.price}€ / ud.</div>
             ${tagsHtml}
             <div class="cart-item-bottom">
               <div class="qty-pill">
@@ -1383,8 +1392,8 @@
       msg += `   Talla: ${item.size} · Cantidad: ${item.qty} · ${subtotal}€\n`;
       if (item.customization) {
         const bits = [];
-        if (item.customization.name) bits.push(`Nombre: ${item.customization.name}`);
-        if (item.customization.number) bits.push(`Nº: ${item.customization.number}`);
+        if (item.customization.name) bits.push(`Nombre: ${escapeWA(item.customization.name)}`);
+        if (item.customization.number) bits.push(`Nº: ${escapeWA(item.customization.number)}`);
         if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
         if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
         if (bits.length) msg += `   ${bits.join(' · ')}\n`;
@@ -1405,16 +1414,29 @@
     msg += `${DIVIDER}\n💳 *MÉTODO DE PAGO*\n${shipping.shipPayment}\n\n`;
 
     msg += `${DIVIDER}\n📦 *DATOS DE ENVÍO*\n`;
-    msg += `${shipping.shipName}\n${shipping.shipAddress}\n${shipping.shipCity}, ${shipping.shipProvince}, ${shipping.shipCountry} — ${shipping.shipZip}\n`;
-    msg += `Tel: ${shipping.shipPhone} · Email: ${shipping.shipEmail}\n`;
+    msg += `${escapeWA(shipping.shipName)}\n${escapeWA(shipping.shipAddress)}\n${escapeWA(shipping.shipCity)}, ${escapeWA(shipping.shipProvince)}, ${escapeWA(shipping.shipCountry)} — ${escapeWA(shipping.shipZip)}\n`;
+    msg += `Tel: ${escapeWA(shipping.shipPhone)} · Email: ${escapeWA(shipping.shipEmail)}\n`;
     if (shipping.shipComments) {
-      msg += `\n💬 *Comentarios:* ${shipping.shipComments}\n`;
+      msg += `\n💬 *Comentarios:* ${escapeWA(shipping.shipComments)}\n`;
     }
     msg += `\n`;
 
     msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
+
+    saveCart([]);
+    try { localStorage.removeItem(SHIP_KEY); } catch(e){}
+    allShipFieldIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    cartItemsEl.innerHTML = `
+      <div class="cart-empty">
+        <span class="cart-empty-icon">✅</span>
+        <p>¡Pedido enviado! Confirma el mensaje en WhatsApp para completarlo.</p>
+        <a href="catalogo.html">Seguir comprando</a>
+      </div>`;
+    document.getElementById('cartSubtotalRow').style.display = 'none';
+    document.getElementById('cartDiscountRow').style.display = 'none';
+    cartTotalEl.textContent = '0€';
   });
 
   renderCart();
