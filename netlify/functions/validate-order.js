@@ -14,6 +14,28 @@ const COUPONS = {
 const MAX_QTY_PER_ITEM = 50;
 const MAX_ITEMS = 100;
 
+// Límite de peticiones por IP. Es en memoria (best-effort): se reinicia si la
+// función arranca en frío y no se comparte entre instancias en paralelo, así
+// que no es infalible — pero frena una ráfaga de un script desde una misma
+// conexión, que es el abuso real que nos preocupa aquí.
+const RATE_WINDOW_MS = 2 * 60 * 1000;
+const RATE_MAX_REQUESTS = 10;
+const requestLog = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const timestamps = (requestLog.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  timestamps.push(now);
+  requestLog.set(ip, timestamps);
+  // Limpieza ocasional para no acumular IPs viejas indefinidamente en memoria.
+  if (requestLog.size > 5000) {
+    for (const [key, times] of requestLog) {
+      if (times.every((t) => now - t >= RATE_WINDOW_MS)) requestLog.delete(key);
+    }
+  }
+  return timestamps.length > RATE_MAX_REQUESTS;
+}
+
 function round2(n) {
   return Math.round(n * 100) / 100;
 }
@@ -21,6 +43,15 @@ function round2(n) {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Método no permitido' }) };
+  }
+
+  const clientIp = (event.headers && (event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'])) || 'unknown';
+  if (isRateLimited(clientIp)) {
+    return {
+      statusCode: 429,
+      headers: { 'Retry-After': '120' },
+      body: JSON.stringify({ error: 'RATE_LIMITED', message: 'Demasiados intentos. Espera unos minutos y vuelve a intentarlo.' })
+    };
   }
 
   let body;
