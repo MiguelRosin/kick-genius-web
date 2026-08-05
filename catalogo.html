@@ -22031,6 +22031,20 @@
   function escapeWA(str){
     return String(str).replace(/[*_~`]/g, '\\$&');
   }
+  let storageWarningShown = false;
+  function safeSetItem(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e) {
+      if (!storageWarningShown) {
+        storageWarningShown = true;
+        alert('No se pudo guardar en el navegador (almacenamiento lleno). Prueba a borrar datos de otras webs en el navegador o inténtalo desde otro dispositivo.');
+        setTimeout(() => { storageWarningShown = false; }, 10000);
+      }
+      return false;
+    }
+  }
 
 
   // ===== Favoritos (localStorage, compartido entre páginas) =====
@@ -22041,12 +22055,12 @@
     const favs = getFavorites();
     const idx = favs.findIndex(f => f.id === product.id);
     if (idx > -1) favs.splice(idx, 1); else favs.unshift(product);
-    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    safeSetItem(FAV_KEY, JSON.stringify(favs));
     renderFavorites();
     return idx === -1;
   }
   function removeFavorite(id){
-    localStorage.setItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.id !== id)));
+    safeSetItem(FAV_KEY, JSON.stringify(getFavorites().filter(f => f.id !== id)));
     renderFavorites();
   }
   function renderFavorites(){
@@ -39836,7 +39850,7 @@
   // ===== Cart (localStorage) =====
   const CART_KEY = 'kickGeniusCart';
   function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e){ return []; } }
-  function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); renderCart(); }
+  function saveCart(cart){ safeSetItem(CART_KEY, JSON.stringify(cart)); renderCart(); }
 
   const cartItemsEl = document.getElementById('cartItems');
   const cartCountEl = document.getElementById('cartCount');
@@ -39850,7 +39864,7 @@
   };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
-  function saveCouponCode(code){ if (code) localStorage.setItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
+  function saveCouponCode(code){ if (code) safeSetItem(COUPON_KEY, code); else localStorage.removeItem(COUPON_KEY); }
   function calcDiscount(subtotal, code, itemCount){
     const coupon = code ? COUPONS[code] : null;
     if (!coupon || subtotal <= 0) return 0;
@@ -40016,7 +40030,7 @@
   function saveShipping(){
     const data = {};
     allShipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
-    localStorage.setItem(SHIP_KEY, JSON.stringify(data));
+    safeSetItem(SHIP_KEY, JSON.stringify(data));
     return data;
   }
 
@@ -40143,7 +40157,7 @@
     const currentlyDark = current === 'dark' || (!current && prefersDark);
     const next = currentlyDark ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('kickGeniusTheme', next); } catch(e){}
+    safeSetItem('kickGeniusTheme', next);
   });
   // ===== Banner promocional =====
   (function initPromoBanner(){
@@ -40164,7 +40178,7 @@
       e.stopPropagation();
       banner.classList.add('hidden');
       applyBannerHeight();
-      try { localStorage.setItem(BANNER_KEY, '1'); } catch(err){}
+      safeSetItem(BANNER_KEY, '1');
     });
   })();
 
