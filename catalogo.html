@@ -1013,6 +1013,9 @@
                   <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="premier-league" data-team="chelsea" data-label="Categoría: Fútbol · Camisetas · Premier League · Chelsea">
                     Chelsea
                   </button>
+                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="premier-league" data-team="coventry-city" data-label="Categoría: Fútbol · Camisetas · Premier League · Coventry City">
+                    Coventry City
+                  </button>
                   <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="premier-league" data-team="everton" data-label="Categoría: Fútbol · Camisetas · Premier League · Everton">
                     Everton
                   </button>
@@ -1136,9 +1139,6 @@
                   </button>
                   <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="europa" data-team="celtic" data-label="Categoría: Fútbol · Camisetas · Europa · Celtic">
                     Celtic
-                  </button>
-                  <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="europa" data-team="coventry-city" data-label="Categoría: Fútbol · Camisetas · Europa · Coventry City">
-                    Coventry City
                   </button>
                   <button class="tree-item tree-subsubsub" data-cat="futbol" data-league="europa" data-team="estrella-roja" data-label="Categoría: Fútbol · Camisetas · Europa · Estrella Roja">
                     Estrella Roja
@@ -1784,11 +1784,11 @@
                     Portugal
                   </button>
                 </div>
-                <button class="tree-item tree-subsub" data-cat="nino" data-league="europa" data-label="Categoría: Fútbol · Equipaciones Niño · Europa">
-                  <span>Europa</span><span class="tree-toggle">+</span>
+                <button class="tree-item tree-subsub" data-cat="nino" data-league="resto-del-mundo" data-label="Categoría: Fútbol · Equipaciones Niño · Resto del mundo">
+                  <span>Resto del mundo</span><span class="tree-toggle">+</span>
                 </button>
                 <div class="tree-children">
-                  <button class="tree-item tree-subsubsub" data-cat="nino" data-league="europa" data-team="al-nassr" data-label="Categoría: Fútbol · Equipaciones Niño · Europa · Al-Nassr">
+                  <button class="tree-item tree-subsubsub" data-cat="nino" data-league="resto-del-mundo" data-team="al-nassr" data-label="Categoría: Fútbol · Equipaciones Niño · Resto del mundo · Al-Nassr">
                     Al-Nassr
                   </button>
                 </div>
@@ -22339,14 +22339,14 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="europa" data-team="coventry-city" data-id="coventry-city-local-2627">
+      <article class="product-card" data-cat="futbol" data-league="premier-league" data-team="coventry-city" data-id="coventry-city-local-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
           <img class="img-a" loading="lazy" src="assets/productos/coventry-city-local-2627/frontal.jpg" alt="Camiseta Coventry City Local 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/coventry-city-local-2627/trasera.jpg" alt="Camiseta Coventry City Local 26/27 trasera">
         </div>
         <div class="product-info">
-          <span class="product-cat">Fútbol · Europa · Coventry City</span>
+          <span class="product-cat">Fútbol · Premier League · Coventry City</span>
           <span class="product-name">Camiseta Coventry City Local 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
@@ -23207,14 +23207,14 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="nino" data-league="europa" data-team="al-nassr" data-id="al-nassr-local-kids-2627">
+      <article class="product-card" data-cat="nino" data-league="resto-del-mundo" data-team="al-nassr" data-id="al-nassr-local-kids-2627">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
           <img class="img-a" loading="lazy" src="assets/productos/al-nassr-local-kids-2627/frontal.jpg" alt="Equipación Niño Al-Nassr Local 26/27 frontal">
           <img class="img-b" loading="lazy" src="assets/productos/al-nassr-local-kids-2627/trasera.jpg" alt="Equipación Niño Al-Nassr Local 26/27 trasera">
         </div>
         <div class="product-info">
-          <span class="product-cat">Fútbol · Europa · Al-Nassr</span>
+          <span class="product-cat">Fútbol · Resto del mundo · Al-Nassr</span>
           <span class="product-name">Equipación Niño Al-Nassr Local 26/27</span>
           <div class="price-row">
             <span class="price-original">32€</span>
@@ -37549,7 +37549,8 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Liga',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'sporting-lisboa-local-2627': {
@@ -41305,7 +41306,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'real-sociedad-local-kids-2627': {
@@ -41323,12 +41325,13 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Liga',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'coventry-city-local-2627': {
       name: 'Camiseta Coventry City Local 26/27',
-      cat: 'Fútbol · Europa · Coventry City',
+      cat: 'Fútbol · Premier League · Coventry City',
       price: 23,
       originalPrice: 32,
       sizes: ['S','M','L','XL','XXL','3XL','4XL'],
@@ -41784,7 +41787,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'juventus-local-kids-2627': {
@@ -41834,7 +41838,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'valladolid-away-2627': {
@@ -41850,7 +41855,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'real-sociedad-away-2627': {
@@ -41866,7 +41872,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'recreativo-huelva-local-2627': {
@@ -41882,7 +41889,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'osasuna-local-2627': {
@@ -41898,7 +41906,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'sporting-lisboa-away-2627': {
@@ -41929,7 +41938,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'ud-las-palmas-away-2627': {
@@ -41945,7 +41955,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'ud-las-palmas-alt-2627': {
@@ -41961,7 +41972,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'girona-local-2627': {
@@ -41996,7 +42008,8 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Premier League',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'monaco-local-kids-2627': {
@@ -42032,7 +42045,8 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Liga',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'deportivo-away-kids-2627': {
@@ -42050,7 +42064,8 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Liga',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'cadiz-away-2627': {
@@ -42066,7 +42081,8 @@
       customization: {
         nameNumberFee: 2,
         patchFee: 1.5,
-        leaguePatchLabel: 'Liga'
+        leaguePatchLabel: 'Liga',
+        noChampions: true
       }
     },
     'estrella-roja-local-2627': {
@@ -42099,7 +42115,8 @@
         nameNumberFee: 2,
         patchFee: 1.5,
         leaguePatchLabel: 'Liga',
-        socksFee: 5
+        socksFee: 5,
+        noChampions: true
       }
     },
     'malaga-away-shorts-2627': {
@@ -42136,7 +42153,7 @@
     },
     'al-nassr-local-kids-2627': {
       name: 'Equipación Niño Al-Nassr Local 26/27',
-      cat: 'Fútbol · Europa · Al-Nassr',
+      cat: 'Fútbol · Resto del mundo · Al-Nassr',
       price: 23,
       originalPrice: 32,
       sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
