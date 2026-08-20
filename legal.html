@@ -766,7 +766,8 @@
 
   // ===== Cupón de descuento =====
   const COUPONS = {
-    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 }
+    'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
+    'PEDIDOENTREGADO': { type: 'percent', value: 5, label: '5% de descuento' }
   };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
