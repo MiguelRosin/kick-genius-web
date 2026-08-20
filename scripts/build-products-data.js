@@ -12,6 +12,11 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const CATALOGO_PATH = path.join(ROOT, 'catalogo.html');
 const OUT_PATH = path.join(ROOT, 'netlify', 'functions', 'products-data.json');
+// Productos que no viven en el PRODUCTS de catalogo.html (p.ej. artículos de
+// stock.html, que tiene su propia ficha de tarjeta) pero que igualmente
+// necesita conocer validate-order.js para tasar el pedido. Se fusionan aquí
+// para que sobrevivan a cada regeneración de este archivo.
+const EXTRA_PATH = path.join(__dirname, 'stock-products.json');
 
 function extractProducts() {
   const html = fs.readFileSync(CATALOGO_PATH, 'utf8').replace(/\r\n/g, '\n');
@@ -42,6 +47,11 @@ function build() {
         : null
     };
   }
+  if (fs.existsSync(EXTRA_PATH)) {
+    const extra = JSON.parse(fs.readFileSync(EXTRA_PATH, 'utf8'));
+    Object.assign(out, extra);
+  }
+
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
   fs.writeFileSync(OUT_PATH, JSON.stringify(out), 'utf8');
   return Object.keys(out).length;
