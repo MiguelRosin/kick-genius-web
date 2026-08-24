@@ -285,18 +285,75 @@ function ensureFutbolTreeEntry(html, p) {
   return html.slice(0, insertOffset) + newLeaf + html.slice(insertOffset);
 }
 
-// Inserta (si hace falta) la entrada de árbol para un producto de fútbol o sneaker.
+// Inserta (si hace falta) la entrada de árbol para un producto de NBA.
+// Estructura de un solo nivel: NBA > Equipo (sin "modelo" intermedio).
+function ensureNbaTreeEntry(html, p) {
+  const teamDataAttrs = `data-cat="nba" data-team="${p.team}"`;
+  const teamFullLabel = `Categoría: NBA · ${p.teamLabel}`;
+  const buildLeaf = () =>
+    `              <button class="tree-item tree-sub" ${teamDataAttrs} data-label="${teamFullLabel}">\n` +
+    `                ${p.teamLabel}\n` +
+    `              </button>\n`;
+
+  const catBtnRe = /<button class="tree-item tree-cat" data-cat="nba" data-label="Categoría: NBA">/;
+  const catBtnMatch = catBtnRe.exec(html);
+
+  if (!catBtnMatch) {
+    const catBlock =
+      `          <div class="tree-group">\n` +
+      `            <button class="tree-item tree-cat" data-cat="nba" data-label="Categoría: NBA">\n` +
+      `              <span>🏀 NBA</span><span class="tree-toggle">+</span>\n` +
+      `            </button>\n` +
+      `            <div class="tree-children">\n` +
+      buildLeaf() +
+      `            </div>\n` +
+      `          </div>\n\n`;
+    const menuOpenIdx = html.indexOf('<div class="dropdown-menu tree-menu">');
+    if (menuOpenIdx === -1) throw new Error('No se encontró el contenedor del árbol de categorías.');
+    const menuBlock = findMatchingDivClose(html, menuOpenIdx);
+    const insertAt = lineStart(html, menuBlock.closeTagStart);
+    console.log(`  + Nueva categoría en el árbol: NBA (con ${p.teamLabel})`);
+    return html.slice(0, insertAt) + catBlock + html.slice(insertAt);
+  }
+
+  const catBlock = childrenBlockAfter(html, catBtnMatch.index);
+  const section = html.slice(catBlock.contentStart, catBlock.contentEnd);
+
+  const existingTeamRe = new RegExp(`data-team="${p.team}"`);
+  if (existingTeamRe.test(section)) return html; // ya existe
+
+  const itemRe = /[ \t]*<button class="tree-item tree-sub"[^>]*>\s*\n\s*([^\n]+?)\s*\n\s*<\/button>\n/g;
+  let m;
+  let insertOffset = lineStart(html, catBlock.contentEnd);
+  while ((m = itemRe.exec(section))) {
+    const existingLabel = m[1].trim();
+    if (esCompare(p.teamLabel, existingLabel) < 0) {
+      insertOffset = catBlock.contentStart + m.index;
+      break;
+    }
+  }
+  console.log(`  + Nuevo equipo en "NBA": ${p.teamLabel}`);
+  return html.slice(0, insertOffset) + buildLeaf() + html.slice(insertOffset);
+}
+
+// Inserta (si hace falta) la entrada de árbol para un producto de fútbol, sneaker o NBA.
 // Devuelve el html actualizado.
 function ensureTreeEntry(html, p) {
-  return p.type === 'sneaker' ? ensureSneakerTreeEntry(html, p) : ensureFutbolTreeEntry(html, p);
+  if (p.type === 'sneaker') return ensureSneakerTreeEntry(html, p);
+  if (p.type === 'nba') return ensureNbaTreeEntry(html, p);
+  return ensureFutbolTreeEntry(html, p);
 }
 
 function buildCardHtml(p) {
   const catAttr = p.type === 'sneaker'
     ? `data-cat="sneakers" data-brand="${p.brand}" data-model="${p.model}"`
+    : p.type === 'nba'
+    ? `data-cat="nba" data-team="${p.team}"`
     : `data-cat="${p.dataCat || 'futbol'}" data-league="${p.league}" data-team="${p.team}"`;
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
+    : p.type === 'nba'
+    ? `NBA · ${p.teamLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
   const badge = p.badge || `-${Math.round((1 - p.price / p.originalPrice) * 100)}%`;
@@ -332,7 +389,7 @@ function buildCardHtml(p) {
 
 function defaultSaveText(p, save) {
   const c = p.customization;
-  if (!c) return p.type === 'sneaker' ? 'oferta por tiempo limitado' : 'sin personalización';
+  if (!c) return p.type === 'sneaker' || p.type === 'nba' ? 'oferta por tiempo limitado' : 'sin personalización';
   if (c.socksFee) return 'incluye pantalón · personalizable';
   if (c.noPatch && c.noName) return 'personalizable';
   if (c.noPatch) return 'personalizable con nombre y número';
@@ -346,6 +403,8 @@ function jsStringLiteral(v) {
 function buildProductEntry(p) {
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
+    : p.type === 'nba'
+    ? `NBA · ${p.teamLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
   const sizeGroupsJs = p.sizeGroups
@@ -389,6 +448,10 @@ function validateProduct(p, errors) {
   if (p.type === 'sneaker') {
     for (const f of ['brand', 'brandLabel', 'model', 'modelLabel']) {
       if (!p[f]) errors.push(`falta el campo "${f}" (producto tipo sneaker)`);
+    }
+  } else if (p.type === 'nba') {
+    for (const f of ['team', 'teamLabel']) {
+      if (!p[f]) errors.push(`falta el campo "${f}" (producto tipo NBA)`);
     }
   } else {
     for (const f of ['league', 'leagueLabel', 'team', 'teamLabel']) {
