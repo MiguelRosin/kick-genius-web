@@ -162,49 +162,6 @@
   }
   .fav-heart:hover{transform:scale(1.12);}
   .fav-heart.active{background:var(--teal);color:var(--navy-deep);}
-  .quiz-launch-btn{
-    display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
-    background:linear-gradient(90deg,var(--teal),#7cf0d6);color:var(--navy-deep);
-    border:none;border-radius:100px;padding:12px 18px;font-weight:800;font-size:0.8rem;
-    letter-spacing:0.3px;cursor:pointer;text-transform:uppercase;
-    transition:transform .2s ease, box-shadow .2s ease;white-space:nowrap;
-  }
-  .quiz-launch-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,63,115,0.28);}
-  .quiz-overlay{
-    position:fixed;inset:0;background:rgba(var(--ink-rgb),0.55);backdrop-filter:blur(6px);
-    z-index:3500;display:none;align-items:center;justify-content:center;padding:24px;
-  }
-  .quiz-overlay.open{display:flex;}
-  .quiz-box{
-    background:var(--navy);border-radius:var(--radius);width:min(560px,100%);
-    max-height:min(88vh,720px);overflow-y:auto;position:relative;
-    box-shadow:0 30px 80px rgba(0,0,0,0.35);padding:36px 30px 30px;
-  }
-  .quiz-close{
-    position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;
-    background:rgba(var(--ink-rgb),0.08);color:var(--white);border:none;font-size:1.2rem;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;z-index:2;line-height:1;
-  }
-  .quiz-close:hover{background:rgba(var(--ink-rgb),0.16);}
-  .quiz-progress{display:flex;gap:6px;margin-bottom:22px;}
-  .quiz-progress span{flex:1;height:4px;border-radius:4px;background:rgba(var(--ink-rgb),0.12);}
-  .quiz-progress span.done{background:var(--teal);}
-  .quiz-box h3{font-family:'Anton',sans-serif;font-size:1.3rem;letter-spacing:0.5px;margin-bottom:6px;}
-  .quiz-sub{font-size:0.85rem;color:rgba(var(--ink-rgb),0.55);margin-bottom:18px;}
-  .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .quiz-option{
-    background:rgba(var(--ink-rgb),0.05);border:1px solid var(--line);border-radius:14px;
-    padding:16px 14px;text-align:left;cursor:pointer;font-weight:700;font-size:0.9rem;color:var(--white);
-    transition:border-color .2s ease, transform .2s ease;
-  }
-  .quiz-option:hover{border-color:var(--teal);transform:translateY(-2px);}
-  .quiz-option .emoji{display:block;font-size:1.4rem;margin-bottom:6px;}
-  .quiz-back{
-    margin-top:20px;background:none;border:none;color:rgba(var(--ink-rgb),0.5);
-    font-size:0.8rem;font-weight:700;cursor:pointer;
-  }
-  .quiz-back:hover{color:var(--white);}
-  @media (max-width:480px){ .quiz-options{grid-template-columns:1fr;} }
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
   .burger span{width:24px;height:2px;background:var(--white);}
   .theme-toggle{
@@ -854,7 +811,6 @@
         <input type="text" id="searchInput" placeholder="Buscar por producto, equipo, marca..." aria-label="Buscar productos">
         <button class="search-clear" id="searchClear" aria-label="Borrar búsqueda">✕</button>
       </div>
-      <button type="button" class="quiz-launch-btn" id="quizLaunchBtn">🎯 Encuentra tu camiseta</button>
       <div class="dropdown tree-dropdown" id="filterDropdown">
         <button class="dropdown-toggle" type="button">
           <span id="filterLabel">Categoría: Todos</span><span class="chevron">▾</span>
@@ -25089,14 +25045,6 @@
   </div>
 </div>
 
-<div class="quiz-overlay" id="quizOverlay">
-  <div class="quiz-box">
-    <button type="button" class="quiz-close" id="quizClose" aria-label="Cerrar">&times;</button>
-    <div class="quiz-progress" id="quizProgress"></div>
-    <div id="quizBody"></div>
-  </div>
-</div>
-
 <!-- CART -->
 <div class="overlay" id="overlay"></div>
 <aside class="cart-drawer" id="favDrawer">
@@ -25539,115 +25487,6 @@
 
   restoreFilterFromUrl();
   applyFilters();
-
-  // ===== Quiz "Encuentra tu camiseta" =====
-  const QUIZ_TYPES = [
-    { label:'Actuales', emoji:'⚡', cat:'futbol' },
-    { label:'Retro', emoji:'🕰️', cat:'retro' },
-    { label:'Equipación Niño', emoji:'🧒', cat:'nino' },
-    { label:'Chándal', emoji:'🏃', cat:'chandal' }
-  ];
-  const QUIZ_LEAGUES = [
-    { label:'La Liga', emoji:'🇪🇸', league:'liga-espanola' },
-    { label:'Premier League', emoji:'🏴', league:'premier-league' },
-    { label:'Serie A', emoji:'🇮🇹', league:'serie-a' },
-    { label:'Bundesliga', emoji:'🇩🇪', league:'bundesliga' },
-    { label:'Ligue 1', emoji:'🇫🇷', league:'ligue-1' },
-    { label:'Selecciones', emoji:'🌍', league:'selecciones' },
-    { label:'Sorpréndeme', emoji:'🎲', league:'all' }
-  ];
-  const QUIZ_DECADES = [
-    { label:'80s y antes', emoji:'📼', min:0, max:1989 },
-    { label:'90s', emoji:'📻', min:1990, max:1999 },
-    { label:'2000s', emoji:'💿', min:2000, max:2009 },
-    { label:'2010 en adelante', emoji:'📱', min:2010, max:2099 }
-  ];
-  const quizOverlay = document.getElementById('quizOverlay');
-  const quizBody = document.getElementById('quizBody');
-  const quizProgress = document.getElementById('quizProgress');
-  let quizStage = 'type';
-  let quizChoice = { cat: null, league: null, decadeMin: 0, decadeMax: 9999 };
-
-  function quizTotalSteps(){ return quizChoice.cat === 'retro' ? 3 : 2; }
-  function quizStepNumber(){ return quizStage === 'type' ? 1 : quizStage === 'league' ? 2 : 3; }
-  function quizRenderProgress(){
-    const total = quizTotalSteps();
-    const current = quizStepNumber();
-    quizProgress.innerHTML = Array.from({ length: total }, (_, i) => `<span class="${i < current ? 'done' : ''}"></span>`).join('');
-  }
-  function quizOptionsHtml(list){
-    return list.map((o, i) => `<button type="button" class="quiz-option" data-i="${i}"><span class="emoji">${o.emoji}</span>${o.label}</button>`).join('');
-  }
-  function renderQuizStep(){
-    quizRenderProgress();
-    if (quizStage === 'type') {
-      quizBody.innerHTML = `<h3>¿Qué buscas?</h3><p class="quiz-sub">Paso 1 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_TYPES)}</div>`;
-      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-          quizChoice.cat = QUIZ_TYPES[+btn.dataset.i].cat;
-          quizStage = 'league';
-          renderQuizStep();
-        });
-      });
-    } else if (quizStage === 'league') {
-      quizBody.innerHTML = `<h3>¿Liga o selección?</h3><p class="quiz-sub">Paso 2 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_LEAGUES)}</div><button type="button" class="quiz-back" id="quizBack">← Atrás</button>`;
-      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-          quizChoice.league = QUIZ_LEAGUES[+btn.dataset.i].league;
-          if (quizChoice.cat === 'retro') { quizStage = 'decade'; renderQuizStep(); }
-          else { quizFinish(); }
-        });
-      });
-      document.getElementById('quizBack').addEventListener('click', () => { quizStage = 'type'; renderQuizStep(); });
-    } else if (quizStage === 'decade') {
-      quizBody.innerHTML = `<h3>¿De qué época?</h3><p class="quiz-sub">Paso 3 de ${quizTotalSteps()}</p><div class="quiz-options">${quizOptionsHtml(QUIZ_DECADES)}</div><button type="button" class="quiz-back" id="quizBack">← Atrás</button>`;
-      quizBody.querySelectorAll('.quiz-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const d = QUIZ_DECADES[+btn.dataset.i];
-          quizChoice.decadeMin = d.min; quizChoice.decadeMax = d.max;
-          quizFinish();
-        });
-      });
-      document.getElementById('quizBack').addEventListener('click', () => { quizStage = 'league'; renderQuizStep(); });
-    }
-  }
-  function quizFinish(){
-    currentCategoryFilter = {
-      cat: quizChoice.cat, brand: 'all', model: 'all',
-      league: quizChoice.league === 'all' ? 'all' : quizChoice.league,
-      team: 'all'
-    };
-    treeItems.forEach(i => i.classList.remove('active'));
-    const typeLabel = QUIZ_TYPES.find(t => t.cat === quizChoice.cat)?.label || '';
-    const leagueLabel = quizChoice.league === 'all' ? '' : (QUIZ_LEAGUES.find(l => l.league === quizChoice.league)?.label || '');
-    filterLabel.textContent = 'Categoría: Fútbol' + (typeLabel ? ' · ' + typeLabel : '') + (leagueLabel ? ' · ' + leagueLabel : '');
-    applyFilters();
-    if (quizChoice.cat === 'retro') {
-      cards.forEach(card => {
-        if (card.style.display === 'none') return;
-        const name = card.querySelector('.product-name')?.textContent || '';
-        const m = name.match(/(19|20)\d{2}/);
-        const year = m ? parseInt(m[0], 10) : null;
-        if (year !== null && (year < quizChoice.decadeMin || year > quizChoice.decadeMax)) card.style.display = 'none';
-      });
-      const anyVisible = Array.from(cards).some(c => c.style.display !== 'none');
-      emptyState.classList.toggle('visible', !anyVisible);
-      loadMoreWrap.classList.remove('visible');
-    }
-    closeQuiz();
-    document.querySelector('.catalog-toolbar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-  function openQuiz(){
-    quizStage = 'type';
-    quizChoice = { cat: null, league: null, decadeMin: 0, decadeMax: 9999 };
-    renderQuizStep();
-    quizOverlay.classList.add('open');
-  }
-  function closeQuiz(){ quizOverlay.classList.remove('open'); }
-  document.getElementById('quizLaunchBtn').addEventListener('click', openQuiz);
-  document.getElementById('quizClose').addEventListener('click', closeQuiz);
-  quizOverlay.addEventListener('click', (e) => { if (e.target === quizOverlay) closeQuiz(); });
-  if (new URLSearchParams(location.search).get('quiz') === '1') openQuiz();
 
   // ===== Product catalog data (ficha completa) =====
   const PRODUCTS = {
@@ -45870,22 +45709,13 @@
     window.scrollTo(0, wasFavOpen ? favScrollY : cartScrollY);
   });
 
-  // ===== Datos de envío (persistidos entre visitas) =====
-  const SHIP_KEY = 'kickGeniusShipping';
+  // ===== Datos de envío (solo en memoria: no se guardan si no se completa el pedido) =====
   const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail','shipPayment'];
   const allShipFieldIds = [...shipFieldIds, 'shipComments'];
 
-  (function loadShipping(){
-    try {
-      const saved = JSON.parse(localStorage.getItem(SHIP_KEY)) || {};
-      allShipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
-    } catch(e){}
-  })();
-
-  function saveShipping(){
+  function readShipping(){
     const data = {};
     allShipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
-    safeSetItem(SHIP_KEY, JSON.stringify(data));
     return data;
   }
 
@@ -45899,7 +45729,7 @@
     const cart = getCart();
     if (cart.length === 0) return;
 
-    const shipping = saveShipping();
+    const shipping = readShipping();
     const shippingError = document.getElementById('shippingError');
     const missing = shipFieldIds.filter(id => !shipping[id]);
     document.querySelectorAll('.shipping-input').forEach(el => el.classList.remove('invalid'));
@@ -45989,7 +45819,6 @@
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
 
     saveCart([]);
-    try { localStorage.removeItem(SHIP_KEY); } catch(e){}
     allShipFieldIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     cartItemsEl.innerHTML = `
       <div class="cart-empty">

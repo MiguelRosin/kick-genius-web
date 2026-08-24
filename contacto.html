@@ -908,22 +908,13 @@
     window.scrollTo(0, wasFavOpen ? favScrollY : cartScrollY);
   });
 
-  // ===== Datos de envío (persistidos entre visitas) =====
-  const SHIP_KEY = 'kickGeniusShipping';
+  // ===== Datos de envío (solo en memoria: no se guardan si no se completa el pedido) =====
   const shipFieldIds = ['shipName','shipAddress','shipCity','shipProvince','shipCountry','shipZip','shipPhone','shipEmail','shipPayment'];
   const allShipFieldIds = [...shipFieldIds, 'shipComments'];
 
-  (function loadShipping(){
-    try {
-      const saved = JSON.parse(localStorage.getItem(SHIP_KEY)) || {};
-      allShipFieldIds.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
-    } catch(e){}
-  })();
-
-  function saveShipping(){
+  function readShipping(){
     const data = {};
     allShipFieldIds.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
-    safeSetItem(SHIP_KEY, JSON.stringify(data));
     return data;
   }
 
@@ -937,7 +928,7 @@
     const cart = getCart();
     if (cart.length === 0) return;
 
-    const shipping = saveShipping();
+    const shipping = readShipping();
     const shippingError = document.getElementById('shippingError');
     const missing = shipFieldIds.filter(id => !shipping[id]);
     document.querySelectorAll('.shipping-input').forEach(el => el.classList.remove('invalid'));
@@ -1027,7 +1018,6 @@
     window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
 
     saveCart([]);
-    try { localStorage.removeItem(SHIP_KEY); } catch(e){}
     allShipFieldIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     cartItemsEl.innerHTML = `
       <div class="cart-empty">
