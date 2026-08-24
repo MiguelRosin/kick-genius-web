@@ -25372,6 +25372,21 @@
     return haystack.includes(query);
   }
 
+  function syncFilterUrl() {
+    const { cat, brand, model, league, team } = currentCategoryFilter;
+    const params = new URLSearchParams();
+    if (cat !== 'all') params.set('cat', cat);
+    if (brand !== 'all') params.set('brand', brand);
+    if (model !== 'all') params.set('model', model);
+    if (league !== 'all') params.set('league', league);
+    if (team !== 'all') params.set('team', team);
+    const q = searchInput.value.trim();
+    if (q) params.set('q', q);
+    const qs = params.toString();
+    const newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+    history.replaceState(null, '', newUrl);
+  }
+
   function applyFilters(resetPage = true) {
     if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
@@ -25398,6 +25413,7 @@
     emptyState.classList.toggle('visible', matchedCount === 0);
     loadMoreWrap.classList.toggle('visible', shownCount < matchedCount);
     renderActiveFilterChips();
+    syncFilterUrl();
   }
 
   function renderActiveFilterChips() {
@@ -25476,6 +25492,52 @@
     searchInput.focus();
   });
 
+  function expandTreeAncestors(item) {
+    let el = item.parentElement;
+    while (el && el !== document.body) {
+      if (el.classList.contains('tree-children')) {
+        el.classList.add('open');
+        const parentBtn = el.previousElementSibling;
+        const toggleIcon = parentBtn?.querySelector('.tree-toggle');
+        if (toggleIcon) toggleIcon.classList.add('open');
+      }
+      el = el.parentElement;
+    }
+  }
+
+  function restoreFilterFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q') || '';
+    const wantCat = params.get('cat') || 'all';
+    const wantBrand = params.get('brand') || 'all';
+    const wantModel = params.get('model') || 'all';
+    const wantLeague = params.get('league') || 'all';
+    const wantTeam = params.get('team') || 'all';
+    if (q) searchInput.value = q;
+    if (wantCat === 'all' && wantBrand === 'all' && wantModel === 'all' && wantLeague === 'all' && wantTeam === 'all') {
+      return false;
+    }
+    const match = Array.from(treeItems).find(item =>
+      (item.dataset.cat || 'all') === wantCat &&
+      (item.dataset.brand || 'all') === wantBrand &&
+      (item.dataset.model || 'all') === wantModel &&
+      (item.dataset.league || 'all') === wantLeague &&
+      (item.dataset.team || 'all') === wantTeam
+    );
+    if (match) {
+      treeItems.forEach(i => i.classList.remove('active'));
+      match.classList.add('active');
+      filterLabel.textContent = match.dataset.label;
+      expandTreeAncestors(match);
+    } else {
+      const parts = [wantCat, wantLeague, wantTeam, wantBrand, wantModel].filter(p => p !== 'all').map(s => s.replace(/-/g, ' '));
+      filterLabel.textContent = parts.length ? 'Categoría: ' + parts.join(' · ') : 'Categoría: Todos';
+    }
+    currentCategoryFilter = { cat: wantCat, brand: wantBrand, model: wantModel, league: wantLeague, team: wantTeam };
+    return true;
+  }
+
+  restoreFilterFromUrl();
   applyFilters();
 
   // ===== Quiz "Encuentra tu camiseta" =====
