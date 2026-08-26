@@ -283,13 +283,28 @@
   .dropdown-item.active{background:var(--teal);color:var(--navy-deep);}
 
   /* ===== Árbol de categorías (filtro único y claro) ===== */
-  .tree-menu{min-width:270px;max-height:420px;padding:10px;}
+  .tree-menu{min-width:300px;max-height:min(70vh,560px);padding:10px;}
+  .tree-search-wrap{
+    position:sticky;top:-10px;margin:-10px -10px 8px;padding:10px 10px 8px;
+    background:var(--navy);z-index:3;border-bottom:1px solid var(--line);
+  }
+  .tree-search-input{
+    width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--navy-soft);color:var(--white);font-family:inherit;
+    font-size:0.82rem;font-weight:600;outline:none;transition:border-color .2s ease;
+  }
+  .tree-search-input:focus{border-color:var(--teal);}
+  .tree-search-input::placeholder{color:rgba(var(--ink-rgb),0.4);font-weight:600;}
+  .tree-no-results{display:none;padding:20px 12px;text-align:center;font-size:0.82rem;color:rgba(var(--ink-rgb),0.5);}
+  .tree-no-results.visible{display:block;}
+  .search-hidden{display:none !important;}
   .tree-item{
     display:block;width:100%;text-align:left;border:none;background:transparent;
     cursor:pointer;transition:background .2s ease, color .2s ease;border-radius:10px;
   }
   .tree-item:hover{background:rgba(var(--ink-rgb),0.06);}
   .tree-item.active{background:var(--teal);color:var(--navy-deep);}
+  .tree-item.in-active-path{background:rgba(27,63,115,0.10);}
   .tree-all{
     padding:11px 12px;font-size:0.88rem;font-weight:800;margin-bottom:6px;
     border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;
@@ -816,6 +831,10 @@
           <span id="filterLabel">Categoría: Todos</span><span class="chevron">▾</span>
         </button>
         <div class="dropdown-menu tree-menu">
+          <div class="tree-search-wrap">
+            <input type="text" class="tree-search-input" id="treeSearchInput" placeholder="Buscar equipo o liga..." autocomplete="off" aria-label="Buscar equipo o liga en el árbol de categorías">
+          </div>
+          <p class="tree-no-results" id="treeNoResults">Sin resultados</p>
           <button class="tree-item tree-all active" data-label="Categoría: Todos">
             Todos los productos
           </button>
@@ -27368,13 +27387,80 @@
   const PAGE_SIZE = 24;
   let visibleLimit = PAGE_SIZE;
 
+  // Iconos por liga: mejora el escaneo visual del árbol, que ya tiene cientos de equipos.
+  const LEAGUE_FLAGS = {
+    'liga-espanola': '🇪🇸', 'premier-league': '🏴', 'serie-a': '🇮🇹', 'bundesliga': '🇩🇪',
+    'ligue-1': '🇫🇷', 'liga-portugal': '🇵🇹', 'selecciones': '🌍', 'europa': '🗺️',
+    'mls': '🇺🇸', 'resto-del-mundo': '🌐'
+  };
+  document.querySelectorAll('.tree-subsub[data-league]').forEach(btn => {
+    const label = btn.querySelector('span');
+    const flag = LEAGUE_FLAGS[btn.dataset.league];
+    if (label && flag && !label.dataset.flagged) {
+      label.textContent = `${flag} ${label.textContent}`;
+      label.dataset.flagged = '1';
+    }
+  });
+
   const toggle = filterDropdown.querySelector('.dropdown-toggle');
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
     filterDropdown.classList.toggle('open');
   });
-  document.addEventListener('click', () => filterDropdown.classList.remove('open'));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') filterDropdown.classList.remove('open'); });
+  function closeTreeDropdown() {
+    filterDropdown.classList.remove('open');
+    if (treeSearchInput.value) {
+      treeSearchInput.value = '';
+      applyTreeSearch('');
+    }
+  }
+  document.addEventListener('click', closeTreeDropdown);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTreeDropdown(); });
+
+  // ===== Buscador dentro del árbol de categorías =====
+  const treeSearchInput = document.getElementById('treeSearchInput');
+  const treeNoResults = document.getElementById('treeNoResults');
+  const treeAllBtn = document.querySelector('.tree-all');
+  const DIACRITICS_RE = /[̀-ͯ]/g;
+  function normalizeText(s) {
+    return s.normalize('NFD').replace(DIACRITICS_RE, '').toLowerCase().trim();
+  }
+  function applyTreeSearch(rawQuery) {
+    const query = normalizeText(rawQuery);
+    treeAllBtn.classList.toggle('search-hidden', query.length > 0);
+    if (!query) {
+      treeItems.forEach(item => item.classList.remove('search-hidden'));
+      document.querySelectorAll('.tree-group').forEach(g => g.classList.remove('search-hidden'));
+      document.querySelectorAll('.tree-children').forEach(c => c.classList.remove('search-hidden'));
+      treeNoResults.classList.remove('visible');
+      return;
+    }
+    let anyVisible = false;
+    treeItems.forEach(item => {
+      if (item === treeAllBtn) return;
+      const selfMatch = normalizeText(item.textContent).includes(query);
+      const childrenDiv = item.nextElementSibling?.classList.contains('tree-children') ? item.nextElementSibling : null;
+      const descendantMatch = childrenDiv
+        ? Array.from(childrenDiv.querySelectorAll('.tree-item')).some(d => normalizeText(d.textContent).includes(query))
+        : false;
+      const show = selfMatch || descendantMatch;
+      item.classList.toggle('search-hidden', !show);
+      if (childrenDiv) {
+        childrenDiv.classList.toggle('search-hidden', !show);
+        if (show) {
+          childrenDiv.classList.add('open');
+          item.querySelector('.tree-toggle')?.classList.add('open');
+        }
+      }
+      if (show) anyVisible = true;
+    });
+    document.querySelectorAll('.tree-group').forEach(group => {
+      group.classList.toggle('search-hidden', !group.querySelector('.tree-item:not(.search-hidden)'));
+    });
+    treeNoResults.classList.toggle('visible', !anyVisible);
+  }
+  treeSearchInput.addEventListener('input', () => applyTreeSearch(treeSearchInput.value));
+  treeSearchInput.addEventListener('click', (e) => e.stopPropagation());
 
   document.querySelectorAll('.tree-toggle').forEach(toggleIcon => {
     toggleIcon.addEventListener('click', (e) => {
@@ -27496,10 +27582,11 @@
 
   treeItems.forEach(item => {
     item.addEventListener('click', () => {
-      treeItems.forEach(i => i.classList.remove('active'));
+      treeItems.forEach(i => i.classList.remove('active', 'in-active-path'));
       item.classList.add('active');
+      expandTreeAncestors(item);
       filterLabel.textContent = item.dataset.label;
-      filterDropdown.classList.remove('open');
+      closeTreeDropdown();
       currentCategoryFilter = {
         cat: item.dataset.cat || 'all',
         brand: item.dataset.brand || 'all',
@@ -27526,6 +27613,7 @@
         const parentBtn = el.previousElementSibling;
         const toggleIcon = parentBtn?.querySelector('.tree-toggle');
         if (toggleIcon) toggleIcon.classList.add('open');
+        if (parentBtn) parentBtn.classList.add('in-active-path');
       }
       el = el.parentElement;
     }
@@ -27551,7 +27639,7 @@
       (item.dataset.team || 'all') === wantTeam
     );
     if (match) {
-      treeItems.forEach(i => i.classList.remove('active'));
+      treeItems.forEach(i => i.classList.remove('active', 'in-active-path'));
       match.classList.add('active');
       filterLabel.textContent = match.dataset.label;
       expandTreeAncestors(match);
