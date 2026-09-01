@@ -8,7 +8,8 @@ const products = require('./products-data.json');
 
 const COUPONS = {
   PROMO: { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' }
+  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' },
+  'GANADOR-AGOSTO26-7KQP': { type: 'percent', value: 100, maxDiscount: 25, label: 'Camiseta gratis (hasta 25€)' }
 };
 
 const MAX_QTY_PER_ITEM = 50;
@@ -111,7 +112,8 @@ exports.handler = async (event) => {
       couponValid = true;
       couponLabel = coupon.label;
       if (!coupon.minQty || itemCount >= coupon.minQty) {
-        const raw = coupon.type === 'percent' ? (subtotal * coupon.value) / 100 : coupon.value;
+        let raw = coupon.type === 'percent' ? (subtotal * coupon.value) / 100 : coupon.value;
+        if (coupon.maxDiscount) raw = Math.min(raw, coupon.maxDiscount);
         discount = Math.min(round2(raw), subtotal);
       }
     }

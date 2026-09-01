@@ -53717,7 +53717,8 @@
   // ===== Cupón de descuento =====
   const COUPONS = {
     'PROMO': { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-    'PEDIDOENTREGADO': { type: 'percent', value: 5, label: '5% de descuento' }
+    'PEDIDOENTREGADO': { type: 'percent', value: 5, label: '5% de descuento' },
+    'GANADOR-AGOSTO26-7KQP': { type: 'percent', value: 100, maxDiscount: 25, label: 'Camiseta gratis (hasta 25€)' }
   };
   const COUPON_KEY = 'kickGeniusCoupon';
   function getCoupon(){ try { return localStorage.getItem(COUPON_KEY) || null; } catch(e){ return null; } }
@@ -53726,7 +53727,8 @@
     const coupon = code ? COUPONS[code] : null;
     if (!coupon || subtotal <= 0) return 0;
     if (coupon.minQty && itemCount < coupon.minQty) return 0;
-    const raw = coupon.type === 'percent' ? subtotal * coupon.value / 100 : coupon.value;
+    let raw = coupon.type === 'percent' ? subtotal * coupon.value / 100 : coupon.value;
+    if (coupon.maxDiscount) raw = Math.min(raw, coupon.maxDiscount);
     return Math.min(Math.round(raw * 100) / 100, subtotal);
   }
   const couponInput = document.getElementById('couponInput');
