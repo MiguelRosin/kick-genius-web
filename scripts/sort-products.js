@@ -2,7 +2,8 @@
 // Regla (confirmada por el usuario):
 //   - Solo se reordena DENTRO de cada equipo: cada equipo conserva los
 //     "huecos" que ocupa ahora en el grid; solo cambia el orden de sus
-//     variantes entre sí.
+//     variantes entre sí. Funciona igual si esos huecos están dispersos
+//     por el grid (p.ej. tras añadir una tarjeta nueva al final).
 //   - Categorías afectadas: futbol (Camisetas), nino (Equipaciones Niño)
 //     y retro (Camisetas Retro).
 //   - Orden de variantes: local, visitante, alternativa, cuarta,
@@ -11,16 +12,11 @@
 //   - En retro, primero por temporada (más antigua primero) y dentro de
 //     cada temporada por ese mismo orden de variantes.
 //
-// Uso:  node scripts/sort-products.js [--write]
+// Se usa como módulo (sortProductGrid) desde scripts/add-products.js para
+// que las camisetas nuevas queden ya bien ordenadas al insertarlas, y
+// también como CLI para reordenar el catálogo entero a mano:
+//   node scripts/sort-products.js [--write]
 // Sin --write hace una simulación y muestra el resumen.
-
-const fs = require('fs');
-const path = require('path');
-
-const ROOT = path.resolve(__dirname, '..');
-const CATALOGO = path.join(ROOT, 'catalogo.html');
-const BACKUP_DIR = path.join(__dirname, '.backups');
-const WRITE = process.argv.includes('--write');
 
 const CATS = new Set(['futbol', 'nino', 'retro']);
 
@@ -67,8 +63,12 @@ const RANK_LABEL = [
   'girl local', 'girl visitante', 'girl alternativa'
 ];
 
-function main() {
-  let html = fs.readFileSync(CATALOGO, 'utf8').replace(/\r\n/g, '\n');
+// Reordena el grid de producto dentro de `html` (string completo de
+// catalogo.html) y devuelve { html, blocksTotal, groupsCount, changes,
+// noSeason }. No escribe nada a disco. Lanza si algo no cuadra, sin tocar
+// el html de entrada.
+function sortProductGrid(html) {
+  html = html.replace(/\r\n/g, '\n');
 
   const gridOpen = html.indexOf('<div class="product-grid" id="productGrid">');
   if (gridOpen === -1) throw new Error('No se encontró el grid de productos.');
@@ -96,7 +96,7 @@ function main() {
   }
   const tailSep = region.slice(cursor);
   const rebuilt = seps.map((s, i) => s + blocks[i]).join('') + tailSep;
-  if (rebuilt !== region) throw new Error('La comprobación de ida y vuelta falló; abortado sin tocar nada.');
+  if (rebuilt !== region) throw new Error('La comprobación de ida y vuelta falló al reordenar; abortado sin tocar nada.');
 
   const attr = (b, name) => (b.match(new RegExp(name + '="([^"]*)"')) || [])[1] || '';
   const meta = blocks.map((b, i) => {
@@ -158,20 +158,34 @@ function main() {
   const newHtml = prefix + newRegion + suffix;
 
   // Validaciones de seguridad.
-  if (newBlocks.length !== blocks.length) throw new Error('Cambió el número de tarjetas.');
+  if (newBlocks.length !== blocks.length) throw new Error('Cambió el número de tarjetas al reordenar.');
   const idsBefore = meta.map(m => m.id).slice().sort();
   const idsAfter = newBlocks.map(b => (b.match(/data-id="([^"]*)"/) || [])[1]).sort();
-  if (JSON.stringify(idsBefore) !== JSON.stringify(idsAfter)) throw new Error('Se perdió o duplicó algún data-id.');
-  if (newHtml.length !== html.length) throw new Error('El tamaño del archivo cambió (no debería): ' + (newHtml.length - html.length));
+  if (JSON.stringify(idsBefore) !== JSON.stringify(idsAfter)) throw new Error('Se perdió o duplicó algún data-id al reordenar.');
+  if (newHtml.length !== html.length) throw new Error('El tamaño del archivo cambió al reordenar (no debería): ' + (newHtml.length - html.length));
 
-  console.log(`Tarjetas totales: ${blocks.length}`);
-  console.log(`Grupos equipo/categoría afectados: ${groups.size}`);
-  console.log(`Grupos con cambios de orden: ${changes.length}`);
-  if (noSeason.length) {
-    console.log(`\nRetro sin temporada legible (se colocan al final de su bloque): ${[...new Set(noSeason)].join(', ')}`);
+  return { html: newHtml, blocksTotal: blocks.length, groupsCount: groups.size, changes, noSeason: [...new Set(noSeason)] };
+}
+
+function runCli() {
+  const fs = require('fs');
+  const path = require('path');
+  const ROOT = path.resolve(__dirname, '..');
+  const CATALOGO = path.join(ROOT, 'catalogo.html');
+  const BACKUP_DIR = path.join(__dirname, '.backups');
+  const WRITE = process.argv.includes('--write');
+
+  const html = fs.readFileSync(CATALOGO, 'utf8');
+  const result = sortProductGrid(html);
+
+  console.log(`Tarjetas totales: ${result.blocksTotal}`);
+  console.log(`Grupos equipo/categoría afectados: ${result.groupsCount}`);
+  console.log(`Grupos con cambios de orden: ${result.changes.length}`);
+  if (result.noSeason.length) {
+    console.log(`\nRetro sin temporada legible (se colocan al final de su bloque): ${result.noSeason.join(', ')}`);
   }
   console.log('\n--- Cambios (primeros 40) ---');
-  for (const c of changes.slice(0, 40)) {
+  for (const c of result.changes.slice(0, 40)) {
     console.log(`\n[${c.key}]`);
     console.log('  antes:  ' + c.before.join(', '));
     console.log('  ahora:  ' + c.after.join(' | '));
@@ -185,8 +199,10 @@ function main() {
   fs.mkdirSync(BACKUP_DIR, { recursive: true });
   const backup = path.join(BACKUP_DIR, `catalogo.sort.${Date.now()}.html`);
   fs.writeFileSync(backup, html, 'utf8');
-  fs.writeFileSync(CATALOGO, newHtml, 'utf8');
+  fs.writeFileSync(CATALOGO, result.html, 'utf8');
   console.log(`\n✔ Guardado. Copia de seguridad: ${path.relative(ROOT, backup)}`);
 }
 
-main();
+module.exports = { sortProductGrid, kitRank, seasonYear };
+
+if (require.main === module) runCli();

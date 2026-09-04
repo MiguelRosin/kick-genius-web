@@ -8,8 +8,7 @@ const products = require('./products-data.json');
 
 const COUPONS = {
   PROMO: { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' },
-  'GANADOR-AGOSTO26-7KQP': { type: 'percent', value: 100, maxDiscount: 25, label: 'Camiseta gratis (hasta 25€)' }
+  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' }
 };
 
 const MAX_QTY_PER_ITEM = 50;

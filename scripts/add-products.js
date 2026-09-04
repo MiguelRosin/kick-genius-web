@@ -562,6 +562,12 @@ async function main() {
     return;
   }
 
+  // Deja cada tarjeta nueva en su sitio dentro del orden ya establecido para
+  // su equipo (local, visitante, alternativa, cuarta, portero, player, girl;
+  // en retro además por temporada), sin mover tarjetas de otros equipos.
+  const sortResult = require('./sort-products.js').sortProductGrid(html);
+  html = sortResult.html;
+
   fs.writeFileSync(CATALOGO_PATH, html, 'utf8');
 
   // Verificación de sintaxis del <script> principal
