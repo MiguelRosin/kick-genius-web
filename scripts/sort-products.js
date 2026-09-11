@@ -7,8 +7,10 @@
 //   - Categorías afectadas: futbol (Camisetas), nino (Equipaciones Niño),
 //     retro (Camisetas Retro) y pantalon-corto (Pantalón Corto).
 //   - Orden de variantes: local, visitante, alternativa, cuarta,
-//     portero local, portero visitante, player local, player visitante,
-//     player alternativa, girl local, girl visitante, girl alternativa.
+//     portero local, portero visitante — y ese mismo sub-orden se repite
+//     dentro de "player" y dentro de "girl" (p.ej. player local, player
+//     visitante, player alternativa, player cuarta, player portero local,
+//     player portero visitante, y luego el bloque girl igual).
 //   - En retro, primero por temporada (más antigua primero) y dentro de
 //     cada temporada por ese mismo orden de variantes.
 //
@@ -36,7 +38,12 @@ function seasonYear(id) {
   return normYY(d1);                                     // rango: 8591, 9295
 }
 
-// Rango de la variante (0..11) a partir del id (con el equipo ya quitado).
+// Rango de la variante (0..17) a partir del id (con el equipo ya quitado).
+// Primero el sub-orden local/visitante/alternativa/cuarta/portero (0..5),
+// y luego el grupo normal/player/girl lo desplaza en bloques de 6, para que
+// combinaciones como "player-cuarta" o "player-gk-away" no choquen con
+// "player-local"/"player-away" (bug corregido: antes "player"/"girl" solo
+// distinguían alternativa/visitante y perdían cuarta y portero).
 function kitRank(idTail) {
   const t = idTail.split('-');
   const has = w => t.includes(w);
@@ -47,21 +54,19 @@ function kitRank(idTail) {
   const alt = has('alt') || has('alternativa') || has('tercera') || has('third');
   const cuarta = has('cuarta') || has('fourth');
 
-  if (girl) return alt ? 11 : away ? 10 : 9;
-  if (player) return alt ? 8 : away ? 7 : 6;
-  if (gk) return away ? 5 : 4;
-  if (cuarta) return 3;
-  if (alt) return 2;
-  if (away) return 1;
-  return 0;
+  let sub;
+  if (gk) sub = away ? 5 : 4;
+  else if (cuarta) sub = 3;
+  else if (alt) sub = 2;
+  else if (away) sub = 1;
+  else sub = 0;
+
+  const groupBase = girl ? 12 : player ? 6 : 0;
+  return groupBase + sub;
 }
 
-const RANK_LABEL = [
-  'local', 'visitante', 'alternativa', 'cuarta',
-  'portero local', 'portero visitante',
-  'player local', 'player visitante', 'player alternativa',
-  'girl local', 'girl visitante', 'girl alternativa'
-];
+const SUB_LABELS = ['local', 'visitante', 'alternativa', 'cuarta', 'portero local', 'portero visitante'];
+const RANK_LABEL = ['', 'player ', 'girl '].flatMap(g => SUB_LABELS.map(s => (g + s).trim()));
 
 // Reordena el grid de producto dentro de `html` (string completo de
 // catalogo.html) y devuelve { html, blocksTotal, groupsCount, changes,
