@@ -70,7 +70,12 @@ function readQueue() {
     fail(`El JSON de la cola no es válido: ${e.message}`);
   }
   if (!Array.isArray(data)) fail('El JSON de la cola debe ser un array de productos.');
-  return data;
+  return data.map(normalizeProduct);
+}
+
+// NBA es una liga más de Baloncesto (Baloncesto > NBA > Equipo), no una categoría raíz.
+function normalizeProduct(p) {
+  return p.type === 'nba' ? { ...p, type: 'baloncesto', league: 'nba', leagueLabel: 'NBA' } : p;
 }
 
 // Encuentra el cierre </div> que corresponde al <div ...> que empieza en openStart,
@@ -285,75 +290,86 @@ function ensureFutbolTreeEntry(html, p) {
   return html.slice(0, insertOffset) + newLeaf + html.slice(insertOffset);
 }
 
-// Inserta (si hace falta) la entrada de árbol para un producto de NBA.
-// Estructura de un solo nivel: NBA > Equipo (sin "modelo" intermedio).
-function ensureNbaTreeEntry(html, p) {
-  const teamDataAttrs = `data-cat="nba" data-team="${p.team}"`;
-  const teamFullLabel = `Categoría: NBA · ${p.teamLabel}`;
-  const buildLeaf = () =>
-    `              <button class="tree-item tree-sub" ${teamDataAttrs} data-label="${teamFullLabel}">\n` +
-    `                ${p.teamLabel}\n` +
-    `              </button>\n`;
+// Inserta (si hace falta) la entrada de árbol para un producto de baloncesto.
+// Estructura: Baloncesto > Liga (Liga Endesa, NBA...) > Equipo, con la misma forma que
+// Sneakers > Marca > Modelo. Los productos con type "nba" se normalizan a esta misma
+// estructura (liga "nba") en main(), así que NBA cuelga de Baloncesto.
+function ensureBaloncestoTreeEntry(html, p) {
+  const leagueDataAttrs = `data-cat="baloncesto" data-league="${p.league}"`;
+  const leagueFullLabel = `Categoría: Baloncesto · ${p.leagueLabel}`;
+  const teamDataAttrs = `${leagueDataAttrs} data-team="${p.team}"`;
+  const teamFullLabel = `${leagueFullLabel} · ${p.teamLabel}`;
+  const buildTeam = () => buildSubsubButton(2, teamDataAttrs, teamFullLabel, p.teamLabel);
+  const buildLeague = () => buildSubButton(leagueDataAttrs, leagueFullLabel, p.leagueLabel, buildTeam());
 
-  const catBtnRe = /<button class="tree-item tree-cat" data-cat="nba" data-label="Categoría: NBA">/;
+  const catBtnRe = /<button class="tree-item tree-cat" data-cat="baloncesto" data-label="Categoría: Baloncesto">/;
   const catBtnMatch = catBtnRe.exec(html);
 
   if (!catBtnMatch) {
-    const catBlock =
+    const group =
       `          <div class="tree-group">\n` +
-      `            <button class="tree-item tree-cat" data-cat="nba" data-label="Categoría: NBA">\n` +
-      `              <span>🏀 NBA</span><span class="tree-toggle">+</span>\n` +
+      `            <button class="tree-item tree-cat" data-cat="baloncesto" data-label="Categoría: Baloncesto">\n` +
+      `              <span>🏀 Baloncesto</span><span class="tree-toggle">+</span>\n` +
       `            </button>\n` +
       `            <div class="tree-children">\n` +
-      buildLeaf() +
+      buildLeague() +
       `            </div>\n` +
       `          </div>\n\n`;
     const menuOpenIdx = html.indexOf('<div class="dropdown-menu tree-menu">');
     if (menuOpenIdx === -1) throw new Error('No se encontró el contenedor del árbol de categorías.');
     const menuBlock = findMatchingDivClose(html, menuOpenIdx);
     const insertAt = lineStart(html, menuBlock.closeTagStart);
-    console.log(`  + Nueva categoría en el árbol: NBA (con ${p.teamLabel})`);
-    return html.slice(0, insertAt) + catBlock + html.slice(insertAt);
+    console.log(`  + Nueva categoría en el árbol: Baloncesto (con ${p.leagueLabel} · ${p.teamLabel})`);
+    return html.slice(0, insertAt) + group + html.slice(insertAt);
   }
 
   const catBlock = childrenBlockAfter(html, catBtnMatch.index);
   const section = html.slice(catBlock.contentStart, catBlock.contentEnd);
+  const leagueBtnRe = new RegExp(`<button class="tree-item tree-sub" data-cat="baloncesto" data-league="${p.league}" data-label="[^"]*">`);
+  const leagueBtnMatch = leagueBtnRe.exec(section);
 
-  const existingTeamRe = new RegExp(`data-team="${p.team}"`);
-  if (existingTeamRe.test(section)) return html; // ya existe
+  if (!leagueBtnMatch) {
+    const insertAt = lineStart(html, catBlock.closeTagStart);
+    console.log(`  + Nueva liga en "Baloncesto": ${p.leagueLabel} (con ${p.teamLabel})`);
+    return html.slice(0, insertAt) + buildLeague() + html.slice(insertAt);
+  }
 
-  const itemRe = /[ \t]*<button class="tree-item tree-sub"[^>]*>\s*\n\s*([^\n]+?)\s*\n\s*<\/button>\n/g;
+  const leagueBtnAbsIndex = catBlock.contentStart + leagueBtnMatch.index;
+  const teamBlock = childrenBlockAfter(html, leagueBtnAbsIndex);
+  const teamSection = html.slice(teamBlock.contentStart, teamBlock.contentEnd);
+  if (new RegExp(`data-team="${p.team}"`).test(teamSection)) return html; // ya existe
+
+  const itemRe = /[ \t]*<button class="tree-item tree-subsub"[^>]*>\s*\n\s*([^\n]+?)\s*\n\s*<\/button>\n/g;
   let m;
-  let insertOffset = lineStart(html, catBlock.contentEnd);
-  while ((m = itemRe.exec(section))) {
-    const existingLabel = m[1].trim();
-    if (esCompare(p.teamLabel, existingLabel) < 0) {
-      insertOffset = catBlock.contentStart + m.index;
+  let insertOffset = lineStart(html, teamBlock.contentEnd);
+  while ((m = itemRe.exec(teamSection))) {
+    if (esCompare(p.teamLabel, m[1].trim()) < 0) {
+      insertOffset = teamBlock.contentStart + m.index;
       break;
     }
   }
-  console.log(`  + Nuevo equipo en "NBA": ${p.teamLabel}`);
-  return html.slice(0, insertOffset) + buildLeaf() + html.slice(insertOffset);
+  console.log(`  + Nuevo equipo en "Baloncesto · ${p.leagueLabel}": ${p.teamLabel}`);
+  return html.slice(0, insertOffset) + buildTeam() + html.slice(insertOffset);
 }
 
-// Inserta (si hace falta) la entrada de árbol para un producto de fútbol, sneaker o NBA.
+// Inserta (si hace falta) la entrada de árbol para un producto de fútbol, sneaker o baloncesto.
 // Devuelve el html actualizado.
 function ensureTreeEntry(html, p) {
   if (p.type === 'sneaker') return ensureSneakerTreeEntry(html, p);
-  if (p.type === 'nba') return ensureNbaTreeEntry(html, p);
+  if (p.type === 'baloncesto') return ensureBaloncestoTreeEntry(html, p);
   return ensureFutbolTreeEntry(html, p);
 }
 
 function buildCardHtml(p) {
   const catAttr = p.type === 'sneaker'
     ? `data-cat="sneakers" data-brand="${p.brand}" data-model="${p.model}"`
-    : p.type === 'nba'
-    ? `data-cat="nba" data-team="${p.team}"`
+    : p.type === 'baloncesto'
+    ? `data-cat="baloncesto" data-league="${p.league}" data-team="${p.team}"`
     : `data-cat="${p.dataCat || 'futbol'}" data-league="${p.league}" data-team="${p.team}"`;
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
-    : p.type === 'nba'
-    ? `NBA · ${p.teamLabel}`
+    : p.type === 'baloncesto'
+    ? `Baloncesto · ${p.leagueLabel} · ${p.teamLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
   const badge = p.badge || `-${Math.round((1 - p.price / p.originalPrice) * 100)}%`;
@@ -389,7 +405,7 @@ function buildCardHtml(p) {
 
 function defaultSaveText(p, save) {
   const c = p.customization;
-  if (!c) return p.type === 'sneaker' || p.type === 'nba' ? 'oferta por tiempo limitado' : 'sin personalización';
+  if (!c) return p.type === 'sneaker' ? 'oferta por tiempo limitado' : 'sin personalización';
   if (c.socksFee) return 'incluye pantalón · personalizable';
   if (c.noPatch && c.noName) return 'personalizable';
   if (c.noPatch) return 'personalizable con nombre y número';
@@ -403,8 +419,8 @@ function jsStringLiteral(v) {
 function buildProductEntry(p) {
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
-    : p.type === 'nba'
-    ? `NBA · ${p.teamLabel}`
+    : p.type === 'baloncesto'
+    ? `Baloncesto · ${p.leagueLabel} · ${p.teamLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
   const sizeGroupsJs = p.sizeGroups
@@ -449,13 +465,10 @@ function validateProduct(p, errors) {
     for (const f of ['brand', 'brandLabel', 'model', 'modelLabel']) {
       if (!p[f]) errors.push(`falta el campo "${f}" (producto tipo sneaker)`);
     }
-  } else if (p.type === 'nba') {
-    for (const f of ['team', 'teamLabel']) {
-      if (!p[f]) errors.push(`falta el campo "${f}" (producto tipo NBA)`);
-    }
   } else {
+    const kind = p.type === 'baloncesto' ? 'baloncesto' : 'fútbol';
     for (const f of ['league', 'leagueLabel', 'team', 'teamLabel']) {
-      if (!p[f]) errors.push(`falta el campo "${f}" (producto de fútbol)`);
+      if (!p[f]) errors.push(`falta el campo "${f}" (producto de ${kind})`);
     }
   }
   if (!/^[a-z0-9-]+$/.test(p.id || '')) errors.push('el id debe ser minúsculas/números/guiones, ej. "liverpool-away-9900"');

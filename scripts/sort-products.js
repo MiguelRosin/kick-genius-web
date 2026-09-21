@@ -5,7 +5,8 @@
 //     variantes entre sí. Funciona igual si esos huecos están dispersos
 //     por el grid (p.ej. tras añadir una tarjeta nueva al final).
 //   - Categorías afectadas: futbol (Camisetas), nino (Equipaciones Niño),
-//     retro (Camisetas Retro) y pantalon-corto (Pantalón Corto).
+//     retro (Camisetas Retro), pantalon-corto (Pantalón Corto) y
+//     baloncesto (Baloncesto > Liga).
 //   - Orden de variantes: local, visitante, alternativa, cuarta,
 //     portero local, portero visitante — y ese mismo sub-orden se repite
 //     dentro de "player" y dentro de "girl" (p.ej. player local, player
@@ -20,7 +21,7 @@
 //   node scripts/sort-products.js [--write]
 // Sin --write hace una simulación y muestra el resumen.
 
-const CATS = new Set(['futbol', 'nino', 'retro', 'pantalon-corto']);
+const CATS = new Set(['futbol', 'nino', 'retro', 'pantalon-corto', 'baloncesto']);
 
 function normYY(yy) {
   return yy >= 40 ? 1900 + yy : 2000 + yy;
