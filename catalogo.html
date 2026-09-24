@@ -36854,6 +36854,12 @@
               <option value="yes">Sí, añadir medias (+5€)</option>
             </select>
           </div>
+          <div id="excludeBlock">
+            <span class="size-label" id="excludeLabel" style="margin-top:14px;">Equipos que NO quieres recibir (máx. 5, opcional)</span>
+            <div class="customize-fields">
+              <input type="text" id="customExclude" placeholder="Ej: Real Madrid, Barcelona, PSG..." maxlength="120">
+            </div>
+          </div>
           <p class="customize-note" id="customizeNote"></p>
         </div>
 
@@ -66998,7 +67004,15 @@
         'assets/productos/camiseta-sorpresa/frontal.jpg',
         'assets/productos/camiseta-sorpresa/trasera.jpg'
       ],
-      note: '🎁 Es una sorpresa: puede ser de la temporada 26/27 o retro, con o sin serigrafía. No podrás elegir ni personalizar cuál te toca.'
+      note: '🎁 Es una sorpresa: puede ser de la temporada 26/27 o retro, con o sin serigrafía. No podrás elegir cuál te toca, pero sí descartar hasta 5 equipos para no recibir una camiseta suya.',
+      customization: {
+        noName: true,
+        noNumber: true,
+        noPatch: true,
+        excludeTeams: true,
+        excludeLabel: 'Equipos que NO quieres recibir (máx. 5, opcional)',
+        customizeLabel: 'Descarta equipos (opcional)'
+      }
     }
   };
 
@@ -67067,6 +67081,9 @@
   const customPatchThirdOption = document.getElementById('customPatchThirdOption');
   const socksBlock = document.getElementById('socksBlock');
   const customSocks = document.getElementById('customSocks');
+  const excludeBlock = document.getElementById('excludeBlock');
+  const excludeLabel = document.getElementById('excludeLabel');
+  const customExclude = document.getElementById('customExclude');
   const customizeNote = document.getElementById('customizeNote');
   const productNote = document.getElementById('productNote');
   let currentProductId = null;
@@ -67215,6 +67232,7 @@
       customNumber.value = '';
       customizeLabel.textContent = product.customization.customizeLabel || 'Personaliza tu camiseta (opcional)';
       customName.style.display = product.customization.noName ? 'none' : '';
+      customNumber.style.display = product.customization.noNumber ? 'none' : '';
       customPatch.value = 'none';
       if (product.customization.noPatch) {
         patchBlock.style.display = 'none';
@@ -67238,6 +67256,13 @@
         customSocks.value = 'no';
       } else {
         socksBlock.style.display = 'none';
+      }
+      if (product.customization.excludeTeams) {
+        excludeBlock.style.display = '';
+        excludeLabel.textContent = product.customization.excludeLabel || 'Equipos que NO quieres recibir (máx. 5, opcional)';
+        customExclude.value = '';
+      } else {
+        excludeBlock.style.display = 'none';
       }
       updateCustomizeNote();
     } else {
@@ -67361,17 +67386,19 @@
       const number = customNumber.value.trim();
       const patch = customPatch.value;
       const socks = product.customization.socksFee ? customSocks.value : 'no';
+      const exclude = product.customization.excludeTeams ? customExclude.value.trim() : '';
       if (name || number) unitPrice += product.customization.nameNumberFee;
       if (patch !== 'none') unitPrice += product.customization.patchFee;
       if (socks === 'yes') unitPrice += product.customization.socksFee;
       customization = {
         name, number,
         patch: patch === 'none' ? '' : customPatch.options[customPatch.selectedIndex].text,
-        socks: socks === 'yes' ? 'Sí (+' + product.customization.socksFee + '€)' : ''
+        socks: socks === 'yes' ? 'Sí (+' + product.customization.socksFee + '€)' : '',
+        exclude
       };
     }
 
-    const id = currentProductId + '-' + currentSize + '-' + (customization ? `${customization.name}-${customization.number}-${customization.patch}-${customization.socks}` : '');
+    const id = currentProductId + '-' + currentSize + '-' + (customization ? `${customization.name}-${customization.number}-${customization.patch}-${customization.socks}-${customization.exclude}` : '');
     const existing = cart.find(i => i.id === id);
     if (existing) { existing.qty++; }
     else {
@@ -67466,6 +67493,7 @@
         if (item.customization.number) tags.push(`Nº ${escapeHtml(item.customization.number)}`);
         if (item.customization.patch) tags.push(escapeHtml(item.customization.patch));
         if (item.customization.socks) tags.push('Medias');
+        if (item.customization.exclude) tags.push(`Descarta: ${escapeHtml(item.customization.exclude)}`);
       }
       const tagsHtml = tags.length ? `<div class="cart-tags">${tags.map(t => `<span class="cart-tag">${t}</span>`).join('')}</div>` : '';
       return `
@@ -67644,6 +67672,7 @@
         if (item.customization.number) bits.push(`Nº: ${escapeWA(item.customization.number)}`);
         if (item.customization.patch) bits.push(`Parche: ${item.customization.patch}`);
         if (item.customization.socks) bits.push(`Medias: ${item.customization.socks}`);
+        if (item.customization.exclude) bits.push(`Descarta: ${escapeWA(item.customization.exclude)}`);
         if (bits.length) msg += `   ${bits.join(' · ')}\n`;
       }
       msg += `\n`;
