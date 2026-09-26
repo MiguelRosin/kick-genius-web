@@ -16,9 +16,10 @@
 <meta name="apple-mobile-web-app-title" content="Kick Genius">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  html[data-stock="hidden"] #navStockItem{display:none;}
+  html[data-stock="hidden"] #navStockItem,
+  html[data-stock="hidden"] .stock-link{display:none;}
   :root{
     --navy: #fffdf9;
     --navy-deep: #faf5ec;
@@ -31,6 +32,12 @@
     --cream-rgb: 250,245,236;
     --line: rgba(var(--ink-rgb),0.12);
     --radius: 18px;
+    --radius-sm: 12px;
+    --radius-lg: 26px;
+    --font-serif: 'Fraunces', serif;
+    --font-display: 'Anton', sans-serif;
+    --shadow-soft: 0 20px 44px rgba(var(--ink-rgb),0.09);
+    --shadow-lift: 0 30px 64px rgba(var(--ink-rgb),0.16);
   }
   :root[data-theme="dark"]{
     --navy: #12161d;
@@ -70,8 +77,16 @@
     -webkit-font-smoothing:antialiased;
   }
   body.cart-open{overflow:hidden;position:fixed;width:100%;}
-  h1,h2,h3,.display{
-    font-family:'Anton', sans-serif;
+  h1,h2{
+    font-family:var(--font-serif);
+    font-weight:600;
+    font-optical-sizing:auto;
+    letter-spacing:-0.01em;
+    text-transform:none;
+    line-height:1.06;
+  }
+  h3,.display{
+    font-family:var(--font-display);
     letter-spacing:0.5px;
     text-transform:uppercase;
     line-height:1.05;
@@ -214,9 +229,13 @@
   .catalog-toolbar-inner{
     display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
   }
-  .catalog-toolbar-title{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
-  .catalog-toolbar-title h1{font-size:1.3rem;}
+  .catalog-toolbar-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .catalog-toolbar-title h1{font-size:1.6rem;}
   .catalog-toolbar-title span{font-size:0.8rem;color:rgba(var(--ink-rgb),0.5);font-weight:600;text-transform:none;letter-spacing:0;}
+  .catalog-toolbar-title .product-count{
+    font-size:0.72rem;font-weight:800;letter-spacing:0.3px;color:var(--teal);
+    background:rgba(27,63,115,0.08);padding:4px 12px;border-radius:100px;
+  }
 
   .filters-bar{
     display:flex;gap:12px;flex-wrap:wrap;align-items:center;
@@ -240,9 +259,10 @@
   .clear-all-filters:hover{border-color:var(--teal);color:var(--teal);}
   .search-box{
     display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:100px;
-    border:1px solid var(--line);background:var(--navy);transition:border-color .25s ease;
+    border:1px solid var(--line);background:var(--navy);
+    transition:border-color .25s ease, box-shadow .25s ease;
   }
-  .search-box:focus-within{border-color:var(--teal);}
+  .search-box:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px rgba(27,63,115,0.08);}
   .search-box .search-icon{font-size:0.85rem;opacity:0.6;flex-shrink:0;}
   .search-box input{
     border:none;background:none;outline:none;color:var(--white);font-family:inherit;
@@ -269,9 +289,9 @@
   .dropdown.open .chevron{transform:rotate(180deg);}
   .dropdown-menu{
     position:absolute;top:calc(100% + 10px);left:0;transform:translateY(-6px);
-    background:var(--navy);border:1px solid var(--line);border-radius:16px;
-    box-shadow:0 22px 45px rgba(var(--ink-rgb),0.16);padding:8px;min-width:230px;max-height:320px;
-    overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;
+    background:var(--navy);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-lift);padding:8px;min-width:230px;max-height:320px;
+    overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease;
     z-index:950;
   }
   .dropdown.open .dropdown-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
@@ -367,11 +387,12 @@
   }
   .product-card{
     background:var(--navy-soft);border:1px solid var(--line);border-radius:var(--radius);
-    overflow:hidden;position:relative;transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    overflow:hidden;position:relative;box-shadow:var(--shadow-soft);
+    transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease, border-color .4s ease;
     display:flex;flex-direction:column;
   }
   .product-card:hover{
-    transform:translateY(-10px);box-shadow:0 22px 45px rgba(var(--ink-rgb),0.14);border-color:rgba(27,63,115,0.45);
+    transform:translateY(-10px);box-shadow:var(--shadow-lift);border-color:rgba(27,63,115,0.45);
   }
   .product-card[data-id]{cursor:pointer;}
   .product-media{
@@ -400,7 +421,7 @@
   .badge-offer{
     position:absolute;top:14px;right:14px;background:var(--teal);color:var(--navy-deep);
     font-size:0.68rem;font-weight:800;padding:5px 12px;border-radius:100px;letter-spacing:0.5px;
-    text-transform:uppercase;z-index:2;
+    text-transform:uppercase;z-index:2;box-shadow:0 6px 16px rgba(27,63,115,0.3);
     animation:pulseOffer 2.2s ease-in-out infinite;
   }
   @keyframes pulseOffer{
@@ -425,13 +446,16 @@
     border:1px solid var(--line);border-radius:8px;font-size:0.75rem;cursor:pointer;
     transition:all .2s ease;background:transparent;color:var(--white);
   }
-  .size-chip.selected, .size-chip:hover{border-color:var(--teal);color:var(--teal);}
+  .size-chip.selected, .size-chip:hover{border-color:var(--teal);color:var(--teal);background:rgba(27,63,115,0.08);}
   .add-cart-btn{
-    margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;
+    margin-top:8px;width:100%;padding:14px;border:none;border-radius:100px;
     background:var(--teal);color:var(--navy-deep);font-weight:800;font-size:0.8rem;
-    letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:filter .2s ease;
+    letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;
+    box-shadow:0 10px 24px rgba(27,63,115,0.22);
+    transition:filter .2s ease, transform .25s ease, box-shadow .25s ease;
   }
-  .add-cart-btn:hover{filter:brightness(1.1);}
+  .add-cart-btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 14px 30px rgba(27,63,115,0.3);}
+  .add-cart-btn:disabled{transform:none;box-shadow:none;}
   .add-cart-btn:disabled{background:rgba(var(--ink-rgb),0.06);color:rgba(var(--ink-rgb),0.35);cursor:not-allowed;}
   .share-btn{
     margin-top:10px;width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);
@@ -448,11 +472,11 @@
   }
   .product-modal-overlay.open{display:flex;}
   .product-modal{
-    background:var(--navy);border:1px solid var(--line);border-radius:var(--radius);
-    max-width:960px;width:100%;position:relative;margin:auto;
-    animation:modalIn .35s ease;
+    background:var(--navy);border:1px solid var(--line);border-radius:var(--radius-lg);
+    max-width:980px;width:100%;position:relative;margin:auto;box-shadow:var(--shadow-lift);
+    animation:modalIn .4s cubic-bezier(.16,1,.3,1);
   }
-  @keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+  @keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
   .modal-close{
     position:absolute;top:18px;right:18px;background:rgba(var(--ink-rgb),0.06);border:1px solid var(--line);
     color:var(--white);font-size:1.4rem;width:38px;height:38px;border-radius:50%;cursor:pointer;
@@ -505,7 +529,7 @@
   .related-card-price{font-size:0.8rem;font-weight:800;color:var(--teal);margin-top:4px;}
   .modal-details{padding:32px;display:flex;flex-direction:column;}
   .modal-details .product-cat{margin-bottom:8px;}
-  .modal-details h3{font-size:1.5rem;font-family:'Manrope',sans-serif;text-transform:none;font-weight:800;line-height:1.3;margin-bottom:14px;}
+  .modal-details h3{font-size:1.6rem;font-family:var(--font-serif);text-transform:none;font-weight:600;line-height:1.25;margin-bottom:14px;}
   .modal-price-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
   .modal-offer-tag{
     background:var(--yellow);color:var(--white);font-size:0.68rem;font-weight:800;
@@ -579,20 +603,42 @@
     .related-grid{grid-template-columns:repeat(2, 1fr);}
   }
 
-  footer{
-    border-top:1px solid var(--line);padding:44px 0;position:relative;z-index:1;
+  footer{border-top:1px solid var(--line);padding:64px 0 36px;position:relative;z-index:1;}
+  .footer-grid{
+    display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;padding-bottom:40px;
+    border-bottom:1px solid var(--line);
   }
-  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
   .footer-brand{display:flex;align-items:center;gap:10px;}
   .footer-brand img{height:32px;width:32px;border-radius:50%;}
-  .footer-socials{display:flex;gap:14px;}
+  .footer-brand span{font-family:var(--font-display);letter-spacing:1px;font-size:1.05rem;}
+  .footer-tagline{font-size:0.85rem;color:rgba(var(--ink-rgb),0.55);line-height:1.6;margin-top:14px;max-width:280px;}
+  .footer-socials{display:flex;gap:12px;margin-top:20px;}
   .footer-socials a{
-    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;transition:all .25s ease;
   }
   .footer-socials a:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);}
-  .footer-copy{font-size:0.8rem;color:rgba(var(--ink-rgb),0.4);text-align:center;margin-top:24px;}
-  .footer-legal-link{font-size:0.8rem;color:rgba(var(--ink-rgb),0.5);text-align:center;margin-top:10px;text-decoration:underline;display:block;}
+  .footer-col-title{
+    font-size:0.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+    color:rgba(var(--ink-rgb),0.45);margin-bottom:16px;
+  }
+  .footer-links{display:flex;flex-direction:column;gap:12px;}
+  .footer-links a{font-size:0.88rem;font-weight:600;color:var(--white);opacity:0.8;transition:opacity .2s ease, color .2s ease;}
+  .footer-links a:hover{opacity:1;color:var(--teal);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+    padding-top:24px;
+  }
+  .footer-copy{font-size:0.8rem;color:rgba(var(--ink-rgb),0.4);}
+  .footer-legal-link{font-size:0.8rem;color:rgba(var(--ink-rgb),0.5);text-decoration:underline;}
+  @media (max-width:820px){
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .footer-brand,.footer-tagline,.footer-socials{grid-column:1 / -1;}
+  }
+  @media (max-width:520px){
+    .footer-grid{grid-template-columns:1fr;gap:28px;}
+    .footer-bottom{flex-direction:column;text-align:center;}
+  }
 
   /* ===== CART DRAWER ===== */
   .overlay{
@@ -731,10 +777,11 @@
   .checkout-btn{
     width:100%;padding:16px;border:none;border-radius:100px;background:var(--teal);
     color:var(--navy-deep);font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
-    cursor:pointer;font-size:0.85rem;transition:filter .2s ease, transform .2s ease;
+    cursor:pointer;font-size:0.85rem;box-shadow:0 10px 24px rgba(27,63,115,0.22);
+    transition:filter .2s ease, transform .25s ease, box-shadow .25s ease;
     display:flex;align-items:center;justify-content:center;gap:8px;
   }
-  .checkout-btn:hover{filter:brightness(1.1);transform:translateY(-2px);}
+  .checkout-btn:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 14px 30px rgba(27,63,115,0.3);}
   .checkout-note{text-align:center;font-size:0.72rem;color:rgba(var(--ink-rgb),0.45);margin-top:10px;}
 
   @media (max-width: 860px){
@@ -818,7 +865,8 @@
   <div class="wrap catalog-toolbar-inner">
     <div class="catalog-toolbar-title">
       <h1>Catálogo</h1>
-      <span>Sneakers · Fútbol</span>
+      <span>Sneakers · Fútbol · Baloncesto</span>
+      <span class="product-count">+1900 productos</span>
     </div>
 
     <div class="filters-bar">
@@ -1845,6 +1893,9 @@
                   <button class="tree-item tree-subsubsub" data-cat="retro" data-league="serie-a" data-team="inter-milan" data-label="Categoría: Fútbol · Camisetas Retro · Serie A · Inter Milan">
                     Inter Milan
                   </button>
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="serie-a" data-team="napoles" data-label="Categoría: Fútbol · Camisetas Retro · Serie A · Nápoles">
+                    Nápoles
+                  </button>
                   <button class="tree-item tree-subsubsub" data-cat="retro" data-league="serie-a" data-team="palermo" data-label="Categoría: Fútbol · Camisetas Retro · Serie A · Palermo FC">
                     Palermo FC
                   </button>
@@ -1862,6 +1913,14 @@
                   </button>
                   <button class="tree-item tree-subsubsub" data-cat="retro" data-league="serie-a" data-team="venezia" data-label="Categoría: Fútbol · Camisetas Retro · Serie A · Venezia FC">
                     Venezia FC
+                  </button>
+                </div>
+                <button class="tree-item tree-subsub" data-cat="retro" data-league="resto-del-mundo" data-label="Categoría: Fútbol · Camisetas Retro · Resto del mundo">
+                  <span>Resto del mundo</span><span class="tree-toggle">+</span>
+                </button>
+                <div class="tree-children">
+                  <button class="tree-item tree-subsubsub" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-label="Categoría: Fútbol · Camisetas Retro · Resto del mundo · Boca Juniors">
+                    Boca Juniors
                   </button>
                 </div>
               </div>
@@ -3405,37 +3464,37 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-originals-blanca-2627">
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-away-2026">
         <div class="product-media">
-          <span class="badge-offer">-29%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-originals-blanca-2627/frontal.jpg" alt="Camiseta España Originals Blanca frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-originals-blanca-2627/trasera.jpg" alt="Camiseta España Originals Blanca trasera">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-away-2026/frontal.jpg" alt="Camiseta España Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-away-2026/trasera.jpg" alt="Camiseta España Visitante 2026 trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Originals Blanca</span>
+          <span class="product-name">Camiseta España Visitante 2026 (2 Estrellas)</span>
           <div class="price-row">
-            <span class="price-original">35€</span>
-            <span class="price-final">25€</span>
-            <span class="price-save">Ahorras 10€ · edición Originals (no personalizable)</span>
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
           </div>
         </div>
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-originals-roja-2627">
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-negra-2026">
         <div class="product-media">
-          <span class="badge-offer">-29%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-originals-roja-2627/frontal.jpg" alt="Camiseta España Originals Roja frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-originals-roja-2627/trasera.jpg" alt="Camiseta España Originals Roja trasera">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-negra-2026/frontal.jpg" alt="Camiseta España Negra 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-negra-2026/trasera.jpg" alt="Camiseta España Negra 2026 trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Originals Roja</span>
+          <span class="product-name">Camiseta España Negra 2026</span>
           <div class="price-row">
-            <span class="price-original">35€</span>
-            <span class="price-final">25€</span>
-            <span class="price-save">Ahorras 10€ · edición Originals (no personalizable)</span>
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
           </div>
         </div>
       </article>
@@ -4515,24 +4574,6 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-negra-2026">
-        <div class="product-media">
-          <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-negra-2026/frontal.jpg" alt="Camiseta España Negra 2026 frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-negra-2026/trasera.jpg" alt="Camiseta España Negra 2026 trasera">
-        </div>
-        <div class="product-info">
-          <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Negra 2026</span>
-          <div class="price-row">
-            <span class="price-original">32€</span>
-            <span class="price-final">23€</span>
-            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-azul-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
@@ -4549,16 +4590,34 @@
           </div>
         </div>
       </article>
-      <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-away-2026">
+       <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-gk-local-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-away-2026/frontal.jpg" alt="Camiseta España Visitante 2026 frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-away-2026/trasera.jpg" alt="Camiseta España Visitante 2026 trasera">
+          <img class="img-a" loading="lazy" src="assets/productos/espana-gk-local-2026/frontal.jpg" alt="Camiseta España Portero 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-gk-local-2026/trasera.jpg" alt="Camiseta España Portero 2026 trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Visitante 2026 (2 Estrellas)</span>
+          <span class="product-name">Camiseta España Portero 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+     <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-gk-away-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-gk-away-2026/frontal.jpg" alt="Camiseta España Portero Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-gk-away-2026/trasera.jpg" alt="Camiseta España Portero Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Camiseta España Portero Visitante 2026</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -7606,15 +7665,15 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="nino" data-league="selecciones" data-team="espana" data-id="espana-away-kids-2026">
+      <article class="product-card" data-cat="nino" data-league="selecciones" data-team="espana" data-id="espana-kids-red-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-away-kids-2026/frontal.jpg" alt="Equipación Niño España Visitante 2026 frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-away-kids-2026/trasera.jpg" alt="Equipación Niño España Visitante 2026 trasera">
+          <img class="img-a" loading="lazy" src="assets/productos/espana-kids-red-2026/frontal.jpg" alt="Equipación Niño España Roja 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-kids-red-2026/trasera.jpg" alt="Equipación Niño España Roja 2026 trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Equipación Niño España Visitante 2026 (2 Estrellas)</span>
+          <span class="product-name">Equipación Niño España Roja 2026</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -12215,15 +12274,15 @@
       </article>
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-girl-roja-2026">
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-girl-away-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-girl-roja-2026/frontal.jpg" alt="Camiseta España Roja 2026 (Girl Version) frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-girl-roja-2026/trasera.jpg" alt="Camiseta España Roja 2026 (Girl Version) trasera">
+          <img class="img-a" loading="lazy" src="assets/productos/espana-girl-away-2026/frontal.jpg" alt="Camiseta España Visitante 2026 (2 Estrellas) (Girl Version) frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-girl-away-2026/trasera.jpg" alt="Camiseta España Visitante 2026 (2 Estrellas) (Girl Version) trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Roja 2026 (Girl Version)</span>
+          <span class="product-name">Camiseta España Visitante 2026 (2 Estrellas) (Girl Version)</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -18850,15 +18909,15 @@
 
 
       <!-- PRODUCTO REAL -->
-      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-girl-away-2026">
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-girl-roja-2026">
         <div class="product-media">
           <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" src="assets/productos/espana-girl-away-2026/frontal.jpg" alt="Camiseta España Visitante 2026 (2 Estrellas) (Girl Version) frontal">
-          <img class="img-b" loading="lazy" src="assets/productos/espana-girl-away-2026/trasera.jpg" alt="Camiseta España Visitante 2026 (2 Estrellas) (Girl Version) trasera">
+          <img class="img-a" loading="lazy" src="assets/productos/espana-girl-roja-2026/frontal.jpg" alt="Camiseta España Roja 2026 (Girl Version) frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-girl-roja-2026/trasera.jpg" alt="Camiseta España Roja 2026 (Girl Version) trasera">
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Selecciones · España</span>
-          <span class="product-name">Camiseta España Visitante 2026 (2 Estrellas) (Girl Version)</span>
+          <span class="product-name">Camiseta España Roja 2026 (Girl Version)</span>
           <div class="price-row">
             <span class="price-original">32€</span>
             <span class="price-final">23€</span>
@@ -37978,6 +38037,924 @@
         </div>
       </article>
 
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-8081">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-8081/frontal.jpg" alt="Camiseta Boca Juniors Retro 80/81 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-8081/trasera.jpg" alt="Camiseta Boca Juniors Retro 80/81 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 80/81</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-9192">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-9192/frontal.jpg" alt="Camiseta Boca Juniors Retro 91/92 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-9192/trasera.jpg" alt="Camiseta Boca Juniors Retro 91/92 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 91/92</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-9596">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-9596/frontal.jpg" alt="Camiseta Boca Juniors Retro 95/96 (Maradona 10) frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-9596/trasera-10-maradona.jpg" alt="Camiseta Boca Juniors Retro 95/96 (Maradona 10) trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 95/96 (Maradona 10)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-9596">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-9596/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 95/96 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-9596/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 95/96 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 95/96</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-9697">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-9697/frontal.jpg" alt="Camiseta Boca Juniors Retro 96/97 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-9697/trasera.jpg" alt="Camiseta Boca Juniors Retro 96/97 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 96/97</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-9697">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-9697/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 96/97 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-9697/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 96/97 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 96/97</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-9899">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-9899/frontal.jpg" alt="Camiseta Boca Juniors Retro 98/99 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-9899/trasera.jpg" alt="Camiseta Boca Juniors Retro 98/99 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 98/99</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-9899">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-9899/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 98/99 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-9899/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 98/99 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 98/99</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-alt-9899">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-alt-9899/frontal.jpg" alt="Camiseta Boca Juniors Retro Tercera Equipación 98/99 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-alt-9899/trasera.jpg" alt="Camiseta Boca Juniors Retro Tercera Equipación 98/99 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Tercera Equipación 98/99</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-9900">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-9900/frontal.jpg" alt="Camiseta Boca Juniors Retro 99/00 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-9900/trasera.jpg" alt="Camiseta Boca Juniors Retro 99/00 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 99/00</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-9900">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-9900/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 99/00 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-9900/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 99/00 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 99/00</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0102">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0102/frontal.jpg" alt="Camiseta Boca Juniors Retro 01/02 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0102/trasera.jpg" alt="Camiseta Boca Juniors Retro 01/02 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 01/02</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0203">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0203/frontal.jpg" alt="Camiseta Boca Juniors Retro 02/03 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0203/trasera.jpg" alt="Camiseta Boca Juniors Retro 02/03 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 02/03</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-0203">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-0203/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 02/03 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-0203/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 02/03 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 02/03</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0304">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0304/frontal.jpg" alt="Camiseta Boca Juniors Retro 03/04 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0304/trasera.jpg" alt="Camiseta Boca Juniors Retro 03/04 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 03/04</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0506">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0506/frontal.jpg" alt="Camiseta Boca Juniors Retro 05/06 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0506/trasera.jpg" alt="Camiseta Boca Juniors Retro 05/06 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 05/06</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0607">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0607/frontal.jpg" alt="Camiseta Boca Juniors Retro 06/07 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0607/trasera.jpg" alt="Camiseta Boca Juniors Retro 06/07 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 06/07</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-0607">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-0607/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 06/07 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-0607/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 06/07 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 06/07</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0708">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0708/frontal.jpg" alt="Camiseta Boca Juniors Retro 07/08 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0708/trasera.jpg" alt="Camiseta Boca Juniors Retro 07/08 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 07/08</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-0708">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-0708/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 07/08 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-0708/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 07/08 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 07/08</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-0910">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-0910/frontal.jpg" alt="Camiseta Boca Juniors Retro 09/10 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-0910/trasera.jpg" alt="Camiseta Boca Juniors Retro 09/10 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 09/10</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-1011">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-1011/frontal.jpg" alt="Camiseta Boca Juniors Retro 10/11 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-1011/trasera.jpg" alt="Camiseta Boca Juniors Retro 10/11 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 10/11</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-1112">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-1112/frontal.jpg" alt="Camiseta Boca Juniors Retro 11/12 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-1112/trasera.jpg" alt="Camiseta Boca Juniors Retro 11/12 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 11/12</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-away-1314">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-away-1314/frontal.jpg" alt="Camiseta Boca Juniors Retro Visitante 13/14 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-away-1314/trasera.jpg" alt="Camiseta Boca Juniors Retro Visitante 13/14 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro Visitante 13/14</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-1920">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-1920/frontal.jpg" alt="Camiseta Boca Juniors Retro 19/20 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-1920/trasera.jpg" alt="Camiseta Boca Juniors Retro 19/20 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 19/20</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="resto-del-mundo" data-team="boca-juniors" data-id="boca-juniors-local-2021">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/boca-juniors-local-2021/frontal.jpg" alt="Camiseta Boca Juniors Retro 20/21 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/boca-juniors-local-2021/trasera.jpg" alt="Camiseta Boca Juniors Retro 20/21 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Resto del mundo · Boca Juniors</span>
+          <span class="product-name">Camiseta Boca Juniors Retro 20/21</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="alemania" data-id="alemania-alt-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/alemania-alt-2026/frontal.jpg" alt="Camiseta Alemania Alternativa 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/alemania-alt-2026/trasera.jpg" alt="Camiseta Alemania Alternativa 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · Alemania</span>
+          <span class="product-name">Camiseta Alemania Alternativa 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · personalizable con nombre, número y parche</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-originals-blanca-2627">
+        <div class="product-media">
+          <span class="badge-offer">-29%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-originals-blanca-2627/frontal.jpg" alt="Camiseta España Originals Blanca frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-originals-blanca-2627/trasera.jpg" alt="Camiseta España Originals Blanca trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Camiseta España Originals Blanca</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">25€</span>
+            <span class="price-save">Ahorras 10€ · edición Originals (no personalizable)</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="futbol" data-league="selecciones" data-team="espana" data-id="espana-originals-roja-2627">
+        <div class="product-media">
+          <span class="badge-offer">-29%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-originals-roja-2627/frontal.jpg" alt="Camiseta España Originals Roja frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-originals-roja-2627/trasera.jpg" alt="Camiseta España Originals Roja trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Camiseta España Originals Roja</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">25€</span>
+            <span class="price-save">Ahorras 10€ · edición Originals (no personalizable)</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="nino" data-league="selecciones" data-team="espana" data-id="espana-away-kids-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-away-kids-2026/frontal.jpg" alt="Equipación Niño España Visitante 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-away-kids-2026/trasera.jpg" alt="Equipación Niño España Visitante 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Equipación Niño España Visitante 2026 (2 Estrellas)</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="pantalon-corto" data-league="selecciones" data-team="espana" data-id="espana-shorts-alt-2026">
+        <div class="product-media">
+          <span class="badge-offer">-38%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-shorts-alt-2026/frontal.jpg" alt="Pantalón Corto España Alternativa 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-shorts-alt-2026/trasera.jpg" alt="Pantalón Corto España Alternativa 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Pantalón Corto España Alternativa 2026</span>
+          <div class="price-row">
+            <span class="price-original">20€</span>
+            <span class="price-final">12.5€</span>
+            <span class="price-save">Ahorras 7.5€ · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="nino" data-league="selecciones" data-team="espana" data-id="espana-kids-gk-local-2026">
+        <div class="product-media">
+          <span class="badge-offer">-28%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/espana-kids-gk-local-2026/frontal.jpg" alt="Equipación Niño España Portero 2026 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/espana-kids-gk-local-2026/trasera.jpg" alt="Equipación Niño España Portero 2026 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Selecciones · España</span>
+          <span class="product-name">Equipación Niño España Portero 2026</span>
+          <div class="price-row">
+            <span class="price-original">32€</span>
+            <span class="price-final">23€</span>
+            <span class="price-save">Ahorras 9€ · incluye pantalón · personalizable</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-8586">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-8586/frontal.jpg" alt="Camiseta Nápoles Retro 85/86 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-8586/trasera.jpg" alt="Camiseta Nápoles Retro 85/86 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 85/86</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-8687">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-8687/frontal.jpg" alt="Camiseta Nápoles Retro 86/87 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-8687/trasera.jpg" alt="Camiseta Nápoles Retro 86/87 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 86/87</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-special-version-8687">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-special-version-8687/frontal.jpg" alt="Camiseta Nápoles Retro 86/87 (Scudetto) frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-special-version-8687/trasera.jpg" alt="Camiseta Nápoles Retro 86/87 (Scudetto) trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 86/87 (Scudetto)</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-8788">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-8788/frontal.jpg" alt="Camiseta Nápoles Retro 87/88 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-8788/trasera.jpg" alt="Camiseta Nápoles Retro 87/88 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 87/88</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-8788">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-8788/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 87/88 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-8788/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 87/88 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 87/88</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-8889">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-8889/frontal.jpg" alt="Camiseta Nápoles Retro 88/89 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-8889/trasera.jpg" alt="Camiseta Nápoles Retro 88/89 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 88/89</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-8889">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-8889/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 88/89 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-8889/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 88/89 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 88/89</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-alt-8889">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-alt-8889/frontal.jpg" alt="Camiseta Nápoles Retro Tercera Equipación 88/89 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-alt-8889/trasera.jpg" alt="Camiseta Nápoles Retro Tercera Equipación 88/89 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Tercera Equipación 88/89</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-9091">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-9091/frontal.jpg" alt="Camiseta Nápoles Retro 90/91 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-9091/trasera.jpg" alt="Camiseta Nápoles Retro 90/91 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 90/91</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-9091">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-9091/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 90/91 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-9091/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 90/91 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 90/91</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-9192">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-9192/frontal.jpg" alt="Camiseta Nápoles Retro 91/92 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-9192/trasera.jpg" alt="Camiseta Nápoles Retro 91/92 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 91/92</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-9192">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-9192/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 91/92 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-9192/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 91/92 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 91/92</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-9394">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-9394/frontal.jpg" alt="Camiseta Nápoles Retro 93/94 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-9394/trasera.jpg" alt="Camiseta Nápoles Retro 93/94 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 93/94</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-9899">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-9899/frontal.jpg" alt="Camiseta Nápoles Retro 98/99 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-9899/trasera.jpg" alt="Camiseta Nápoles Retro 98/99 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 98/99</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-9899">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-9899/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 98/99 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-9899/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 98/99 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 98/99</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-1314">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-1314/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 13/14 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-1314/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 13/14 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 13/14</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-1920">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-1920/frontal.jpg" alt="Camiseta Nápoles Retro 19/20 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-1920/trasera.jpg" alt="Camiseta Nápoles Retro 19/20 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 19/20</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-away-1920">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-away-1920/frontal.jpg" alt="Camiseta Nápoles Retro Visitante 19/20 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-away-1920/trasera.jpg" alt="Camiseta Nápoles Retro Visitante 19/20 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro Visitante 19/20</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PRODUCTO REAL -->
+      <article class="product-card" data-cat="retro" data-league="serie-a" data-team="napoles" data-id="napoles-local-2021">
+        <div class="product-media">
+          <span class="badge-offer">-20%</span>
+          <img class="img-a" loading="lazy" src="assets/productos/napoles-local-2021/frontal.jpg" alt="Camiseta Nápoles Retro 20/21 frontal">
+          <img class="img-b" loading="lazy" src="assets/productos/napoles-local-2021/trasera.jpg" alt="Camiseta Nápoles Retro 20/21 trasera">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Fútbol · Serie A · Nápoles</span>
+          <span class="product-name">Camiseta Nápoles Retro 20/21</span>
+          <div class="price-row">
+            <span class="price-original">35€</span>
+            <span class="price-final">28€</span>
+            <span class="price-save">Ahorras 7€ · personalizable con nombre y número</span>
+          </div>
+        </div>
+      </article>
+
     </div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
@@ -37990,38 +38967,61 @@
 
 <footer>
   <div class="wrap">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <img src="assets/logo/kick-genius-logo-192.jpg" alt="Kick Genius" width="32" height="32">
-        <span style="font-family:'Anton',sans-serif;letter-spacing:1px;">Kick Genius</span>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/logo/kick-genius-logo-192.jpg" alt="Kick Genius" width="32" height="32">
+          <span>Kick Genius</span>
+        </div>
+        <p class="footer-tagline">Sneakers y camisetas deportivas originales y retro, personalizables con nombre, dorsal y parche. Envíos a toda España.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/kick_genius/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <defs><linearGradient id="igGradFooter" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
+                <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
+                <stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+              <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradFooter)"/>
+              <rect x="6.7" y="6.7" width="10.6" height="10.6" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
+              <circle cx="12" cy="12" r="3" fill="none" stroke="#fff" stroke-width="1.6"/>
+              <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@kickgeniusj" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path fill="#25F4EE" transform="translate(-0.9,0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+              <path fill="#FE2C55" transform="translate(0.9,-0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+              <path fill="#0a0a0a" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/34644039760" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2zm0 18.15h-.01c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.25-8.24 8.25zm4.52-6.18c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.74 2.66 4.23 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+          </a>
+        </div>
       </div>
-      <div class="footer-socials">
-        <a href="https://www.instagram.com/kick_genius/" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <defs><linearGradient id="igGradFooter" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
-              <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
-              <stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
-            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradFooter)"/>
-            <rect x="6.7" y="6.7" width="10.6" height="10.6" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/>
-            <circle cx="12" cy="12" r="3" fill="none" stroke="#fff" stroke-width="1.6"/>
-            <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
-          </svg>
-        </a>
-        <a href="https://www.tiktok.com/@kickgeniusj" target="_blank" rel="noopener" aria-label="TikTok">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <path fill="#25F4EE" transform="translate(-0.9,0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
-            <path fill="#FE2C55" transform="translate(0.9,-0.6)" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
-            <path fill="#0a0a0a" d="M16.6 3c.4 1.9 1.7 3.4 3.6 3.9v2.8c-1.3 0-2.6-.4-3.6-1.1v6.3c0 3.2-2.6 5.7-5.8 5.7s-5.8-2.5-5.8-5.7 2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.9a2.8 2.8 0 1 0 2.1 2.7V3h2.8z"/>
-          </svg>
-        </a>
-        <a href="https://wa.me/34644039760" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2zm0 18.15h-.01c-1.5 0-2.97-.4-4.25-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.55-3.7 8.25-8.24 8.25zm4.52-6.18c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.2.88 2.37 1 2.53.12.17 1.74 2.66 4.23 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
-        </a>
+      <div>
+        <span class="footer-col-title">Tienda</span>
+        <div class="footer-links">
+          <a href="catalogo.html">Catálogo</a>
+          <a href="stock.html" class="stock-link">Stock</a>
+          <a href="tallas.html">Guía de tallas</a>
+          <a href="seguimiento.html">Seguimiento de pedido</a>
+        </div>
+      </div>
+      <div>
+        <span class="footer-col-title">Ayuda</span>
+        <div class="footer-links">
+          <a href="nosotros.html">Nosotros</a>
+          <a href="faq.html">Preguntas frecuentes</a>
+          <a href="contacto.html">Contacto</a>
+          <a href="https://wa.me/34644039760" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
       </div>
     </div>
-    <p class="footer-copy">© <span id="year"></span> Kick Genius. Todos los derechos reservados.</p>
-    <a href="legal.html" class="footer-legal-link">Política de Privacidad y Términos</a>
+    <div class="footer-bottom">
+      <p class="footer-copy">© <span id="year"></span> Kick Genius. Todos los derechos reservados.</p>
+      <a href="legal.html" class="footer-legal-link">Política de Privacidad y Términos</a>
+    </div>
   </div>
 </footer>
 
@@ -69248,6 +70248,793 @@
       images: [
         'assets/productos/ac-milan-120-aniversario/frontal.jpg',
         'assets/productos/ac-milan-120-aniversario/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0304': {
+      name: 'Camiseta Boca Juniors Retro 03/04',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0304/frontal.jpg',
+        'assets/productos/boca-juniors-local-0304/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-1920': {
+      name: 'Camiseta Boca Juniors Retro 19/20',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-1920/frontal.jpg',
+        'assets/productos/boca-juniors-local-1920/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    
+    
+    
+    
+    'boca-juniors-local-0102': {
+      name: 'Camiseta Boca Juniors Retro 01/02',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0102/frontal.jpg',
+        'assets/productos/boca-juniors-local-0102/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    
+    'boca-juniors-local-9697': {
+      name: 'Camiseta Boca Juniors Retro 96/97',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-9697/frontal.jpg',
+        'assets/productos/boca-juniors-local-9697/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-9697': {
+      name: 'Camiseta Boca Juniors Retro Visitante 96/97',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-9697/frontal.jpg',
+        'assets/productos/boca-juniors-away-9697/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0203': {
+      name: 'Camiseta Boca Juniors Retro 02/03',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0203/frontal.jpg',
+        'assets/productos/boca-juniors-local-0203/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-0203': {
+      name: 'Camiseta Boca Juniors Retro Visitante 02/03',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-0203/frontal.jpg',
+        'assets/productos/boca-juniors-away-0203/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-9596': {
+      name: 'Camiseta Boca Juniors Retro Visitante 95/96',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-9596/frontal.jpg',
+        'assets/productos/boca-juniors-away-9596/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-9899': {
+      name: 'Camiseta Boca Juniors Retro Visitante 98/99',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-9899/frontal.jpg',
+        'assets/productos/boca-juniors-away-9899/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-alt-9899': {
+      name: 'Camiseta Boca Juniors Retro Tercera Equipación 98/99',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-alt-9899/frontal.jpg',
+        'assets/productos/boca-juniors-alt-9899/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-9900': {
+      name: 'Camiseta Boca Juniors Retro Visitante 99/00',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-9900/frontal.jpg',
+        'assets/productos/boca-juniors-away-9900/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0607': {
+      name: 'Camiseta Boca Juniors Retro 06/07',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0607/frontal.jpg',
+        'assets/productos/boca-juniors-local-0607/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-0607': {
+      name: 'Camiseta Boca Juniors Retro Visitante 06/07',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-0607/frontal.jpg',
+        'assets/productos/boca-juniors-away-0607/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-1314': {
+      name: 'Camiseta Boca Juniors Retro Visitante 13/14',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-1314/frontal.jpg',
+        'assets/productos/boca-juniors-away-1314/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-9192': {
+      name: 'Camiseta Boca Juniors Retro 91/92',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-9192/frontal.jpg',
+        'assets/productos/boca-juniors-local-9192/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-2021': {
+      name: 'Camiseta Boca Juniors Retro 20/21',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-2021/frontal.jpg',
+        'assets/productos/boca-juniors-local-2021/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0910': {
+      name: 'Camiseta Boca Juniors Retro 09/10',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0910/frontal.jpg',
+        'assets/productos/boca-juniors-local-0910/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-8081': {
+      name: 'Camiseta Boca Juniors Retro 80/81',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-8081/frontal.jpg',
+        'assets/productos/boca-juniors-local-8081/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-9899': {
+      name: 'Camiseta Boca Juniors Retro 98/99',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-9899/frontal.jpg',
+        'assets/productos/boca-juniors-local-9899/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-9900': {
+      name: 'Camiseta Boca Juniors Retro 99/00',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-9900/frontal.jpg',
+        'assets/productos/boca-juniors-local-9900/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-9596': {
+      name: 'Camiseta Boca Juniors Retro 95/96 (Maradona 10)',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-9596/frontal.jpg',
+        'assets/productos/boca-juniors-local-9596/trasera-10-maradona.jpg',
+        'assets/productos/boca-juniors-local-9596/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0506': {
+      name: 'Camiseta Boca Juniors Retro 05/06',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0506/frontal.jpg',
+        'assets/productos/boca-juniors-local-0506/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-0708': {
+      name: 'Camiseta Boca Juniors Retro 07/08',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-0708/frontal.jpg',
+        'assets/productos/boca-juniors-local-0708/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-away-0708': {
+      name: 'Camiseta Boca Juniors Retro Visitante 07/08',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-away-0708/frontal.jpg',
+        'assets/productos/boca-juniors-away-0708/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-1011': {
+      name: 'Camiseta Boca Juniors Retro 10/11',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-1011/frontal.jpg',
+        'assets/productos/boca-juniors-local-1011/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'boca-juniors-local-1112': {
+      name: 'Camiseta Boca Juniors Retro 11/12',
+      cat: 'Fútbol · Resto del mundo · Boca Juniors',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/boca-juniors-local-1112/frontal.jpg',
+        'assets/productos/boca-juniors-local-1112/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'alemania-alt-2026': {
+      name: 'Camiseta Alemania Alternativa 2026',
+      cat: 'Fútbol · Selecciones · Alemania',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/alemania-alt-2026/frontal.jpg',
+        'assets/productos/alemania-alt-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'espana-gk-local-2026': {
+      name: 'Camiseta España Portero 2026',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/espana-gk-local-2026/frontal.jpg',
+        'assets/productos/espana-gk-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'espana-gk-away-2026': {
+      name: 'Camiseta España Portero Visitante 2026',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['S','M','L','XL','XXL','3XL','4XL'],
+      images: [
+        'assets/productos/espana-gk-away-2026/frontal.jpg',
+        'assets/productos/espana-gk-away-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true
+      }
+    },
+    'espana-kids-gk-local-2026': {
+      name: 'Equipación Niño España Portero 2026',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/espana-kids-gk-local-2026/frontal.jpg',
+        'assets/productos/espana-kids-gk-local-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true,
+        socksFee: 5
+      }
+    },
+    'espana-shorts-alt-2026': {
+      name: 'Pantalón Corto España Alternativa 2026',
+      cat: 'Fútbol · Selecciones · España',
+      price: 12.5,
+      originalPrice: 20,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/espana-shorts-alt-2026/frontal.jpg',
+        'assets/productos/espana-shorts-alt-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true,
+        noName: true,
+        customizeLabel: 'Personaliza tu pantalón (opcional)'
+      }
+    },
+    'espana-kids-red-2026': {
+      name: 'Equipación Niño España Roja 2026',
+      cat: 'Fútbol · Selecciones · España',
+      price: 23,
+      originalPrice: 32,
+      sizes: ['XXS (16)','XS (18)','S (20)','M (22)','L (24)','XL (26)','XXL (28)'],
+      note: 'ℹ️ El pantalón a juego viene incluido en el precio.',
+      images: [
+        'assets/productos/espana-kids-red-2026/frontal.jpg',
+        'assets/productos/espana-kids-red-2026/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        patchFee: 1.5,
+        leaguePatchLabel: 'Mundial 2026',
+        noChampions: true,
+        socksFee: 5
+      }
+    },
+    'napoles-local-8586': {
+      name: 'Camiseta Nápoles Retro 85/86',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-8586/frontal.jpg',
+        'assets/productos/napoles-local-8586/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-8687': {
+      name: 'Camiseta Nápoles Retro 86/87',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-8687/frontal.jpg',
+        'assets/productos/napoles-local-8687/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-8788': {
+      name: 'Camiseta Nápoles Retro 87/88',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-8788/frontal.jpg',
+        'assets/productos/napoles-local-8788/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-8788': {
+      name: 'Camiseta Nápoles Retro Visitante 87/88',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-8788/frontal.jpg',
+        'assets/productos/napoles-away-8788/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-8889': {
+      name: 'Camiseta Nápoles Retro 88/89',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-8889/frontal.jpg',
+        'assets/productos/napoles-local-8889/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-8889': {
+      name: 'Camiseta Nápoles Retro Visitante 88/89',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-8889/frontal.jpg',
+        'assets/productos/napoles-away-8889/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-alt-8889': {
+      name: 'Camiseta Nápoles Retro Tercera Equipación 88/89',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-alt-8889/frontal.jpg',
+        'assets/productos/napoles-alt-8889/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-9091': {
+      name: 'Camiseta Nápoles Retro 90/91',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-9091/frontal.jpg',
+        'assets/productos/napoles-local-9091/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-9091': {
+      name: 'Camiseta Nápoles Retro Visitante 90/91',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-9091/frontal.jpg',
+        'assets/productos/napoles-away-9091/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-9192': {
+      name: 'Camiseta Nápoles Retro 91/92',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-9192/frontal.jpg',
+        'assets/productos/napoles-local-9192/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-9192': {
+      name: 'Camiseta Nápoles Retro Visitante 91/92',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-9192/frontal.jpg',
+        'assets/productos/napoles-away-9192/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-9394': {
+      name: 'Camiseta Nápoles Retro 93/94',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-9394/frontal.jpg',
+        'assets/productos/napoles-local-9394/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-9899': {
+      name: 'Camiseta Nápoles Retro 98/99',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-9899/frontal.jpg',
+        'assets/productos/napoles-local-9899/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-9899': {
+      name: 'Camiseta Nápoles Retro Visitante 98/99',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-9899/frontal.jpg',
+        'assets/productos/napoles-away-9899/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-1314': {
+      name: 'Camiseta Nápoles Retro Visitante 13/14',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-1314/frontal.jpg',
+        'assets/productos/napoles-away-1314/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-1920': {
+      name: 'Camiseta Nápoles Retro 19/20',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-1920/frontal.jpg',
+        'assets/productos/napoles-local-1920/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-away-1920': {
+      name: 'Camiseta Nápoles Retro Visitante 19/20',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-away-1920/frontal.jpg',
+        'assets/productos/napoles-away-1920/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-local-2021': {
+      name: 'Camiseta Nápoles Retro 20/21',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-local-2021/frontal.jpg',
+        'assets/productos/napoles-local-2021/trasera.jpg'
+      ],
+      customization: {
+        nameNumberFee: 2,
+        noPatch: true
+      }
+    },
+    'napoles-special-version-8687': {
+      name: 'Camiseta Nápoles Retro 86/87 (Scudetto)',
+      cat: 'Fútbol · Serie A · Nápoles',
+      price: 28,
+      originalPrice: 35,
+      sizes: ['S','M','L','XL','XXL'],
+      images: [
+        'assets/productos/napoles-special-version-8687/frontal.jpg',
+        'assets/productos/napoles-special-version-8687/trasera.jpg'
       ],
       customization: {
         nameNumberFee: 2,
