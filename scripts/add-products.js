@@ -1,6 +1,7 @@
 // Sube varios productos a la vez a catalogo.html: entrada en el árbol de
-// categorías (si el equipo/modelo es nuevo), tarjeta del grid y objeto
-// PRODUCTS. Lee un JSON con la lista de productos (ver products-queue.example.json).
+// categorías (si el equipo/modelo es nuevo), tarjeta del grid y ficha en
+// assets/data/products-catalog.json. Lee un JSON con la lista de productos
+// (ver products-queue.example.json).
 //
 // Uso:
 //   node scripts/add-products.js [ruta-a-cola.json]
@@ -11,6 +12,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const CATALOGO_PATH = path.join(ROOT, 'catalogo.html');
+const PRODUCTS_JSON_PATH = path.join(ROOT, 'assets', 'data', 'products-catalog.json');
 const queuePath = path.resolve(process.argv[2] || path.join(__dirname, 'products-queue.json'));
 const BACKUP_DIR = path.join(__dirname, '.backups');
 
@@ -412,47 +414,25 @@ function defaultSaveText(p, save) {
   return 'personalizable con nombre, número y parche';
 }
 
-function jsStringLiteral(v) {
-  return `'${String(v).replace(/'/g, "\\'")}'`;
-}
-
-function buildProductEntry(p) {
+function buildProductRecord(p) {
   const catLabel = p.type === 'sneaker'
     ? `Sneakers · ${p.brandLabel} · ${p.modelLabel}`
     : p.type === 'baloncesto'
     ? `Baloncesto · ${p.leagueLabel} · ${p.teamLabel}`
     : `Fútbol · ${p.leagueLabel} · ${p.teamLabel}`;
 
-  const sizeGroupsJs = p.sizeGroups
-    ? '[\n' + p.sizeGroups.map(g =>
-        `        { label: ${jsStringLiteral(g.label)}, sizes: [${g.sizes.map(s => (typeof s === 'number' ? s : jsStringLiteral(s))).join(',')}] }`
-      ).join(',\n') + '\n      ]'
-    : null;
-  const sizesJs = p.sizes ? '[' + p.sizes.map(s => (typeof s === 'number' ? s : jsStringLiteral(s))).join(',') + ']' : null;
-  const imagesJs = p.images.map(f => `        'assets/productos/${p.id}/${f}'`).join(',\n');
-
-  let customJs = '';
-  if (p.customization) {
-    const lines = Object.entries(p.customization).map(([k, v]) => {
-      const val = typeof v === 'string' ? jsStringLiteral(v) : v;
-      return `        ${k}: ${val}`;
-    });
-    customJs = `,\n      customization: {\n${lines.join(',\n')}\n      }`;
-  }
-
-  const noteJs = p.note ? `,\n      note: ${jsStringLiteral(p.note)}` : '';
-  const sizesLineJs = sizeGroupsJs
-    ? `      sizeGroups: ${sizeGroupsJs}${noteJs},\n`
-    : `      sizes: ${sizesJs}${noteJs},\n`;
-
-  return `    ${jsStringLiteral(p.id)}: {\n` +
-    `      name: ${jsStringLiteral(p.name)},\n` +
-    `      cat: ${jsStringLiteral(catLabel)},\n` +
-    `      price: ${p.price},\n` +
-    `      originalPrice: ${p.originalPrice},\n` +
-    sizesLineJs +
-    `      images: [\n${imagesJs}\n      ]${customJs}\n` +
-    `    }`;
+  const record = {
+    name: p.name,
+    cat: catLabel,
+    price: p.price,
+    originalPrice: p.originalPrice
+  };
+  if (p.sizeGroups) record.sizeGroups = p.sizeGroups;
+  else record.sizes = p.sizes;
+  if (p.note) record.note = p.note;
+  record.images = p.images.map(f => `assets/productos/${p.id}/${f}`);
+  if (p.customization) record.customization = p.customization;
+  return record;
 }
 
 function validateProduct(p, errors) {
@@ -533,6 +513,10 @@ async function main() {
   const backupPath = path.join(BACKUP_DIR, `catalogo.${Date.now()}.html`);
   fs.writeFileSync(backupPath, html, 'utf8');
 
+  const productsData = JSON.parse(fs.readFileSync(PRODUCTS_JSON_PATH, 'utf8'));
+  const dataBackupPath = path.join(BACKUP_DIR, `products-catalog.${Date.now()}.json`);
+  fs.writeFileSync(dataBackupPath, JSON.stringify(productsData), 'utf8');
+
   const added = [];
   const skipped = [];
 
@@ -542,9 +526,8 @@ async function main() {
       skipped.push(`${p.id || '(sin id)'}: ${errors.join('; ')}`);
       continue;
     }
-    const existsRe = new RegExp(`['"]${p.id}['"]\\s*:\\s*{`);
-    if (existsRe.test(html)) {
-      skipped.push(`${p.id}: ya existe en PRODUCTS, se omite`);
+    if (productsData[p.id]) {
+      skipped.push(`${p.id}: ya existe en el catálogo, se omite`);
       continue;
     }
 
@@ -561,9 +544,7 @@ async function main() {
     if (!html.includes(cardAnchor)) throw new Error('No se encontró el punto de inserción del grid de productos.');
     html = html.replace(cardAnchor, '\n' + buildCardHtml(p) + cardAnchor.slice(1));
 
-    const dataAnchor = '\n  };\n\n  // ===== Ficha de producto (modal) =====';
-    if (!html.includes(dataAnchor)) throw new Error('No se encontró el punto de inserción de PRODUCTS.');
-    html = html.replace(dataAnchor, ',\n' + buildProductEntry(p) + dataAnchor);
+    productsData[p.id] = buildProductRecord(p);
 
     added.push(p.id);
   }
@@ -572,6 +553,7 @@ async function main() {
     console.log('\nNada que añadir.');
     if (skipped.length) console.log('Omitidos:\n' + skipped.map(s => '  - ' + s).join('\n'));
     fs.unlinkSync(backupPath);
+    fs.unlinkSync(dataBackupPath);
     return;
   }
 
@@ -598,6 +580,8 @@ async function main() {
     fail(`Error de sintaxis tras la inserción, se ha restaurado catalogo.html.\n${e.stderr ? e.stderr.toString() : e.message}`);
   }
   fs.unlinkSync(checkFile);
+
+  fs.writeFileSync(PRODUCTS_JSON_PATH, JSON.stringify(productsData, null, 2), 'utf8');
 
   // Mantiene sincronizado el catálogo de precios que usa la Netlify Function
   // validate-order.js para validar pedidos en el servidor.

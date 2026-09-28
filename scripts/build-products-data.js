@@ -10,26 +10,16 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const CATALOGO_PATH = path.join(ROOT, 'catalogo.html');
+const PRODUCTS_JSON_PATH = path.join(ROOT, 'assets', 'data', 'products-catalog.json');
 const OUT_PATH = path.join(ROOT, 'netlify', 'functions', 'products-data.json');
-// Productos que no viven en el PRODUCTS de catalogo.html (p.ej. artículos de
-// stock.html, que tiene su propia ficha de tarjeta) pero que igualmente
+// Productos que no viven en assets/data/products-catalog.json (p.ej. artículos
+// de stock.html, que tiene su propia ficha de tarjeta) pero que igualmente
 // necesita conocer validate-order.js para tasar el pedido. Se fusionan aquí
 // para que sobrevivan a cada regeneración de este archivo.
 const EXTRA_PATH = path.join(__dirname, 'stock-products.json');
 
 function extractProducts() {
-  const html = fs.readFileSync(CATALOGO_PATH, 'utf8').replace(/\r\n/g, '\n');
-  const start = html.indexOf('const PRODUCTS = {');
-  if (start === -1) throw new Error('No se encontró "const PRODUCTS = {" en catalogo.html');
-  const anchor = '\n  };\n\n  // ===== Ficha de producto (modal) =====';
-  const anchorIdx = html.indexOf(anchor, start);
-  if (anchorIdx === -1) throw new Error('No se encontró el cierre de PRODUCTS en catalogo.html');
-  const end = anchorIdx + '\n  };'.length;
-  const src = html.slice(start, end);
-  // El objeto es JS literal de confianza (nuestro propio código fuente), no input
-  // externo, así que evaluarlo aquí es seguro.
-  return new Function(`'use strict'; ${src} return PRODUCTS;`)();
+  return JSON.parse(fs.readFileSync(PRODUCTS_JSON_PATH, 'utf8'));
 }
 
 function build() {
