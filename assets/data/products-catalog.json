@@ -45930,5 +45930,195 @@
       "assets/productos/ac-milan-chandal-entrenamiento-rojo/frontal.jpg",
       "assets/productos/ac-milan-chandal-entrenamiento-rojo/trasera.jpg"
     ]
+  },
+  "albacete-kids-local-2627": {
+    "name": "Equipación Niño Albacete Balompié Local 26/27",
+    "cat": "Fútbol · Liga Española · Albacete Balompié",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": [
+      "XXS (16)",
+      "XS (18)",
+      "S (20)",
+      "M (22)",
+      "L (24)",
+      "XL (26)",
+      "XXL (28)"
+    ],
+    "note": "ℹ️ El pantalón a juego viene incluido en el precio.",
+    "images": [
+      "assets/productos/albacete-kids-local-2627/frontal.jpg",
+      "assets/productos/albacete-kids-local-2627/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 1.5,
+      "leaguePatchLabel": "Liga",
+      "noChampions": true,
+      "socksFee": 5
+    }
+  },
+  "burgos-kids-local-2627": {
+    "name": "Equipación Niño Burgos CF Local 26/27",
+    "cat": "Fútbol · Liga Española · Burgos CF",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": [
+      "XXS (16)",
+      "XS (18)",
+      "S (20)",
+      "M (22)",
+      "L (24)",
+      "XL (26)",
+      "XXL (28)"
+    ],
+    "note": "ℹ️ El pantalón a juego viene incluido en el precio.",
+    "images": [
+      "assets/productos/burgos-kids-local-2627/frontal.jpg",
+      "assets/productos/burgos-kids-local-2627/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 1.5,
+      "leaguePatchLabel": "Liga",
+      "noChampions": true,
+      "socksFee": 5
+    }
+  },
+  "atletico-madrid-ml-local-2627": {
+    "name": "Camiseta Atlético de Madrid Local 26/27 Manga Larga",
+    "cat": "Fútbol · Liga Española · Atlético de Madrid",
+    "price": 30,
+    "originalPrice": 38,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "3XL",
+      "4XL"
+    ],
+    "images": [
+      "assets/productos/atletico-madrid-ml-local-2627/frontal.jpg",
+      "assets/productos/atletico-madrid-ml-local-2627/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 1.5,
+      "leaguePatchLabel": "Liga"
+    }
+  },
+  "malaga-local-9900": {
+    "name": "Camiseta Málaga Retro 99/00",
+    "cat": "Fútbol · Liga Española · Málaga",
+    "price": 28,
+    "originalPrice": 35,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "images": [
+      "assets/productos/malaga-local-9900/frontal.jpg",
+      "assets/productos/malaga-local-9900/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "noPatch": true
+    }
+  },
+  "bayern-munich-local-1617": {
+    "name": "Camiseta Bayern Munich Retro 16/17",
+    "cat": "Fútbol · Bundesliga · Bayern Munich",
+    "price": 28,
+    "originalPrice": 35,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "images": [
+      "assets/productos/bayern-munich-local-1617/frontal.jpg",
+      "assets/productos/bayern-munich-local-1617/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 1.5,
+      "leaguePatchLabel": "Bundesliga"
+    }
+  },
+  "bodo-glimt-local-2627": {
+    "name": "Camiseta Bodø/Glimt Local 26/27",
+    "cat": "Fútbol · Europa · Bodø/Glimt",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "3XL",
+      "4XL"
+    ],
+    "images": [
+      "assets/productos/bodo-glimt-local-2627/frontal.jpg",
+      "assets/productos/bodo-glimt-local-2627/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "noPatch": true
+    }
+  },
+  "everton-away-2627": {
+    "name": "Camiseta Everton Visitante 26/27",
+    "cat": "Fútbol · Premier League · Everton",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "3XL",
+      "4XL"
+    ],
+    "images": [
+      "assets/productos/everton-away-2627/frontal.jpg",
+      "assets/productos/everton-away-2627/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "patchFee": 1.5,
+      "leaguePatchLabel": "Premier League",
+      "noChampions": true
+    }
+  },
+  "argentina-homenaje-messi": {
+    "name": "Camiseta Argentina Homenaje a Messi",
+    "cat": "Fútbol · Selecciones · Argentina",
+    "price": 23,
+    "originalPrice": 32,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "images": [
+      "assets/productos/argentina-homenaje-messi/frontal.jpg",
+      "assets/productos/argentina-homenaje-messi/trasera.jpg"
+    ],
+    "customization": {
+      "nameNumberFee": 2,
+      "noPatch": true
+    }
   }
 }
