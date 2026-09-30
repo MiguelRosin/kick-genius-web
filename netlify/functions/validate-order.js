@@ -8,7 +8,8 @@ const products = require('./products-data.json');
 
 const COUPONS = {
   PROMO: { type: 'fixed', value: 25, label: '25€ de descuento', minQty: 6 },
-  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' }
+  PEDIDOENTREGADO: { type: 'percent', value: 5, label: '5% de descuento' },
+  SEPTIEMBRE: { type: 'fixed', value: 25, label: '25€ de descuento' }
 };
 
 const MAX_QTY_PER_ITEM = 50;
