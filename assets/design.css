@@ -1,0 +1,55 @@
+/* Diseño compartido del sitio (cabecera, fondo, tarjetas, tipografía).
+   Se carga después del <style> de cada página y unifica el aspecto con el catálogo. */
+:root{
+  --radius:14px;
+  --card-bg:#ffffff;
+  --media-bg:#f3f2ef;
+  --shadow-soft:0 1px 2px rgba(var(--ink-rgb),0.05), 0 6px 18px rgba(var(--ink-rgb),0.05);
+  --shadow-lift:0 2px 4px rgba(var(--ink-rgb),0.06), 0 18px 40px rgba(var(--ink-rgb),0.12);
+}
+:root[data-theme="dark"]{--card-bg:#171c24;--media-bg:#222834;}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-theme="dark"]){--card-bg:#171c24;--media-bg:#222834;}
+}
+body{background:var(--navy);}
+body::before{display:none;}
+.wrap{max-width:1280px;}
+
+/* Cabecera */
+nav{max-width:1280px;gap:32px;padding:12px 24px;}
+.brand{flex-shrink:0;gap:12px;margin-right:8px;}
+.brand span{font-size:1.05rem;letter-spacing:.4px;white-space:nowrap;}
+.nav-links{gap:22px;}
+.nav-links a{font-size:0.74rem;letter-spacing:1.4px;font-weight:700;opacity:.7;padding-bottom:6px;}
+.nav-links a.active{color:var(--teal);opacity:1;}
+header{background:rgba(var(--cream-rgb),0.86);box-shadow:0 1px 0 var(--line);}
+
+/* Tarjetas de producto (inicio y stock) */
+.product-card{
+  background:var(--card-bg);border:1px solid var(--line);border-radius:var(--radius);box-shadow:none;
+  transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .3s ease;
+}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);border-color:rgba(var(--ink-rgb),0.2);}
+.product-media{background:var(--media-bg);aspect-ratio:4/3;}
+.product-media::before{background:linear-gradient(90deg,var(--media-bg),var(--card-bg),var(--media-bg));background-size:200% 100%;}
+.product-media img{padding:0;object-fit:cover;}
+.product-card:hover .product-media img{transform:scale(1.03);}
+.badge-offer{
+  top:12px;right:12px;background:var(--teal);color:#fff;box-shadow:none;animation:none;
+  border-radius:6px;padding:4px 8px;font-size:0.66rem;letter-spacing:.4px;
+}
+.product-info{padding:16px 16px 18px;gap:8px;background:var(--card-bg);}
+.product-cat{font-size:0.66rem;letter-spacing:1.2px;color:rgba(var(--ink-rgb),0.5);font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.product-name{font-size:0.95rem;font-weight:700;line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.price-row{gap:4px 10px;padding-top:10px;border-top:1px solid var(--line);}
+.price-final{font-size:1.25rem;color:var(--white);order:1;}
+.price-original{order:2;font-size:0.82rem;}
+.price-save{order:3;font-size:0.68rem;font-weight:600;opacity:.5;}
+
+/* Botones y foco accesible */
+.btn,.btn-primary,.btn-ghost{border-radius:10px;}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--teal);outline-offset:2px;
+}
