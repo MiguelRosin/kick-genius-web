@@ -21,3 +21,17 @@
   for = "/assets/data/*"
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=86400"
+
+# Secciones ocultas de momento (ver assets/stock-status.js): redirigen a la home.
+# Para reactivarlas, borra estas reglas y pon KICK_HAS_STOCK / KICK_HAS_TRACKING a true.
+[[redirects]]
+  from = "/stock.html"
+  to = "/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/seguimiento.html"
+  to = "/"
+  status = 302
+  force = true
