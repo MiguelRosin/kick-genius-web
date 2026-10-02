@@ -933,6 +933,17 @@
     .quick-cat{white-space:nowrap;}
     .results-meta{justify-content:space-between;}
   }
+  /* Tarjeta "Camiseta Sorpresa": misma medida que el resto, con interrogación y regalo */
+  .surprise-media{background:linear-gradient(135deg,var(--teal) 0%,#2d5fa8 55%,var(--yellow) 130%);}
+  .surprise-art{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;}
+  .surprise-q{font-family:var(--font-serif);font-weight:700;font-size:min(9rem,38vw);line-height:1;color:rgba(255,255,255,.95);
+    text-shadow:0 8px 30px rgba(0,0,0,.25);animation:surpriseBob 3.2s ease-in-out infinite;}
+  .surprise-gift{position:absolute;right:14%;bottom:12%;font-size:2.6rem;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));
+    transform:rotate(12deg);animation:surpriseWiggle 4s ease-in-out infinite;}
+  @keyframes surpriseBob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-8px) rotate(4deg);}}
+  @keyframes surpriseWiggle{0%,86%,100%{transform:rotate(12deg);}90%{transform:rotate(-6deg) scale(1.1);}95%{transform:rotate(20deg) scale(1.1);}}
+  @media (prefers-reduced-motion: reduce){.surprise-q,.surprise-gift{animation:none;}}
 </style>
 </head>
 <body>
@@ -2652,10 +2663,12 @@
     <div class="product-grid" id="productGrid"><template id="cardsTpl">
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-id="camiseta-sorpresa">
-        <div class="product-media">
+        <div class="product-media media-loaded surprise-media">
           <span class="badge-offer">-28%</span>
-          <img class="img-a" loading="lazy" decoding="async" src="assets/thumbs/camiseta-sorpresa/frontal.webp" alt="Camiseta Sorpresa frontal">
-          <img class="img-b" loading="lazy" decoding="async" src="assets/thumbs/camiseta-sorpresa/trasera.webp" alt="Camiseta Sorpresa trasera">
+          <div class="surprise-art" role="img" aria-label="Camiseta sorpresa: no sabrás cuál es hasta recibirla">
+            <span class="surprise-q">?</span>
+            <span class="surprise-gift">🎁</span>
+          </div>
         </div>
         <div class="product-info">
           <span class="product-cat">Fútbol · Producto Sorpresa</span>
