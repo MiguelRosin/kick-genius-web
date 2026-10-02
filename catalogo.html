@@ -2508,7 +2508,7 @@
 
 <section class="catalog-section">
   <div class="wrap">
-    <div class="product-grid" id="productGrid">
+    <div class="product-grid" id="productGrid"><template id="cardsTpl">
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-id="camiseta-sorpresa">
         <div class="product-media">
@@ -39297,7 +39297,7 @@
         </div>
       </article>
 
-    </div>
+    </template></div>
 
     <p class="empty-state" id="emptyState">Todavía no hay productos en esta categoría. ¡Vuelve pronto!</p>
 
@@ -39647,22 +39647,16 @@
   const filterDropdown = document.getElementById('filterDropdown');
   const filterLabel = document.getElementById('filterLabel');
   const emptyState = document.getElementById('emptyState');
-  const cards = document.querySelectorAll('.product-card');
-
-  document.querySelectorAll('.product-media').forEach(media => {
-    const img = media.querySelector('img.img-a');
-    if (!img) return;
-    const markLoaded = () => media.classList.add('media-loaded');
-    if (img.complete && img.naturalWidth > 0) markLoaded();
-    else {
-      img.addEventListener('load', markLoaded, { once: true });
-      img.addEventListener('error', markLoaded, { once: true });
-    }
-  });
+  // Las ~2000 tarjetas viven dentro de un <template> (inertes: sin estilos, layout
+  // ni imágenes). Solo se montan en el grid las que toca mostrar (PAGE_SIZE a PAGE_SIZE).
+  const productGrid = document.getElementById('productGrid');
+  const cardsTpl = document.getElementById('cardsTpl');
+  const cards = Array.from(cardsTpl.content.querySelectorAll('.product-card'));
+  const preparedCards = new WeakSet();
 
   // ===== Favoritos: corazón sobre cada card =====
   function refreshAllHearts(){
-    document.querySelectorAll('.product-card[data-id]').forEach(card => {
+    productGrid.querySelectorAll('.product-card[data-id]').forEach(card => {
       const btn = card.querySelector('.fav-heart');
       if (!btn) return;
       const active = isFavorited(card.dataset.id);
@@ -39671,26 +39665,44 @@
       btn.setAttribute('aria-label', active ? 'Quitar de favoritos' : 'Añadir a favoritos');
     });
   }
-  document.querySelectorAll('.product-card[data-id]').forEach(card => {
+
+  // Se ejecuta una sola vez por tarjeta, la primera vez que se monta en el grid.
+  function prepareCard(card) {
+    if (preparedCards.has(card)) return;
+    preparedCards.add(card);
     const media = card.querySelector('.product-media');
-    if (!media) return;
-    const id = card.dataset.id;
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'fav-heart';
-    btn.textContent = '♡';
-    btn.setAttribute('aria-label', 'Añadir a favoritos');
-    media.appendChild(btn);
-    btn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      await productsReady;
-      const p = PRODUCTS[id];
-      if (!p) return;
-      toggleFavorite({ id, name: p.name, price: p.price, originalPrice: p.originalPrice || null, img: p.images[0] });
-      refreshAllHearts();
-    });
-  });
-  refreshAllHearts();
+    if (media) {
+      const img = media.querySelector('img.img-a');
+      if (img) {
+        const markLoaded = () => media.classList.add('media-loaded');
+        if (img.complete && img.naturalWidth > 0) markLoaded();
+        else {
+          img.addEventListener('load', markLoaded, { once: true });
+          img.addEventListener('error', markLoaded, { once: true });
+        }
+      }
+      const id = card.dataset.id;
+      if (id) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'fav-heart';
+        btn.setAttribute('aria-label', 'Añadir a favoritos');
+        const active = isFavorited(id);
+        btn.classList.toggle('active', active);
+        btn.textContent = active ? '♥' : '♡';
+        media.appendChild(btn);
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await productsReady;
+          const p = PRODUCTS[id];
+          if (!p) return;
+          toggleFavorite({ id, name: p.name, price: p.price, originalPrice: p.originalPrice || null, img: p.images[0] });
+          refreshAllHearts();
+        });
+      }
+    }
+    if (card.dataset.id) card.addEventListener('click', () => openProductModal(card.dataset.id));
+  }
   const treeItems = document.querySelectorAll('.tree-item');
   const searchInput = document.getElementById('searchInput');
   const searchClear = document.getElementById('searchClear');
@@ -39827,7 +39839,7 @@
     const query = searchInput.value.trim().toLowerCase();
     searchClear.classList.toggle('visible', query.length > 0);
     let matchedCount = 0;
-    let shownCount = 0;
+    const toShow = [];
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
       const matchesBrand = activeBrand === 'all' || card.dataset.brand === activeBrand;
@@ -39836,16 +39848,15 @@
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
       const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
-      let show = false;
       if (matches) {
         matchedCount++;
-        show = matchedCount <= visibleLimit;
-        if (show) shownCount++;
+        if (matchedCount <= visibleLimit) toShow.push(card);
       }
-      card.style.display = show ? '' : 'none';
     });
+    toShow.forEach(prepareCard);
+    productGrid.replaceChildren(cardsTpl, ...toShow);
     emptyState.classList.toggle('visible', matchedCount === 0);
-    loadMoreWrap.classList.toggle('visible', shownCount < matchedCount);
+    loadMoreWrap.classList.toggle('visible', toShow.length < matchedCount);
     renderActiveFilterChips();
     syncFilterUrl();
   }
@@ -40246,10 +40257,10 @@
 
     // ===== Productos relacionados =====
     relatedGrid.innerHTML = '';
-    const sourceCard = document.querySelector('.product-card[data-id="' + id + '"]');
+    const sourceCard = cards.find(c => c.dataset.id === id);
     let relatedPicks = [];
     if (sourceCard) {
-      const allCards = Array.from(document.querySelectorAll('.product-card[data-id]'));
+      const allCards = cards;
       let candidates = [];
       if (sourceCard.dataset.cat === 'sneakers') {
         candidates = allCards.filter(c => c !== sourceCard && c.dataset.brand === sourceCard.dataset.brand);
@@ -40299,9 +40310,6 @@
     if (location.search) history.pushState({}, '', location.pathname);
   }
 
-  document.querySelectorAll('.product-card[data-id]').forEach(card => {
-    card.addEventListener('click', () => openProductModal(card.dataset.id));
-  });
   modalClose.addEventListener('click', closeProductModal);
   modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeProductModal(); });
 

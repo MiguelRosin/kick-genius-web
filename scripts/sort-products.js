@@ -81,7 +81,7 @@ function sortProductGrid(html) {
 
   const gridOpen = html.indexOf('<div class="product-grid" id="productGrid">');
   if (gridOpen === -1) throw new Error('No se encontró el grid de productos.');
-  const anchor = '\n    </div>\n\n    <p class="empty-state" id="emptyState">';
+  const anchor = '\n    </template></div>\n\n    <p class="empty-state" id="emptyState">';
   const gridEnd = html.indexOf(anchor, gridOpen);
   if (gridEnd === -1) throw new Error('No se encontró el final del grid.');
 

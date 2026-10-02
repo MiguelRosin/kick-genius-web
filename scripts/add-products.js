@@ -557,7 +557,7 @@ async function main() {
     console.log(`→ Añadiendo ${p.id}...`);
     html = ensureTreeEntry(html, p);
 
-    const cardAnchor = '\n    </div>\n\n    <p class="empty-state" id="emptyState">';
+    const cardAnchor = '\n    </template></div>\n\n    <p class="empty-state" id="emptyState">';
     if (!html.includes(cardAnchor)) throw new Error('No se encontró el punto de inserción del grid de productos.');
     html = html.replace(cardAnchor, '\n' + buildCardHtml(p) + cardAnchor.slice(1));
 
