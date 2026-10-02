@@ -816,6 +816,123 @@
     .product-info{padding:16px;}
     .dropdown-toggle{padding:9px 14px;font-size:0.72rem;}
   }
+  /* ===== REDISEÑO PROFESIONAL (catálogo) ===== */
+  :root{
+    --radius:14px;
+    --card-bg:#ffffff;
+    --media-bg:#f3f2ef;
+    --shadow-soft:0 1px 2px rgba(var(--ink-rgb),0.05), 0 6px 18px rgba(var(--ink-rgb),0.05);
+    --shadow-lift:0 2px 4px rgba(var(--ink-rgb),0.06), 0 18px 40px rgba(var(--ink-rgb),0.12);
+  }
+  :root[data-theme="dark"]{--card-bg:#171c24;--media-bg:#222834;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]):not([data-theme="dark"]){--card-bg:#171c24;--media-bg:#222834;}
+  }
+  body{background:var(--navy);}
+  body::before{display:none;}
+  .wrap{max-width:1280px;}
+
+  /* Cabecera: más aire entre logo y menú, sin amontonar */
+  nav{max-width:1280px;gap:32px;padding:12px 24px;}
+  .brand{flex-shrink:0;gap:12px;margin-right:8px;}
+  .brand span{font-size:1.05rem;letter-spacing:.4px;white-space:nowrap;}
+  .nav-links{gap:22px;}
+  .nav-links a{font-size:0.74rem;letter-spacing:1.4px;font-weight:700;opacity:.7;padding-bottom:6px;}
+  .nav-links a.active{color:var(--teal);opacity:1;}
+  header{background:rgba(var(--cream-rgb),0.86);box-shadow:0 1px 0 var(--line);}
+
+  /* Barra del catálogo */
+  .catalog-toolbar{background:var(--navy);padding:26px 0 22px;}
+  .catalog-toolbar-title h1{font-size:2.1rem;font-weight:600;}
+  .catalog-toolbar-title span{font-size:0.82rem;}
+  .catalog-toolbar-title .product-count{background:none;border:1px solid var(--line);color:rgba(var(--ink-rgb),0.7);font-weight:700;}
+  .search-box,.dropdown-toggle{background:var(--card-bg);border-radius:10px;padding:12px 16px;box-shadow:0 1px 2px rgba(var(--ink-rgb),0.04);}
+  .search-box input{width:260px;}
+  .dropdown-toggle{font-size:0.8rem;}
+  .catalog-section{padding-top:32px;background:var(--navy);}
+
+  /* Rejilla y tarjetas */
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px 22px;}
+  .product-card{
+    background:var(--card-bg);border:1px solid var(--line);border-radius:var(--radius);box-shadow:none;
+    transition:transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);border-color:rgba(var(--ink-rgb),0.2);}
+  .product-media{background:var(--media-bg);}
+  .product-media::before{background:linear-gradient(90deg,var(--media-bg),var(--card-bg),var(--media-bg));background-size:200% 100%;}
+  /* Casi todas las fotos son 3:2; cover rellena el marco sin franjas vacías */
+  .product-media{aspect-ratio:4/3;}
+  .product-media img{padding:0;object-fit:cover;}
+  .product-card:hover .product-media img{transform:scale(1.03);}
+  .badge-offer{
+    top:12px;right:12px;background:var(--teal);color:#fff;box-shadow:none;animation:none;
+    border-radius:6px;padding:4px 8px;font-size:0.66rem;letter-spacing:.4px;
+  }
+  .badge-new{top:12px;left:auto;right:12px;margin-top:30px;border-radius:6px;padding:4px 8px;}
+  .fav-heart{
+    top:10px;left:10px;width:32px;height:32px;background:var(--card-bg);color:rgba(var(--ink-rgb),0.7);
+    box-shadow:0 1px 4px rgba(var(--ink-rgb),0.15);backdrop-filter:none;
+  }
+  .fav-heart:hover{transform:scale(1.08);}
+  .fav-heart.active{color:#d6336c;}
+  .product-info{padding:16px 16px 18px;gap:8px;background:var(--card-bg);}
+  .product-cat{font-size:0.66rem;letter-spacing:1.2px;color:rgba(var(--ink-rgb),0.5);font-weight:700;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .product-name{font-size:0.95rem;font-weight:700;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em;}
+  .price-row{gap:4px 10px;padding-top:10px;border-top:1px solid var(--line);}
+  .price-final{font-size:1.25rem;color:var(--white);order:1;}
+  .price-original{order:2;font-size:0.82rem;}
+  .price-save{order:3;font-size:0.68rem;font-weight:600;opacity:.5;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .load-more-btn{border-radius:10px;border-color:var(--ink-line,var(--line));color:var(--white);padding:14px 40px;}
+  .load-more-btn:hover{background:var(--navy-deep);color:var(--navy);}
+  @media (max-width:640px){
+    .product-grid{grid-template-columns:repeat(2,1fr);gap:14px 12px;}
+    .product-info{padding:12px;}
+    .product-name{font-size:0.85rem;}
+    .price-save{display:none;}
+    .catalog-toolbar-title h1{font-size:1.6rem;}
+    .search-box input{width:100%;}
+  }
+  /* Franja de confianza, categorías rápidas y orden */
+  .trust-strip{
+    list-style:none;display:flex;gap:10px 28px;flex-wrap:wrap;justify-content:center;
+    padding:10px 16px;margin-bottom:22px;border:1px solid var(--line);border-radius:10px;
+    background:var(--card-bg);font-size:0.76rem;font-weight:700;color:rgba(var(--ink-rgb),0.7);
+  }
+  .results-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;}
+  .quick-cats{display:flex;gap:8px;flex-wrap:wrap;}
+  .quick-cat{
+    padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:var(--card-bg);
+    color:var(--white);font:700 0.8rem 'Manrope',sans-serif;cursor:pointer;transition:all .2s ease;
+  }
+  .quick-cat:hover{border-color:var(--teal);color:var(--teal);}
+  .quick-cat.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .results-meta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .results-count{font-size:0.8rem;font-weight:600;color:rgba(var(--ink-rgb),0.6);}
+  .sort-wrap{display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;color:rgba(var(--ink-rgb),0.6);}
+  .sort-wrap select{
+    padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card-bg);
+    color:var(--white);font:600 0.8rem 'Manrope',sans-serif;cursor:pointer;
+  }
+  .sort-wrap select:focus-visible,.quick-cat:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  /* "Ver detalles" al pasar el ratón */
+  .product-media::after{
+    content:"Ver detalles";position:absolute;left:12px;right:12px;bottom:12px;z-index:2;
+    padding:10px;border-radius:10px;background:var(--teal);color:#fff;text-align:center;
+    font:700 0.76rem 'Manrope',sans-serif;letter-spacing:.6px;text-transform:uppercase;
+    opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease;pointer-events:none;
+  }
+  .product-card:hover .product-media::after{opacity:1;transform:none;}
+  @media (hover:none){.product-media::after{display:none;}}
+  @media (max-width:640px){
+    .trust-strip{justify-content:flex-start;font-size:0.7rem;padding:10px 12px;}
+    .results-bar{flex-direction:column;align-items:stretch;}
+    .quick-cats{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+    .quick-cat{white-space:nowrap;}
+    .results-meta{justify-content:space-between;}
+  }
 </style>
 </head>
 <body>
@@ -2508,6 +2625,30 @@
 
 <section class="catalog-section">
   <div class="wrap">
+    <ul class="trust-strip" aria-label="Condiciones de compra">
+      <li>🔒 Pago con PayPal o transferencia</li>
+      <li>🚚 Envío en ~15 días</li>
+      <li>🎨 Personalización disponible</li>
+    </ul>
+    <div class="results-bar">
+      <div class="quick-cats" id="quickCats" role="group" aria-label="Categorías">
+        <button type="button" class="quick-cat active" data-quick="all">Todo</button>
+        <button type="button" class="quick-cat" data-quick="futbol">⚽ Fútbol</button>
+        <button type="button" class="quick-cat" data-quick="sneakers">👟 Sneakers</button>
+        <button type="button" class="quick-cat" data-quick="baloncesto">🏀 Baloncesto</button>
+      </div>
+      <div class="results-meta">
+        <span class="results-count" id="resultsCount" aria-live="polite"></span>
+        <label class="sort-wrap">Ordenar
+          <select id="sortSelect" aria-label="Ordenar productos">
+            <option value="default">Destacados</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="discount">Mayor descuento</option>
+          </select>
+        </label>
+      </div>
+    </div>
     <div class="product-grid" id="productGrid"><template id="cardsTpl">
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-id="camiseta-sorpresa">
@@ -39833,13 +39974,36 @@
     history.replaceState(null, '', newUrl);
   }
 
+  const sortSelect = document.getElementById('sortSelect');
+  const resultsCount = document.getElementById('resultsCount');
+  // Precios leídos de la tarjeta una sola vez (para ordenar sin recorrer el DOM cada vez).
+  const priceCache = new WeakMap();
+  function cardPrices(card) {
+    let v = priceCache.get(card);
+    if (!v) {
+      const num = sel => parseFloat((card.querySelector(sel)?.textContent || '').replace(',', '.').replace(/[^\d.]/g, '')) || 0;
+      const price = num('.price-final');
+      const original = num('.price-original');
+      v = { price, discount: original > price ? original - price : 0 };
+      priceCache.set(card, v);
+    }
+    return v;
+  }
+  sortSelect.addEventListener('change', () => applyFilters());
+  document.querySelectorAll('#quickCats .quick-cat').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.quick;
+      const target = q === 'all' ? document.querySelector('.tree-all') : document.querySelector(`.tree-cat[data-cat="${q}"]`);
+      target?.click();
+    });
+  });
+
   function applyFilters(resetPage = true) {
     if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
     const query = searchInput.value.trim().toLowerCase();
     searchClear.classList.toggle('visible', query.length > 0);
-    let matchedCount = 0;
-    const toShow = [];
+    const matched = [];
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
       const matchesBrand = activeBrand === 'all' || card.dataset.brand === activeBrand;
@@ -39848,10 +40012,24 @@
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
       const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
-      if (matches) {
-        matchedCount++;
-        if (matchedCount <= visibleLimit) toShow.push(card);
-      }
+      if (matches) matched.push(card);
+    });
+    const sortMode = sortSelect.value;
+    if (sortMode !== 'default') {
+      const key = {
+        'price-asc': c => cardPrices(c).price,
+        'price-desc': c => -cardPrices(c).price,
+        'discount': c => -cardPrices(c).discount
+      }[sortMode];
+      matched.sort((a, b) => key(a) - key(b));
+    }
+    const matchedCount = matched.length;
+    const toShow = matched.slice(0, visibleLimit);
+    resultsCount.textContent = matchedCount
+      ? `Mostrando ${toShow.length} de ${matchedCount.toLocaleString('es-ES')} productos`
+      : '';
+    document.querySelectorAll('#quickCats .quick-cat').forEach(b => {
+      b.classList.toggle('active', b.dataset.quick === activeCategory);
     });
     toShow.forEach(prepareCard);
     productGrid.replaceChildren(cardsTpl, ...toShow);
