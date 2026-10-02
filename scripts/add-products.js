@@ -385,7 +385,9 @@ function buildCardHtml(p) {
     // pudo generar (sin sharp) se cae a la imagen completa.
     const thumbRel = `assets/thumbs/${p.id}/${path.parse(file).name}.webp`;
     const src = fs.existsSync(path.join(ROOT, thumbRel)) ? thumbRel : `assets/productos/${p.id}/${file}`;
-    return `          <img class="${cls}" loading="lazy" decoding="async" src="${src}" alt="${p.name} ${side}">`;
+    // La trasera (img-b) se carga al pasar el ratón: data-src en vez de src.
+    const srcAttr = i === 0 ? 'loading="lazy" decoding="async" src' : 'decoding="async" data-src';
+    return `          <img class="${cls}" ${srcAttr}="${src}" alt="${p.name} ${side}">`;
   }).join('\n');
 
   const newBadge = p.isNew ? `          <span class="badge-new">🆕 Nuevo</span>\n` : '';
