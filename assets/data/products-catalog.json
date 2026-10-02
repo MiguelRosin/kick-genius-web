@@ -43101,8 +43101,7 @@
       "4XL"
     ],
     "images": [
-      "assets/productos/camiseta-sorpresa/frontal.jpg",
-      "assets/productos/camiseta-sorpresa/trasera.jpg"
+      "assets/sorpresa.svg"
     ],
     "note": "🎁 Es una sorpresa: puede ser de la temporada 26/27 o retro, con o sin serigrafía. No podrás elegir cuál te toca, pero sí descartar hasta 5 equipos para no recibir una camiseta suya.",
     "customization": {

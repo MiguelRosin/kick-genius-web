@@ -40374,6 +40374,7 @@
     modalMainImg.src = currentModalImages[0];
 
     modalThumbs.innerHTML = '';
+    modalThumbs.style.display = product.images.length > 1 ? '' : 'none';
     product.images.forEach((src, i) => {
       const t = document.createElement('img');
       t.src = src;

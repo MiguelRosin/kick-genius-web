@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Camiseta sorpresa">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b3f73"/><stop offset=".55" stop-color="#2d5fa8"/><stop offset="1" stop-color="#bb8a44"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <text x="560" y="640" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="620" fill="#fff" fill-opacity=".95" transform="rotate(-4 560 450)">?</text>
+  <g transform="translate(860 560) rotate(12)">
+    <rect x="0" y="60" width="220" height="170" rx="14" fill="#e0453a"/>
+    <rect x="-14" y="30" width="248" height="60" rx="12" fill="#f0594d"/>
+    <rect x="95" y="30" width="30" height="200" fill="#f6c453"/>
+    <path d="M110 30 C60 -30 20 10 60 30 Z" fill="#f6c453"/>
+    <path d="M110 30 C160 -30 200 10 160 30 Z" fill="#f6c453"/>
+  </g>
+</svg>
