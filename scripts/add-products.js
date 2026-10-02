@@ -381,7 +381,11 @@ function buildCardHtml(p) {
   const imgTags = p.images.slice(0, 2).map((file, i) => {
     const cls = i === 0 ? 'img-a' : 'img-b';
     const side = i === 0 ? 'frontal' : 'trasera';
-    return `          <img class="${cls}" loading="lazy" src="assets/productos/${p.id}/${file}" alt="${p.name} ${side}">`;
+    // Las tarjetas usan miniaturas (assets/thumbs, ver makeThumbs); si no se
+    // pudo generar (sin sharp) se cae a la imagen completa.
+    const thumbRel = `assets/thumbs/${p.id}/${path.parse(file).name}.webp`;
+    const src = fs.existsSync(path.join(ROOT, thumbRel)) ? thumbRel : `assets/productos/${p.id}/${file}`;
+    return `          <img class="${cls}" loading="lazy" decoding="async" src="${src}" alt="${p.name} ${side}">`;
   }).join('\n');
 
   const newBadge = p.isNew ? `          <span class="badge-new">🆕 Nuevo</span>\n` : '';
@@ -483,7 +487,20 @@ async function compressImages(p) {
     await pipeline.jpeg({ quality: 80, mozjpeg: true }).toFile(tmp);
     await renameWithRetry(tmp, full);
   }
+  await makeThumbs(p);
   return { ok: true, compressed: true };
+}
+
+// Miniaturas de 480px (WebP) de las dos imágenes que se ven en la tarjeta del
+// catálogo; la ficha del producto sigue usando las imágenes completas.
+async function makeThumbs(p) {
+  const outDir = path.join(ROOT, 'assets', 'thumbs', p.id);
+  fs.mkdirSync(outDir, { recursive: true });
+  for (const file of p.images.slice(0, 2)) {
+    const src = path.join(ROOT, 'assets', 'productos', p.id, file);
+    const dst = path.join(outDir, path.parse(file).name + '.webp');
+    await sharp(src).rotate().resize({ width: 480, height: 480, fit: 'inside' }).webp({ quality: 75 }).toFile(dst);
+  }
 }
 
 // OneDrive puede bloquear brevemente un archivo recién escrito; reintenta el
@@ -540,7 +557,7 @@ async function main() {
     console.log(`→ Añadiendo ${p.id}...`);
     html = ensureTreeEntry(html, p);
 
-    const cardAnchor = '\n    </div>\n\n    <p class="empty-state" id="emptyState">';
+    const cardAnchor = '\n    </template></div>\n\n    <p class="empty-state" id="emptyState">';
     if (!html.includes(cardAnchor)) throw new Error('No se encontró el punto de inserción del grid de productos.');
     html = html.replace(cardAnchor, '\n' + buildCardHtml(p) + cardAnchor.slice(1));
 
