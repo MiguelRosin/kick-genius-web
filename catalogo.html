@@ -895,6 +895,44 @@
     .catalog-toolbar-title h1{font-size:1.6rem;}
     .search-box input{width:100%;}
   }
+  /* Franja de confianza, categorías rápidas y orden */
+  .trust-strip{
+    list-style:none;display:flex;gap:10px 28px;flex-wrap:wrap;justify-content:center;
+    padding:10px 16px;margin-bottom:22px;border:1px solid var(--line);border-radius:10px;
+    background:var(--card-bg);font-size:0.76rem;font-weight:700;color:rgba(var(--ink-rgb),0.7);
+  }
+  .results-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;}
+  .quick-cats{display:flex;gap:8px;flex-wrap:wrap;}
+  .quick-cat{
+    padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:var(--card-bg);
+    color:var(--white);font:700 0.8rem 'Manrope',sans-serif;cursor:pointer;transition:all .2s ease;
+  }
+  .quick-cat:hover{border-color:var(--teal);color:var(--teal);}
+  .quick-cat.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .results-meta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .results-count{font-size:0.8rem;font-weight:600;color:rgba(var(--ink-rgb),0.6);}
+  .sort-wrap{display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;color:rgba(var(--ink-rgb),0.6);}
+  .sort-wrap select{
+    padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card-bg);
+    color:var(--white);font:600 0.8rem 'Manrope',sans-serif;cursor:pointer;
+  }
+  .sort-wrap select:focus-visible,.quick-cat:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  /* "Ver detalles" al pasar el ratón */
+  .product-media::after{
+    content:"Ver detalles";position:absolute;left:12px;right:12px;bottom:12px;z-index:2;
+    padding:10px;border-radius:10px;background:var(--teal);color:#fff;text-align:center;
+    font:700 0.76rem 'Manrope',sans-serif;letter-spacing:.6px;text-transform:uppercase;
+    opacity:0;transform:translateY(8px);transition:opacity .25s ease, transform .25s ease;pointer-events:none;
+  }
+  .product-card:hover .product-media::after{opacity:1;transform:none;}
+  @media (hover:none){.product-media::after{display:none;}}
+  @media (max-width:640px){
+    .trust-strip{justify-content:flex-start;font-size:0.7rem;padding:10px 12px;}
+    .results-bar{flex-direction:column;align-items:stretch;}
+    .quick-cats{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+    .quick-cat{white-space:nowrap;}
+    .results-meta{justify-content:space-between;}
+  }
 </style>
 </head>
 <body>
@@ -2587,6 +2625,30 @@
 
 <section class="catalog-section">
   <div class="wrap">
+    <ul class="trust-strip" aria-label="Condiciones de compra">
+      <li>🔒 Pago con PayPal o transferencia</li>
+      <li>🚚 Envío en ~15 días</li>
+      <li>🎨 Personalización disponible</li>
+    </ul>
+    <div class="results-bar">
+      <div class="quick-cats" id="quickCats" role="group" aria-label="Categorías">
+        <button type="button" class="quick-cat active" data-quick="all">Todo</button>
+        <button type="button" class="quick-cat" data-quick="futbol">⚽ Fútbol</button>
+        <button type="button" class="quick-cat" data-quick="sneakers">👟 Sneakers</button>
+        <button type="button" class="quick-cat" data-quick="baloncesto">🏀 Baloncesto</button>
+      </div>
+      <div class="results-meta">
+        <span class="results-count" id="resultsCount" aria-live="polite"></span>
+        <label class="sort-wrap">Ordenar
+          <select id="sortSelect" aria-label="Ordenar productos">
+            <option value="default">Destacados</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="discount">Mayor descuento</option>
+          </select>
+        </label>
+      </div>
+    </div>
     <div class="product-grid" id="productGrid"><template id="cardsTpl">
       <!-- PRODUCTO REAL -->
       <article class="product-card" data-cat="futbol" data-id="camiseta-sorpresa">
@@ -39912,13 +39974,36 @@
     history.replaceState(null, '', newUrl);
   }
 
+  const sortSelect = document.getElementById('sortSelect');
+  const resultsCount = document.getElementById('resultsCount');
+  // Precios leídos de la tarjeta una sola vez (para ordenar sin recorrer el DOM cada vez).
+  const priceCache = new WeakMap();
+  function cardPrices(card) {
+    let v = priceCache.get(card);
+    if (!v) {
+      const num = sel => parseFloat((card.querySelector(sel)?.textContent || '').replace(',', '.').replace(/[^\d.]/g, '')) || 0;
+      const price = num('.price-final');
+      const original = num('.price-original');
+      v = { price, discount: original > price ? original - price : 0 };
+      priceCache.set(card, v);
+    }
+    return v;
+  }
+  sortSelect.addEventListener('change', () => applyFilters());
+  document.querySelectorAll('#quickCats .quick-cat').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.quick;
+      const target = q === 'all' ? document.querySelector('.tree-all') : document.querySelector(`.tree-cat[data-cat="${q}"]`);
+      target?.click();
+    });
+  });
+
   function applyFilters(resetPage = true) {
     if (resetPage) visibleLimit = PAGE_SIZE;
     const { cat: activeCategory, brand: activeBrand, model: activeModel, league: activeLeague, team: activeTeam } = currentCategoryFilter;
     const query = searchInput.value.trim().toLowerCase();
     searchClear.classList.toggle('visible', query.length > 0);
-    let matchedCount = 0;
-    const toShow = [];
+    const matched = [];
     cards.forEach(card => {
       const matchesCategory = activeCategory === 'all' || card.dataset.cat === activeCategory;
       const matchesBrand = activeBrand === 'all' || card.dataset.brand === activeBrand;
@@ -39927,10 +40012,24 @@
       const matchesTeam = activeTeam === 'all' || card.dataset.team === activeTeam;
       const matchesSearch = cardMatchesSearch(card, query);
       const matches = matchesCategory && matchesBrand && matchesModel && matchesLeague && matchesTeam && matchesSearch;
-      if (matches) {
-        matchedCount++;
-        if (matchedCount <= visibleLimit) toShow.push(card);
-      }
+      if (matches) matched.push(card);
+    });
+    const sortMode = sortSelect.value;
+    if (sortMode !== 'default') {
+      const key = {
+        'price-asc': c => cardPrices(c).price,
+        'price-desc': c => -cardPrices(c).price,
+        'discount': c => -cardPrices(c).discount
+      }[sortMode];
+      matched.sort((a, b) => key(a) - key(b));
+    }
+    const matchedCount = matched.length;
+    const toShow = matched.slice(0, visibleLimit);
+    resultsCount.textContent = matchedCount
+      ? `Mostrando ${toShow.length} de ${matchedCount.toLocaleString('es-ES')} productos`
+      : '';
+    document.querySelectorAll('#quickCats .quick-cat').forEach(b => {
+      b.classList.toggle('active', b.dataset.quick === activeCategory);
     });
     toShow.forEach(prepareCard);
     productGrid.replaceChildren(cardsTpl, ...toShow);
