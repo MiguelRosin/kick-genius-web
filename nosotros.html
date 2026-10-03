@@ -1036,9 +1036,13 @@
 
     msg += `${DIVIDER}\n💳 *MÉTODO DE PAGO*\n${shipping.shipPayment}\n\n`;
 
-    msg += `${DIVIDER}\n📦 *DATOS DE ENVÍO*\n`;
-    msg += `${escapeWA(shipping.shipName)}\n${escapeWA(shipping.shipAddress)}\n${escapeWA(shipping.shipCity)}, ${escapeWA(shipping.shipProvince)}, ${escapeWA(shipping.shipCountry)} — ${escapeWA(shipping.shipZip)}\n`;
-    msg += `Tel: ${escapeWA(shipping.shipPhone)} · Email: ${escapeWA(shipping.shipEmail)}\n`;
+    msg += `${DIVIDER}\nTo this address:\n\n`;
+    msg += `Name: ${escapeWA(shipping.shipName)}\n`;
+    msg += `Address: ${escapeWA(shipping.shipAddress)}\n`;
+    msg += `City: ${escapeWA(shipping.shipCity)}\n`;
+    msg += `Postal Code: ${escapeWA(shipping.shipZip)}\n`;
+    msg += `Country: ${escapeWA(shipping.shipCountry)}\n`;
+    msg += `Phone: ${escapeWA(shipping.shipPhone)}\n`;
     if (shipping.shipComments) {
       msg += `\n💬 *Comentarios:* ${escapeWA(shipping.shipComments)}\n`;
     }
