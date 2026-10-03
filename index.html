@@ -222,107 +222,6 @@
     .promo-banner a{font-size:0.72rem;}
   }
 
-  /* ===== HERO ===== */
-  .hero{
-    min-height:auto;display:flex;align-items:center;justify-content:center;
-    position:relative;padding:148px 24px 72px;overflow:hidden;
-  }
-  .hero-bg-shape{
-    position:absolute;border-radius:50%;filter:blur(90px);opacity:0.16;
-    background:radial-gradient(circle, var(--teal), transparent 70%);
-    width:600px;height:600px;top:-150px;right:-150px;
-    z-index:0;
-  }
-  .hero-bg-shape.two{
-    background:radial-gradient(circle, var(--yellow), transparent 70%);
-    width:400px;height:400px;bottom:-100px;left:-100px;top:auto;right:auto;opacity:.12;
-  }
-  .hero-inner{
-    position:relative;z-index:2;max-width:1180px;margin:0 auto;width:100%;
-    display:grid;grid-template-columns:1fr;gap:40px;
-  }
-  .hero-copy{text-align:center;max-width:640px;margin:0 auto;}
-  .hero-showcase{display:none;}
-  .hero-tag{
-    display:inline-block;padding:8px 18px;border:1px solid var(--line);
-    border-radius:100px;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;
-    color:var(--teal);margin-bottom:28px;font-weight:700;
-    background:rgba(27,63,115,0.05);
-  }
-  .hero h1{
-    font-size:clamp(2.9rem, 8vw, 5.8rem);
-    font-weight:600;
-    background:linear-gradient(180deg, var(--white) 45%, rgba(var(--ink-rgb),0.6));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero h1 .accent{
-    font-style:italic;
-    background:linear-gradient(90deg, var(--teal), var(--yellow));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .hero p{
-    margin:26px auto 34px;max-width:560px;font-size:1.14rem;color:rgba(var(--ink-rgb),0.68);
-    line-height:1.65;
-  }
-  .btn-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
-  .btn{
-    padding:16px 34px;border-radius:100px;font-weight:800;font-size:0.85rem;
-    letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;
-    transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, background .3s ease, color .3s ease;
-    display:inline-flex;align-items:center;gap:8px;
-  }
-  .btn-primary{background:var(--teal);color:var(--navy-deep);box-shadow:0 10px 24px rgba(27,63,115,0.22);}
-  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(27,63,115,0.32);}
-  .btn-ghost{background:transparent;color:var(--white);border:1px solid var(--line);}
-  .btn-ghost:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);background:rgba(27,63,115,0.05);}
-
-  .hero-trust{
-    display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:44px;
-    font-size:0.8rem;font-weight:700;color:rgba(var(--ink-rgb),0.55);
-  }
-  .hero-trust span{display:flex;align-items:center;gap:7px;}
-
-  /* Panel de producto del hero: contenido dentro de su columna, sin salirse
-     del viewport. Solo en pantallas amplias, donde sobra sitio a los lados. */
-  @media (min-width:1020px){
-    .hero-inner{grid-template-columns:1.05fr 0.95fr;align-items:center;gap:64px;text-align:left;}
-    .hero-copy{text-align:left;margin:0;max-width:none;}
-    .hero p{margin:26px 0 34px;}
-    .btn-row{justify-content:flex-start;}
-    .hero-trust{justify-content:flex-start;}
-    .hero-showcase{
-      display:block;position:relative;max-width:420px;margin:0 0 0 auto;
-    }
-    .hero-showcase-main{
-      border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/3;
-      border:1px solid var(--line);background:var(--navy-soft);
-      box-shadow:var(--shadow-lift);
-      transition:transform .5s cubic-bezier(.16,1,.3,1);
-    }
-    .hero-showcase:hover .hero-showcase-main{transform:translateY(-6px) rotate(-0.6deg);}
-    .hero-showcase-main img{width:100%;height:100%;object-fit:cover;display:block;}
-    .hero-showcase-accent{
-      position:absolute;right:-18px;bottom:-32px;width:46%;
-      border-radius:var(--radius);overflow:hidden;aspect-ratio:1/1;
-      border:5px solid var(--navy-deep);background:var(--navy-soft);
-      box-shadow:0 24px 46px rgba(var(--ink-rgb),0.22);
-      transition:transform .5s cubic-bezier(.16,1,.3,1);
-    }
-    .hero-showcase:hover .hero-showcase-accent{transform:translateY(-4px) rotate(1.2deg);}
-    .hero-showcase-accent img{width:100%;height:100%;object-fit:cover;display:block;}
-  }
-
-  .scroll-cue{
-    position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
-    width:26px;height:42px;border:2px solid var(--line);border-radius:20px;
-    display:flex;justify-content:center;padding-top:8px;z-index:2;
-  }
-  .scroll-cue::after{
-    content:"";width:4px;height:8px;background:var(--teal);border-radius:4px;
-    animation:cue 1.6s infinite;
-  }
-  @keyframes cue{0%{opacity:1;transform:translateY(0);}70%{opacity:0;transform:translateY(14px);}100%{opacity:0;}}
-
   /* ===== SECTION GENERIC ===== */
   section{position:relative;z-index:1;padding:100px 0;}
   .kicker{
@@ -374,26 +273,6 @@
   .stagger.visible > *:nth-child(4){transition-delay:.35s;}
   .stagger.visible > *:nth-child(5){transition-delay:.45s;}
   .parallax-el{will-change:transform;}
-
-  /* ===== CATEGORIES ===== */
-  .cat-grid{
-    display:grid;grid-template-columns:repeat(3, minmax(150px, 220px));gap:20px;
-    justify-content:center;max-width:700px;margin:0 auto;
-  }
-  .cat-card{
-    background:var(--navy-soft);border:1px solid var(--line);border-radius:var(--radius-lg);
-    padding:38px 18px;text-align:center;box-shadow:var(--shadow-soft);
-    transition:transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease, box-shadow .4s ease;
-  }
-  .cat-card:hover{
-    transform:translateY(-10px);border-color:var(--teal);box-shadow:var(--shadow-lift);
-  }
-  .cat-card .cat-icon{
-    font-size:1.8rem;display:flex;align-items:center;justify-content:center;
-    width:62px;height:62px;margin:0 auto 16px;border-radius:50%;
-    background:rgba(27,63,115,0.08);
-  }
-  .cat-card h4{font-size:0.85rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;}
 
   /* ===== CONFIANZA ===== */
   .confidence-grid{
@@ -660,40 +539,9 @@
     .cart-btn{padding:9px 12px;font-size:0.75rem;gap:6px;}
     .cart-label{display:none;}
   }
-  /* ===== ANIMACIONES DE INICIO ===== */
-  @media (prefers-reduced-motion: no-preference){
-    @keyframes riseIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
-    @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-    @keyframes accentShift{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
-    @keyframes btnShine{0%{transform:translateX(-120%) skewX(-20deg);}60%,100%{transform:translateX(220%) skewX(-20deg);}}
-    @keyframes showIn{from{opacity:0;transform:translateY(40px) scale(.96);}to{opacity:1;transform:none;}}
-    .hero-tag,.hero h1,.hero p,.hero .btn-row,.hero-trust{opacity:0;animation:riseIn .8s cubic-bezier(.16,1,.3,1) forwards;}
-    .hero-tag{animation-delay:.05s;}
-    .hero h1{animation-delay:.18s;}
-    .hero p{animation-delay:.36s;}
-    .hero .btn-row{animation-delay:.5s;}
-    .hero-trust{animation-delay:.65s;}
-    .hero h1 .accent{
-      background:linear-gradient(90deg,var(--teal),var(--yellow),var(--teal));background-size:200% 100%;
-      -webkit-background-clip:text;background-clip:text;animation:accentShift 6s linear infinite;
-    }
-    .hero-showcase{opacity:0;animation:showIn 1s cubic-bezier(.16,1,.3,1) .3s forwards, floatY 7s ease-in-out 1.3s infinite;}
-    .hero-showcase-accent{animation:floatY 5s ease-in-out .6s infinite reverse;}
-    .btn-primary{position:relative;overflow:hidden;}
-    .btn-primary::after{
-      content:"";position:absolute;top:0;left:0;width:40%;height:100%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
-      animation:btnShine 4.5s ease-in-out 2s infinite;pointer-events:none;
-    }
-    .stagger > *:nth-child(1){transition-delay:.0s;} .stagger > *:nth-child(2){transition-delay:.08s;}
-    .stagger > *:nth-child(3){transition-delay:.16s;} .stagger > *:nth-child(4){transition-delay:.24s;}
-    .stagger > *:nth-child(5){transition-delay:.32s;} .stagger > *:nth-child(6){transition-delay:.4s;}
-  }
-  /* Barra de progreso de scroll */
-  .scroll-progress{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);
-    background:linear-gradient(90deg,var(--teal),var(--yellow));z-index:2000;pointer-events:none;}
 </style>
 <link rel="stylesheet" href="assets/design.css">
+<link rel="stylesheet" href="assets/home.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -753,35 +601,41 @@
 </header>
 
 
-<section class="hero">
-  <div class="hero-bg-shape parallax-el" data-speed="0.15"></div>
-  <div class="hero-bg-shape two parallax-el" data-speed="0.25"></div>
-  <div class="hero-inner">
-    <div class="hero-copy">
-      <span class="hero-tag">Sneakers · Fútbol · Baloncesto</span>
-      <h1>KICK <span class="accent">DIFFERENT.</span></h1>
+<section class="hx" id="hero">
+  <div class="wrap hx-inner">
+    <div class="hx-copy">
+      <span class="hx-eyebrow">Sneakers · Fútbol · Baloncesto</span>
+      <h1>Kick <em>different.</em></h1>
       <p>La tienda online de Kick Genius: sneakers y camisetas deportivas para quienes viven el deporte con estilo propio.</p>
       <div class="btn-row">
-        <a href="catalogo.html" class="btn btn-primary">Ver catálogo</a>
+        <a href="catalogo.html" class="btn btn-gold">Ver catálogo</a>
         <a href="https://wa.me/34644039760" target="_blank" rel="noopener" class="btn btn-ghost">Escríbenos por WhatsApp</a>
       </div>
-      <div class="hero-trust">
-        <span>🔒 Pago con PayPal o transferencia</span>
-        <span>🚚 Envío en ~15 días</span>
-        <span>🎨 Personalización disponible</span>
-      </div>
+      <ul class="hx-facts">
+        <li><span>🔒</span> Pago con PayPal o transferencia</li>
+        <li><span>🚚</span> Envío en ~15 días</li>
+        <li><span>🎨</span> Personalización disponible</li>
+      </ul>
     </div>
-    <div class="hero-showcase">
-      <div class="hero-showcase-main">
-        <img src="assets/productos/fc-barcelona-local-2627/frontal.jpg" alt="Camiseta FC Barcelona Local 26/27" width="1200" height="798" loading="lazy">
+    <div class="hx-visual">
+      <div class="hx-main">
+        <img src="assets/productos/fc-barcelona-local-2627/frontal.jpg" alt="Camiseta FC Barcelona Local 26/27" width="1200" height="798" fetchpriority="high">
       </div>
-      <div class="hero-showcase-accent">
+      <div class="hx-accent">
         <img src="assets/productos/nike-mind-001/vista-lateral-1.jpg" alt="Nike Mind 001 Slide" width="1080" height="720" loading="lazy">
       </div>
+      <div class="hx-chip one"><b>+1.900</b> productos en catálogo</div>
+      <div class="hx-chip two">✨ Con tu nombre y dorsal</div>
     </div>
   </div>
-  <div class="scroll-cue"></div>
 </section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group"><span>Sneakers</span><i></i><span>Camisetas de fútbol</span><i></i><span>Baloncesto</span><i></i><span>Ediciones retro</span><i></i><span>Personalizables</span><i></i><span>Envíos a toda España</span><i></i></div>
+    <div class="ticker-group"><span>Sneakers</span><i></i><span>Camisetas de fútbol</span><i></i><span>Baloncesto</span><i></i><span>Ediciones retro</span><i></i><span>Personalizables</span><i></i><span>Envíos a toda España</span><i></i></div>
+  </div>
+</div>
 
 <section>
   <div class="wrap">
@@ -790,18 +644,18 @@
       <h2>Compra por categoría</h2>
       <p>Encuentra tu estilo entre sneakers, camisetas de fútbol y baloncesto de tus ligas y equipos favoritos.</p>
     </div>
-    <div class="cat-grid stagger">
-      <a href="catalogo.html?cat=sneakers" class="cat-card">
-        <span class="cat-icon">👟</span>
-        <h4>Sneakers</h4>
+    <div class="cat-bento stagger">
+      <a href="catalogo.html?cat=futbol" class="cat-tile big">
+        <img src="assets/productos/real-madrid-local-2627/frontal.jpg" alt="Camisetas de fútbol" loading="lazy">
+        <div class="cat-tile-body"><div><h3>Fútbol</h3><small>Camisetas actuales y retro</small></div><span class="arrow">→</span></div>
       </a>
-      <a href="catalogo.html?cat=futbol" class="cat-card">
-        <span class="cat-icon">⚽</span>
-        <h4>Fútbol</h4>
+      <a href="catalogo.html?cat=sneakers" class="cat-tile">
+        <img src="assets/productos/jordan-4-retro-comic/vista-lateral-1.jpg" alt="Sneakers" loading="lazy">
+        <div class="cat-tile-body"><div><h3>Sneakers</h3><small>Jordan, Nike, Salomon…</small></div><span class="arrow">→</span></div>
       </a>
-      <a href="catalogo.html?cat=baloncesto" class="cat-card">
-        <span class="cat-icon">🏀</span>
-        <h4>Baloncesto</h4>
+      <a href="catalogo.html?cat=baloncesto" class="cat-tile">
+        <img src="assets/productos/valencia-basket-local-2627/frontal.jpg" alt="Camisetas de baloncesto" loading="lazy">
+        <div class="cat-tile-body"><div><h3>Baloncesto</h3><small>Equipos y ligas</small></div><span class="arrow">→</span></div>
       </a>
     </div>
   </div>
@@ -1252,6 +1106,16 @@
   };
   window.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
+
+  // ===== Resplandor del hero que sigue al puntero =====
+  const heroEl = document.getElementById('hero');
+  if (heroEl && window.matchMedia('(hover:hover)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroEl.addEventListener('pointermove', (e) => {
+      const r = heroEl.getBoundingClientRect();
+      heroEl.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+      heroEl.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+    }, { passive: true });
+  }
 
   // ===== Parallax hero shapes =====
   const parallaxEls = document.querySelectorAll('.parallax-el');
