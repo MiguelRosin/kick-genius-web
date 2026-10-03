@@ -564,6 +564,7 @@
     <button class="cart-close" id="cartClose" aria-label="Cerrar carrito">&times;</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
+    <div class="coupon-nudge cart-nudge" id="couponNudge" style="display:none;"></div>
   <div class="cart-footer">
     <div class="shipping-form">
       <h4 class="shipping-title">Datos de envío</h4>
@@ -814,6 +815,7 @@
       cartTotalEl.textContent = '0€';
       document.getElementById('cartSubtotalRow').style.display = 'none';
       document.getElementById('cartDiscountRow').style.display = 'none';
+      document.getElementById('couponNudge').style.display = 'none';
       return;
     }
     let total = 0;
@@ -880,6 +882,22 @@
     } else if (!appliedCoupon) {
       couponMsg.className = 'coupon-msg';
       couponMsg.textContent = '';
+    }
+
+    // Aviso de progreso hacia el cupón PROMO (solo si no hay otro cupón aplicado).
+    const nudge = document.getElementById('couponNudge');
+    const promo = COUPONS.PROMO;
+    if (!appliedCoupon && promo && promo.minQty) {
+      const left = promo.minQty - count;
+      if (left > 0) {
+        nudge.innerHTML = `🎁 Añade <strong>${left} artículo${left === 1 ? '' : 's'} más</strong> y consigue <strong>${promo.value}€ de descuento</strong> con el código PROMO<div class="coupon-nudge-bar"><span style="width:${Math.round(count / promo.minQty * 100)}%"></span></div>`;
+      } else {
+        nudge.innerHTML = `🎉 ¡Ya tienes ${promo.minQty} artículos! Aplica el código PROMO y ahorra <strong>${promo.value}€</strong> <button type="button" class="coupon-nudge-btn" id="couponNudgeBtn">Aplicar PROMO</button>`;
+      }
+      nudge.style.display = 'block';
+      document.getElementById('couponNudgeBtn')?.addEventListener('click', () => applyCouponCode('PROMO'));
+    } else {
+      nudge.style.display = 'none';
     }
 
     cartItemsEl.querySelectorAll('button[data-action]').forEach(btn => {
@@ -1027,19 +1045,36 @@
 
     msg += `${DIVIDER}\n¡Gracias por tu compra en Kick Genius! 🖤`;
 
-    window.open(`https://wa.me/34644039760?text=${encodeURIComponent(msg)}`, '_blank');
-
-    saveCart([]);
-    allShipFieldIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-    cartItemsEl.innerHTML = `
-      <div class="cart-empty">
-        <span class="cart-empty-icon">✅</span>
-        <p>¡Pedido enviado! Confirma el mensaje en WhatsApp para completarlo.</p>
-        <a href="catalogo.html">Seguir comprando</a>
-      </div>`;
-    document.getElementById('cartSubtotalRow').style.display = 'none';
-    document.getElementById('cartDiscountRow').style.display = 'none';
-    cartTotalEl.textContent = '0€';
+    // Si el navegador bloquea la ventana de WhatsApp (habitual en móvil tras comprobar el pedido),
+    // el carrito se conserva y se ofrece un enlace directo en vez de perder el pedido.
+    const waUrl = `https://wa.me/34644039760?text=${encodeURIComponent(msg)}`;
+    function finishOrder() {
+      saveCart([]);
+      allShipFieldIds.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+      document.getElementById('waFallback')?.remove();
+      cartItemsEl.innerHTML = `
+        <div class="cart-empty">
+          <span class="cart-empty-icon">✅</span>
+          <p>¡Pedido enviado! Confirma el mensaje en WhatsApp para completarlo.</p>
+          <a href="catalogo.html">Seguir comprando</a>
+        </div>`;
+      document.getElementById('cartSubtotalRow').style.display = 'none';
+      document.getElementById('cartDiscountRow').style.display = 'none';
+      cartTotalEl.textContent = '0€';
+    }
+    if (window.open(waUrl, '_blank')) {
+      finishOrder();
+    } else {
+      let box = document.getElementById('waFallback');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'waFallback';
+        box.className = 'wa-fallback';
+        document.getElementById('checkoutBtn').before(box);
+      }
+      box.innerHTML = `Tu navegador ha bloqueado la ventana de WhatsApp. <a class="wa-fallback-link" href="${waUrl}" target="_blank" rel="noopener">Abrir WhatsApp con mi pedido</a>`;
+      box.querySelector('a').addEventListener('click', () => setTimeout(finishOrder, 300));
+    }
   });
 
   renderCart();

@@ -53,3 +53,14 @@ header{background:rgba(var(--cream-rgb),0.86);box-shadow:0 1px 0 var(--line);}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:2px solid var(--teal);outline-offset:2px;
 }
+
+/* Aviso de progreso hacia el cupón y enlace de rescate de WhatsApp (carrito) */
+.coupon-nudge{margin:10px 0 0;padding:10px 12px;border:1px dashed var(--teal);border-radius:10px;
+  font-size:0.8rem;font-weight:600;line-height:1.45;color:var(--white);background:rgba(27,63,115,0.06);}
+.coupon-nudge-bar{height:6px;margin-top:8px;border-radius:100px;background:var(--line);overflow:hidden;}
+.coupon-nudge-bar span{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal),var(--yellow));transition:width .4s ease;}
+.coupon-nudge-btn{margin-left:6px;padding:6px 12px;border:none;border-radius:8px;background:var(--teal);color:#fff;
+  font:700 0.74rem 'Manrope',sans-serif;cursor:pointer;}
+.wa-fallback{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(214,138,0,0.12);font-size:0.8rem;font-weight:600;line-height:1.45;}
+.wa-fallback-link{display:block;margin-top:6px;text-align:center;padding:10px;border-radius:10px;background:#25d366;color:#fff;font-weight:800;}
+.cart-nudge{margin:12px 20px 0;}
