@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kick-genius-v1';
+const CACHE_NAME = 'kick-genius-v2';
 const CORE_ASSETS = [
   '/index.html',
   '/catalogo.html',
@@ -32,10 +32,12 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin) return;
 
   const isHTML = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
-  const isStockStatus = url.pathname.endsWith('/assets/stock-status.js');
+  // CSS, JS y JSON (incluido el catálogo) cambian con cada publicación: si se sirvieran desde caché, los
+  // visitantes verían un diseño antiguo mezclado con el nuevo.
+  const isCode = /\.(css|js|json)$/.test(url.pathname);
 
-  if (isHTML || isStockStatus) {
-    // Network-first para páginas (y para stock-status.js): cambian a menudo y no queremos servir versiones desactualizadas.
+  if (isHTML || isCode) {
+    // Network-first para páginas y código: cambian a menudo y no queremos servir versiones desactualizadas.
     event.respondWith(
       fetch(req)
         .then((res) => {
@@ -43,7 +45,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
           return res;
         })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match('/index.html')))
+        .catch(() => caches.match(req).then((cached) => cached || (isHTML ? caches.match('/index.html') : Response.error())))
     );
     return;
   }
