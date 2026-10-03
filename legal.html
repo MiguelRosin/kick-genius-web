@@ -802,7 +802,10 @@
   }
   couponBtn.addEventListener('click', () => applyCouponCode(couponInput.value));
   couponInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCouponCode(couponInput.value); } });
-  couponInput.addEventListener('input', () => couponInput.classList.remove('invalid'));
+  couponInput.addEventListener('input', () => {
+    couponInput.classList.remove('invalid');
+    if (couponMsg.classList.contains('error') && !getCoupon()) { couponMsg.className = 'coupon-msg'; couponMsg.textContent = ''; }
+  });
 
   function renderCart(){
     const cart = getCart();
@@ -883,7 +886,8 @@
         couponMsg.innerHTML = `Cupón <strong>${appliedCoupon}</strong> aplicado (${activeCoupon.label}) <button type="button" class="coupon-remove" id="couponRemoveBtn">Quitar</button>`;
       }
       document.getElementById('couponRemoveBtn').addEventListener('click', () => { saveCouponCode(null); renderCart(); });
-    } else if (!appliedCoupon) {
+    } else if (!appliedCoupon && !couponInput.classList.contains('invalid')) {
+      // (si el último código era inválido se mantiene el aviso de error hasta que se vuelva a escribir)
       couponMsg.className = 'coupon-msg';
       couponMsg.textContent = '';
     }
